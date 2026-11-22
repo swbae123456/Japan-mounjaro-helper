@@ -2,7 +2,7 @@
  * 전략: 캐시 우선 + 백그라운드 갱신(stale-while-revalidate)
  * 앱은 단일 index.html(인라인 CSS/JS)이라 캐시 목록이 작습니다.
  */
-const VERSION = 'jmh-v1';
+const VERSION = 'v1';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
