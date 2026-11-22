@@ -153,12 +153,12 @@ git push -u origin main
 ### 배포 후 체크
 
 - 모바일에서 실제 기기로 열어 폰트·줄바꿈·하단 탭 가림 확인
-- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v3` 생성 확인
+- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v4` 생성 확인
 - 홈 화면에 추가한 뒤 비행기 모드에서 재실행 → 화면이 뜨는지 확인(오프라인 캐시)
 - `index.html`을 수정해 다시 배포하면, 서비스 워커 캐시는 버전(`sw.js`의 `VERSION`)을 올려야 확실히 갱신됩니다
 - 도메인 연결 시 HTTPS 강제
 - 데이터 갱신: **`clinics.json`만 수정**하고 `python3 tools/embed_clinics.py`로 `index.html` 내장 폴백을 다시 생성한 뒤 `2026-11 확인` 표기를 갱신 (두 데이터가 같은지 `python3 tools/embed_clinics.py --check`, `test_app.py`가 검사)
-- 서비스 워커 캐시 이름은 `jmh-v3`(`clinics.json` 프리캐시 포함)
+- 서비스 워커 캐시 이름은 `jmh-v4`(`clinics.json` 프리캐시 포함)
 
 ---
 
