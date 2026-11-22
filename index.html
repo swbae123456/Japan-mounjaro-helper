@@ -883,6 +883,7 @@
       <li>예약·결제·진료는 모두 해당 기관과 이용자 사이에서 이루어집니다. 이 앱은 대신 예약하거나 수수료를 받지 않습니다.</li>
       <li>마운자로의 체중 관리 목적 사용은 일본에서 승인된 효능·효과 범위 밖(자유진료)이며, 일본 건강보험이 적용되지 않습니다.</li>
       <li>이름·금액 등 입력값은 서버로 전송되지 않습니다. 체크리스트 상태와 계산기 설정(환율·금액)만 이 기기 브라우저(localStorage)에 저장되고, 입력한 이름은 저장하지 않습니다.</li>
+      <li>방문자 수를 세기 위해 페이지를 열 때 GoatCounter(gc.zgo.at)로 조회 기록이 익명으로 전송됩니다(쿠키 미사용, IP는 집계 후 저장하지 않음). 이 앱에 입력한 내용은 이 통계로 전송되지 않습니다.</li>
       <li>반입·세관 정보는 일반 참고이며 법률 자문이 아닙니다. 최종 판단은 세관·항공사 안내를 따릅니다.</li>
       <li>공개 전·수익화 전에는 관련 법령(의료법·약사법·의료광고 가이드라인 등) 검토가 필요합니다.</li>
     </ul>
@@ -891,6 +892,7 @@
       <li>Booking, payment and consultation all happen between you and the clinic. This app does not book on your behalf and takes no commission.</li>
       <li>Using Mounjaro for weight management is outside the approved indication in Japan (self-pay) and is not covered by Japanese health insurance.</li>
       <li>What you type (names, amounts) is never sent to a server. Only the checklist state and calculator settings (rates, amounts) are kept in this browser's localStorage; names are not stored.</li>
+      <li>To count visits, opening the page sends an anonymous page-view hit to GoatCounter (gc.zgo.at); it uses no cookies and the IP is not stored after counting. Nothing you type in this app is included in that hit.</li>
       <li>Import and customs notes are general information, not legal advice. Your own country's customs and your airline have the final say.</li>
       <li>Legal review (medical law, pharmaceutical law, advertising guidelines and so on) is needed before public release or monetisation.</li>
     </ul>
@@ -2322,5 +2324,7 @@
   }
 })();
 </script>
+<script data-goatcounter="https://swbae12345.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
