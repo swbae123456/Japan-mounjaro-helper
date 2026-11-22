@@ -3,7 +3,8 @@
 일본에서 마운자로(マンジャロ)를 자가치료 목적으로 처방·수령하고 한국에 반입할 때 필요한 **공개 정보 정리 + 방문 준비 도구**를 모은 모바일 우선 웹앱입니다. 빌드 도구·외부 CDN·서버가 필요 없는 **단일 HTML 파일**입니다.
 
 - 앱: [`index.html`](./index.html)
-- 테스트: [`test_app.py`](./test_app.py) (문법·로직), [`test_structure.py`](./test_structure.py) (DOM·문구 가드레일), [`test_smoke.py`](./test_smoke.py) (초기화·탭·필터·계산 경로 실행)
+- PWA: [`manifest.json`](./manifest.json), [`sw.js`](./sw.js), [`icon-192.png`](./icon-192.png), [`icon-512.png`](./icon-512.png)
+- 테스트(개발용, 배포 대상 아님): [`test_app.py`](./test_app.py) (문법·로직), [`test_structure.py`](./test_structure.py) (DOM·문구 가드레일), [`test_smoke.py`](./test_smoke.py) (초기화·탭·필터·계산 경로 실행)
 
 > **이 앱이 하지 않는 일**: 의료기관 알선, 예약 대행, 의약품 광고·판매, 가격 순위 매기기, 수수료 수취.
 > 예약·결제·진료는 전부 해당 기관과 이용자 사이에서 이루어집니다.
@@ -40,6 +41,15 @@ open index.html            # macOS  (Windows: start index.html)
 python3 -m http.server 8000
 # → http://localhost:8000
 ```
+
+### 휴대폰 앱으로 설치 (PWA)
+
+HTTPS 주소(또는 `localhost`)에서 열면 브라우저가 앱처럼 설치할 수 있게 해 줍니다.
+
+- **Android Chrome**: 주소창 오른쪽 `⋮` → **앱 설치** / **홈 화면에 추가**
+- **iPhone Safari**: 공유 버튼 → **홈 화면에 추가**
+
+설치하면 브라우저 주소창 없이 전체 화면으로 열리고, 한 번 열어 둔 화면은 비행기 모드·지하에서도 뜹니다(서비스 워커 캐시). 파일을 `file://`로 직접 열었을 때는 서비스 워커가 등록되지 않지만 앱은 그대로 동작합니다.
 
 ---
 
@@ -126,17 +136,20 @@ npx wrangler pages deploy . --project-name japan-mounjaro-helper
 
 ```bash
 cd projects/japan-mounjaro-helper
-git init && git add index.html README.md && git commit -m "add prototype"
-git branch -M main
+git init -b main && git add -A && git commit -m "PWA"
 git remote add origin https://github.com/<계정>/japan-mounjaro-helper.git
 git push -u origin main
 ```
 저장소 → **Settings → Pages → Source: Deploy from a branch → main / (root)** → `https://<계정>.github.io/japan-mounjaro-helper/`
 
+> 배포 대상은 `index.html`·`manifest.json`·`sw.js`·`icon-192.png`·`icon-512.png`·`README.md`(+`.nojekyll`)입니다. 테스트 스크립트와 `tools/`는 `.gitignore`로 제외되어 있습니다.
+
 ### 배포 후 체크
 
 - 모바일에서 실제 기기로 열어 폰트·줄바꿈·하단 탭 가림 확인
-- `apple-mobile-web-app` 메타·파비콘 추가(선택)
+- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v1` 생성 확인
+- 홈 화면에 추가한 뒤 비행기 모드에서 재실행 → 화면이 뜨는지 확인(오프라인 캐시)
+- `index.html`을 수정해 다시 배포하면, 서비스 워커 캐시는 버전(`sw.js`의 `VERSION`)을 올려야 확실히 갱신됩니다
 - 도메인 연결 시 HTTPS 강제
 - 데이터 갱신 시 `index.html`의 `CLINICS` 배열만 수정하고 `2026-11 확인` 표기를 갱신
 
