@@ -425,7 +425,7 @@
         <p class="panel-sub" data-en-html="Only the address, hours and prices each clinic publishes on its own official page. Prices reflect a &lt;strong&gt;2026-11 check&lt;/strong&gt;; confirm current terms on the official page before booking.">각 기관이 공식 페이지에 공개한 주소·진료시간·가격만 정리했습니다. 표기 가격은 <strong>2026-11 확인 기준</strong>이며, 최신 조건은 예약 전 공식 페이지에서 확인하세요.</p>
       </div>
 
-      <div class="chips" id="regionChips" role="group" aria-label="지역 필터">
+      <div class="chips" id="regionChips" role="group" aria-label="지역 필터" data-en-aria="Region filter">
         <button class="chip is-active" data-region-key="all" data-en="All" aria-pressed="true">전체</button>
         <button class="chip" data-region-key="tokyo" data-en="Tokyo" aria-pressed="false">도쿄</button>
         <button class="chip" data-region-key="fukuoka" data-en="Fukuoka" aria-pressed="false">후쿠오카</button>
@@ -459,7 +459,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path>
         </svg>
-        <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" data-en-ph="Search by clinic or station" aria-label="클리닉 또는 역 이름 검색" autocomplete="off">
+        <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" data-en-ph="Search by clinic or station" aria-label="클리닉 또는 역 이름 검색" data-en-aria="Search by clinic or station name" autocomplete="off">
       </div>
 
       <div id="clinicList" class="clinic-list"></div>
@@ -609,7 +609,7 @@
           <span class="hint" id="calcDoseHint">—</span>
         </label>
         <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px" data-en="Length">기간</span>
-        <div class="seg" id="calcMonths" role="group" aria-label="기간 선택">
+        <div class="seg" id="calcMonths" role="group" aria-label="기간 선택" data-en-aria="Length">
           <button type="button" data-months="1" data-en="1 mo">1개월</button>
           <button type="button" data-months="2" data-en="2 mo">2개월</button>
           <button type="button" data-months="3" class="is-active" data-en="3 mo">3개월</button>
@@ -662,7 +662,7 @@
             <span class="hint">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)로 언급된 범위가 있습니다. 특정 기관을 지목하지 않는 참고값이며, 실제 금액은 직접 확인해 입력하세요.</span>
           </label>
           <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px">왕복 교통비(원)</span>
-          <div class="seg" id="transportPresets" role="group" aria-label="교통비 예시">
+          <div class="seg" id="transportPresets" role="group" aria-label="교통비 예시" data-en-aria="Transport cost examples">
             <button type="button" data-transport="0">0원</button>
             <button type="button" data-transport="150000">15만 원</button>
             <button type="button" data-transport="350000">35만 원</button>
@@ -840,7 +840,7 @@
     <p id="footEn" data-lang-only="en">Informational prototype · checked 2026-11<br>Not medical brokerage, booking agency or prescription drug advertising. Prescription eligibility and dosage are decided solely by the doctor who sees you in Japan.</p>
   </footer>
 
-  <nav class="tabbar" role="tablist" aria-label="주요 메뉴">
+  <nav class="tabbar" role="tablist" aria-label="주요 메뉴" data-en-aria="Main menu">
     <button class="tab is-active" role="tab" id="tab-clinics" data-tab="clinics" aria-selected="true" aria-controls="panel-clinics">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9.5L12 4l8 5.5V20"></path><path d="M9.5 20v-5.5h5V20"></path><path d="M12 8.2v2.6M10.7 9.5h2.6"></path></svg>
       <span data-en="Clinics">클리닉</span>
@@ -1380,6 +1380,10 @@
     for (var j = 0; j < phs.length; j++) {
       KO_CACHE.push({ el: phs[j], attr: 'placeholder', html: phs[j].getAttribute('placeholder') || '' });
     }
+    var ars = document.querySelectorAll('[data-en-aria]');
+    for (var k = 0; k < ars.length; k++) {
+      KO_CACHE.push({ el: ars[k], attr: 'aria-label', html: ars[k].getAttribute('aria-label') || '' });
+    }
   }
 
   function applyStatic(lang) {
@@ -1388,8 +1392,10 @@
       var rec = KO_CACHE[i];
       var el = rec.el;
       if (!el) continue;
-      if (rec.attr) {
+      if (rec.attr === 'placeholder') {
         el.setAttribute('placeholder', lang === 'en' ? (el.getAttribute('data-en-ph') || rec.html) : rec.html);
+      } else if (rec.attr === 'aria-label') {
+        el.setAttribute('aria-label', lang === 'en' ? (el.getAttribute('data-en-aria') || rec.html) : rec.html);
       } else if (el.getAttribute('data-en-html') !== null) {
         el.innerHTML = lang === 'en' ? el.getAttribute('data-en-html') : rec.html;
       } else if (el.getAttribute('data-en') !== null) {
@@ -1452,8 +1458,12 @@
     return '<span class="badge">한국어 표기 확인 안 됨</span>';
   }
 
+  function doseKeys(tiers) {
+    return Object.keys(tiers || {}).sort(function (a, b) { return parseFloat(a) - parseFloat(b); });
+  }
+
   function priceTable(c) {
-    var doses = Object.keys(c.tiers);
+    var doses = doseKeys(c.tiers);
     var rows = doses.map(function (d) {
       var t = c.tiers[d];
       return '<tr><td>' + d + 'mg</td><td>' + yen(t.m1) + '</td><td>' + yen(monthTotal(t, 3)) + '</td></tr>';
@@ -1771,7 +1781,7 @@
       sel.innerHTML = '<option value="custom">' + L('직접 입력', 'Enter your own') + '</option>';
       return;
     }
-    var doses = Object.keys(c.tiers);
+    var doses = doseKeys(c.tiers);
     sel.innerHTML = doses.map(function (d) {
       return '<option value="' + esc(d) + '">' + esc(d) + 'mg</option>';
     }).join('') + '<option value="custom">' + L('직접 입력(월 약값)', 'Enter your own (monthly drug cost)') + '</option>';
@@ -2111,7 +2121,7 @@
       var c = CLINICS.filter(function (x) { return x.id === id; })[0];
       if (!c) return;
       state.clinicId = id;
-      state.dose = Object.keys(c.tiers)[0];
+      state.dose = doseKeys(c.tiers)[0];
       $('calcClinic').value = id;
       fillDoseSelect();
       $('calcCertFee').value = c.certFee || 0;
@@ -2135,7 +2145,7 @@
       state.clinicId = this.value;
       var c = CLINICS.filter(function (x) { return x.id === state.clinicId; })[0];
       if (c) {
-        state.dose = Object.keys(c.tiers)[0];
+        state.dose = doseKeys(c.tiers)[0];
         if ($('calcCertFee')) $('calcCertFee').value = c.certFee || 0;
       }
       fillDoseSelect();
