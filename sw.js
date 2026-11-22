@@ -2,8 +2,9 @@
  * 전략: 캐시 우선 + 백그라운드 갱신(stale-while-revalidate)
  * index.html(인라인 CSS/JS) + clinics.json(기관 데이터) 구조입니다.
  * v2: 한/영(KO/EN) UI, clinics.json 프리캐시 추가.
+ * v3: 7.5mg·10mg 가격순 정렬 · 비교표 용량 전환 추가.
  */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
