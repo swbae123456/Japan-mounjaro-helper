@@ -1,0 +1,9 @@
+# 개발용 파일 (배포 대상 아님)
+test_*.py
+__pycache__/
+tools/
+tmp-*/
+
+# 로컬 산출물
+.DS_Store
+*.log

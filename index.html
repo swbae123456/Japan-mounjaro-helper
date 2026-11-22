@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e7c66">
+<meta name="color-scheme" content="light">
+<meta name="description" content="일본 마운자로 처방·수령·한국 반입 준비를 위한 공개 정보 정리와 방문 도우미. 알선·예약 대행이 아닙니다.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="마운자로 도우미">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
+<title>일본 마운자로 방문 도우미 (프로토타입)</title>
+<style>
+  :root{
+    --bg:#f3f5f7;
+    --card:#ffffff;
+    --ink:#151a21;
+    --ink-2:#3d4753;
+    --muted:#6b7684;
+    --line:#e4e8ed;
+    --line-2:#eef1f4;
+    --brand:#0e7c66;
+    --brand-2:#0a5f4f;
+    --brand-soft:#e7f4f0;
+    --amber:#a86400;
+    --amber-soft:#fdf3e2;
+    --red:#b02525;
+    --red-soft:#fdecec;
+    --radius:16px;
+    --radius-sm:11px;
+    --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 18px rgba(16,24,40,.05);
+    --font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--ink);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  [hidden]{display:none!important}
+  .shell{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    padding-bottom:calc(76px + env(safe-area-inset-bottom));
+  }
+  @media (min-width:560px){
+    body{background:#e7ebef}
+    .shell{box-shadow:0 0 0 1px rgba(16,24,40,.06),0 14px 50px rgba(16,24,40,.14);min-height:100vh}
+  }
+
+  /* header */
+  .app-header{
+    position:sticky;top:0;z-index:30;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(160%) blur(12px);
+    -webkit-backdrop-filter:saturate(160%) blur(12px);
+    border-bottom:1px solid var(--line);
+    padding:14px 16px 11px;
+  }
+  .brand{display:flex;align-items:center;gap:10px}
+  .logo{
+    width:34px;height:34px;border-radius:10px;flex:0 0 auto;
+    background:linear-gradient(145deg,#128e75,#0a5f4f);
+    display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+  .brand h1{font-size:16.5px;line-height:1.25;margin:0;letter-spacing:-.02em}
+  .brand p{margin:1px 0 0;font-size:11px;color:var(--muted);letter-spacing:-.01em}
+  .top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+  .compliance-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1px solid #cfe6df;background:var(--brand-soft);color:var(--brand-2);
+    font-size:11.5px;font-weight:600;line-height:1;
+    padding:7px 10px;border-radius:999px;cursor:pointer;
+    font-family:var(--font);
+  }
+  .compliance-pill:active{transform:scale(.98)}
+  .verified-tag{font-size:10.5px;color:var(--muted)}
+
+  /* panels */
+  main{padding:14px 14px 4px}
+  .panel-title{font-size:19px;margin:2px 0 4px;letter-spacing:-.02em}
+  .panel-sub{margin:0 0 12px;color:var(--muted);font-size:12.5px;line-height:1.55}
+  .section-head{margin-bottom:10px}
+
+  /* chips */
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:1px 1px 9px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink-2);
+    border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;
+    font-family:var(--font);transition:background .15s,color .15s,border-color .15s;
+  }
+  .chip.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+
+  .filter-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .switch{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);cursor:pointer;user-select:none}
+  .switch input{position:absolute;opacity:0;width:0;height:0}
+  .switch span{
+    width:38px;height:22px;border-radius:999px;background:#d7dde3;position:relative;transition:background .18s;flex:0 0 auto;
+  }
+  .switch span::after{
+    content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .18s;
+  }
+  .switch input:checked + span{background:var(--brand)}
+  .switch input:checked + span::after{transform:translateX(16px)}
+  .switch input:focus-visible + span{outline:2px solid var(--brand);outline-offset:2px}
+
+  .search-wrap{position:relative;margin-bottom:12px}
+  .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .search-wrap input{
+    width:100%;padding:11px 12px 11px 36px;border-radius:12px;border:1px solid var(--line);
+    background:#fff;font-size:14px;font-family:var(--font);color:var(--ink);
+  }
+  .search-wrap input:focus{outline:2px solid rgba(14,124,102,.25);border-color:var(--brand)}
+
+  /* cards */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:15px;margin-bottom:12px;
+  }
+  .card h3{margin:0;font-size:15.5px;letter-spacing:-.02em;line-height:1.3}
+  .ja-name{margin:2px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:0}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .badge{
+    display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;
+    font-size:10.5px;font-weight:700;line-height:1;padding:5px 8px;border-radius:6px;
+    background:#f1f3f6;color:var(--ink-2);border:1px solid var(--line);
+  }
+  .badge.region{background:#eef3ff;color:#2a4b8d;border-color:#dde7fb}
+  .badge.ok{background:var(--brand-soft);color:var(--brand-2);border-color:#cfe6df}
+  .badge.warn{background:var(--amber-soft);color:var(--amber);border-color:#f2dfbd}
+
+  .meta{margin:11px 0 0;display:grid;gap:6px}
+  .meta-row{display:grid;grid-template-columns:52px 1fr;gap:8px;font-size:12.5px;line-height:1.5}
+  .meta-row dt{color:var(--muted);font-weight:600;font-size:11.5px;padding-top:1px}
+  .meta-row dd{margin:0;color:var(--ink-2)}
+  .meta-row dd a{color:var(--brand-2);text-decoration:none;word-break:break-all}
+
+  .badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+  .korean-note{font-size:11.5px;color:var(--ink-2);background:#f7f9fa;border-radius:9px;padding:8px 10px;margin-top:8px;line-height:1.5}
+
+  .price-block{margin-top:12px;border:1px solid var(--line-2);border-radius:12px;overflow:hidden}
+  .price-head{
+    display:flex;justify-content:space-between;align-items:center;
+    background:#f8fafb;padding:7px 10px;font-size:11px;color:var(--muted);font-weight:700;
+  }
+  table.price{width:100%;border-collapse:collapse;font-size:12.5px}
+  table.price th,table.price td{padding:6px 10px;text-align:right;border-top:1px solid var(--line-2)}
+  table.price th:first-child,table.price td:first-child{text-align:left;font-weight:700;color:var(--ink)}
+  table.price th{font-weight:600;color:var(--muted);font-size:10.5px;background:#fff}
+  table.price td{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  table.price.cmp th,table.price.cmp td{font-size:11.5px;padding:8px 8px;vertical-align:top;line-height:1.55;text-align:left}
+  table.price.cmp th:first-child,table.price.cmp td:first-child{white-space:nowrap;font-size:11px}
+  .price-foot{padding:7px 10px;font-size:11px;color:var(--muted);border-top:1px solid var(--line-2);background:#fcfdfd;line-height:1.5}
+
+  .note-list{margin:11px 0 0;padding:0 0 0 15px;font-size:12px;color:var(--ink-2);line-height:1.6}
+  .note-list li{margin-bottom:3px}
+  .note-list li::marker{color:#b9c2cc}
+
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    min-height:42px;padding:0 13px;border-radius:11px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:13.5px;font-weight:700;
+    font-family:var(--font);text-decoration:none;cursor:pointer;line-height:1.2;
+    transition:background .14s,transform .06s;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn.primary{grid-column:1 / -1;background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:active{background:var(--brand-2)}
+  .btn.ghost{background:#f7f9fa;color:var(--ink-2)}
+  .btn.small{min-height:34px;font-size:12px;padding:0 10px;border-radius:9px}
+  .btn[disabled]{opacity:.5;pointer-events:none}
+
+  .empty{background:#fff;border:1px dashed var(--line);border-radius:var(--radius);padding:24px 16px;text-align:center;color:var(--muted);font-size:13px}
+
+  /* forms */
+  .field{display:block;margin-bottom:12px}
+  .field > span.lbl{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px}
+  .field input[type=text],.field input[type=number],.field select,.field input[type=search]{
+    width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;
+    font-size:14px;font-family:var(--font);background:#fff;color:var(--ink);
+  }
+  .field input:focus,.field select:focus{outline:2px solid rgba(14,124,102,.22);border-color:var(--brand)}
+  .hint{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .check{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink-2);margin-bottom:10px;cursor:pointer}
+  .check input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--brand);flex:0 0 auto}
+  .seg{display:flex;gap:6px;background:#f1f4f6;padding:4px;border-radius:12px;margin-bottom:12px}
+  .seg button{
+    flex:1;border:0;background:transparent;padding:9px 4px;border-radius:9px;
+    font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--font);
+  }
+  .seg button.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.10)}
+
+  .output{
+    background:#f8fafb;border:1px solid var(--line-2);border-radius:12px;
+    padding:12px;margin-top:10px;font-size:14px;line-height:1.6;
+    word-break:break-word;white-space:pre-wrap;color:var(--ink);
+  }
+  .output.ja{font-size:14.5px;letter-spacing:.01em}
+  .output .placeholder{color:var(--muted);font-size:12.5px}
+  .out-label{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin:10px 0 4px}
+  .copy-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .copy-row .btn{flex:1;min-width:132px}
+
+  .tip-card{background:var(--amber-soft);border:1px solid #f0dcba;border-radius:var(--radius);padding:13px 14px;margin-bottom:12px}
+  .tip-card h4{margin:0 0 6px;font-size:12.5px;color:var(--amber);letter-spacing:-.01em}
+  .tip-card ul{margin:0;padding-left:16px;font-size:12px;color:#6b521f;line-height:1.65}
+  .tip-card li::marker{color:#d3ac62}
+  .info-card{background:#f4f7fa;border:1px solid #e1e7ee;border-radius:var(--radius);padding:13px 14px;margin-bottom:12px}
+  .info-card h4{margin:0 0 6px;font-size:12.5px;color:#33475e}
+  .info-card p,.info-card ul{margin:0;font-size:12px;color:#4a5c70;line-height:1.65}
+  .info-card ul{padding-left:16px}
+  .info-card code{background:#e8eef4;padding:1px 5px;border-radius:4px;font-size:11.5px}
+
+  /* breakdown */
+  .sum-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 0;font-size:13px;color:var(--ink-2);border-bottom:1px dashed var(--line-2)}
+  .sum-row:last-of-type{border-bottom:0}
+  .sum-row strong{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
+  .sum-row.grand{border-top:2px solid var(--ink);border-bottom:0;margin-top:6px;padding-top:10px;font-size:14px}
+  .sum-row.grand strong{font-size:20px;letter-spacing:-.02em}
+  .sum-row.krw strong{color:var(--brand-2);font-size:16px}
+  .sum-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
+
+  .status{
+    margin-top:10px;padding:11px 12px;border-radius:11px;font-size:12.5px;line-height:1.55;font-weight:600;
+  }
+  .status.ok{background:var(--brand-soft);color:var(--brand-2);border:1px solid #cfe6df}
+  .status.over{background:var(--red-soft);color:var(--red);border:1px solid #f4cdcd}
+
+  /* checklist */
+  .progress-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .progress-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--ink-2);font-weight:700}
+  .progress-top span.pct{color:var(--brand-2);font-size:15px}
+  .bar{height:7px;border-radius:999px;background:#eef1f4;margin-top:8px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#159a80,#0a5f4f);border-radius:999px;transition:width .25s}
+  .check-item{
+    display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--line-2);cursor:pointer;align-items:flex-start;
+  }
+  .check-item:last-child{border-bottom:0}
+  .check-item input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--brand);flex:0 0 auto}
+  .check-item .ct{display:block;font-size:13.5px;font-weight:700;line-height:1.4;letter-spacing:-.01em}
+  .check-item .cd{display:block;font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:3px}
+  .check-item.done .ct{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+  .check-item.done .cd{opacity:.6}
+
+  /* faq */
+  details.faq{
+    background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;
+  }
+  details.faq > summary{
+    list-style:none;cursor:pointer;padding:13px 14px;font-size:13.5px;font-weight:700;line-height:1.45;
+    display:flex;gap:10px;align-items:flex-start;letter-spacing:-.01em;
+  }
+  details.faq > summary::-webkit-details-marker{display:none}
+  details.faq > summary .idx{
+    flex:0 0 auto;width:20px;height:20px;border-radius:6px;background:var(--brand-soft);color:var(--brand-2);
+    font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px;
+  }
+  details.faq > summary .chev{margin-left:auto;flex:0 0 auto;color:var(--muted);transition:transform .18s}
+  details.faq[open] > summary .chev{transform:rotate(45deg)}
+  details.faq .faq-body{padding:0 14px 14px 44px;font-size:12.5px;color:var(--ink-2);line-height:1.68}
+  details.faq .faq-body p{margin:0 0 8px}
+  details.faq .faq-body ul{margin:0 0 8px;padding-left:16px}
+  details.faq .faq-body li{margin-bottom:4px}
+  details.faq .faq-body strong{color:var(--ink)}
+  .ja-quote{
+    display:block;background:#f6f8fa;border:1px solid var(--line-2);border-radius:9px;
+    padding:9px 10px;font-size:13px;color:var(--ink);margin:8px 0;
+  }
+  .inline-copy{margin-top:2px}
+
+  /* tab bar */
+  .tabbar{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:480px;z-index:40;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:saturate(160%) blur(14px);
+    -webkit-backdrop-filter:saturate(160%) blur(14px);
+    border-top:1px solid var(--line);
+    display:grid;grid-template-columns:repeat(5,1fr);
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+  }
+  @media (min-width:560px){
+    .shell{padding-bottom:92px}
+  }
+  .tab{
+    border:0;background:transparent;padding:6px 2px 5px;border-radius:11px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    font-size:10px;font-weight:600;color:#8b95a1;cursor:pointer;font-family:var(--font);letter-spacing:-.02em;
+  }
+  .tab svg{width:21px;height:21px}
+  .tab.is-active{color:var(--brand-2)}
+  .tab.is-active svg{stroke-width:2.1}
+  .tab:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+
+  /* modal */
+  .modal{
+    position:fixed;inset:0;z-index:60;background:rgba(15,20,26,.45);
+    display:flex;align-items:flex-end;justify-content:center;padding:0;
+  }
+  @media (min-width:560px){.modal{align-items:center;padding:20px}}
+  .modal-card{
+    background:#fff;width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:86vh;overflow:auto;
+  }
+  @media (min-width:560px){.modal-card{border-radius:20px}}
+  .modal-card h2{margin:0 0 10px;font-size:16px;letter-spacing:-.02em}
+  .modal-card p{font-size:12.5px;color:var(--ink-2);line-height:1.7;margin:0 0 9px}
+  .modal-card ul{margin:0 0 12px;padding-left:17px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
+  .modal-card li{margin-bottom:4px}
+
+  /* toast */
+  .toast-wrap{position:fixed;left:0;right:0;bottom:calc(88px + env(safe-area-inset-bottom));z-index:70;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+  .toast{
+    background:rgba(21,26,33,.94);color:#fff;font-size:12.5px;font-weight:600;
+    padding:10px 15px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.24);
+    opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;max-width:88vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateY(0)}
+
+  footer.app-foot{padding:8px 16px 18px;color:var(--muted);font-size:10.5px;line-height:1.6;text-align:center}
+  footer.app-foot a{color:var(--brand-2)}
+  .divider{height:1px;background:var(--line);margin:14px 0}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo valid" aria-hidden="true">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"></path>
+        </svg>
+      </div>
+      <div>
+        <h1>일본 마운자로 방문 도우미</h1>
+        <p>공개 정보 정리 · 예약은 각 기관 공식 페이지에서</p>
+      </div>
+    </div>
+    <div class="top-row">
+      <button class="compliance-pill" id="complianceBtn" aria-haspopup="dialog">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path>
+        </svg>
+        정보 도우미 · 알선 아님
+      </button>
+      <span class="verified-tag">가격·시간 2026-11 확인</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ TAB 1: 클리닉 ============ -->
+    <section class="panel" id="panel-clinics" role="tabpanel" aria-labelledby="tab-clinics">
+      <div class="section-head">
+        <h2 class="panel-title">클리닉 정보</h2>
+        <p class="panel-sub">각 기관이 공식 페이지에 공개한 주소·진료시간·가격만 정리했습니다. 표기 가격은 <strong>2026-11 확인 기준</strong>이며, 최신 조건은 예약 전 공식 페이지에서 확인하세요.</p>
+      </div>
+
+      <div class="chips" id="regionChips" role="group" aria-label="지역 필터">
+        <button class="chip is-active" data-region="전체" aria-pressed="true">전체</button>
+        <button class="chip" data-region="도쿄" aria-pressed="false">도쿄</button>
+        <button class="chip" data-region="후쿠오카" aria-pressed="false">후쿠오카</button>
+        <button class="chip" data-region="오사카" aria-pressed="false">오사카</button>
+        <button class="chip" data-region="대마도" aria-pressed="false">대마도 수령</button>
+      </div>
+
+      <div class="filter-row">
+        <label class="switch"><input type="checkbox" id="koreanOnly"><span></span>한국어 안내 확인됨</label>
+        <span class="verified-tag" id="resultCount">6곳</span>
+      </div>
+
+      <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path>
+        </svg>
+        <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" aria-label="클리닉 또는 역 이름 검색" autocomplete="off">
+      </div>
+
+      <div id="clinicList" class="clinic-list"></div>
+
+      <p class="hint" style="padding:0 2px 6px">‘한국어 안내 확인됨’은 해당 기관 공식 페이지에 한국어 안내(페이지·문진표·진료)가 표기된 경우만 포함합니다. 진료 언어는 기관마다 다르니 카드의 ‘한국어 안내’ 줄을 먼저 확인하세요. 가격은 자유진료(보험 적용 외) 기준이며, 처방 여부·용량은 진료한 의사가 판단합니다.</p>
+    </section>
+
+    <!-- ============ TAB 2: 예약 도우미 ============ -->
+    <section class="panel" id="panel-booking" role="tabpanel" aria-labelledby="tab-booking" hidden>
+      <div class="section-head">
+        <h2 class="panel-title">예약 도우미</h2>
+        <p class="panel-sub">일본 예약 폼의 <strong>フリガナ(후리가나)</strong>와 비고란(備考欄)에 붙여 넣을 문구를 만듭니다. 입력값은 서버로 전송되지 않고 저장되지 않습니다.</p>
+      </div>
+
+      <div class="card">
+        <h3>한글 이름 → 카타카나</h3>
+        <p class="ja-name" style="margin-bottom:12px">성과 이름을 따로 입력하면 예약 폼의 姓 / 名 칸에 그대로 쓸 수 있습니다.</p>
+        <div class="two-col">
+          <label class="field" style="margin-bottom:0">
+            <span class="lbl">성(姓)</span>
+            <input type="text" id="surName" placeholder="예: 배" autocomplete="off" inputmode="text">
+          </label>
+          <label class="field" style="margin-bottom:0">
+            <span class="lbl">이름</span>
+            <input type="text" id="givenName" placeholder="예: 지섭" autocomplete="off" inputmode="text">
+          </label>
+        </div>
+        <div class="out-label" style="margin-top:14px">카타카나</div>
+        <div class="output" id="kataOut"><span class="placeholder">한글을 입력하면 카타카나로 바뀝니다.</span></div>
+        <div class="out-label">공백 없이 (한 칸용)</div>
+        <div class="output" id="kataOutFlat"><span class="placeholder">—</span></div>
+        <div class="copy-row">
+          <button class="btn small ghost" data-copy-target="kataOut">성 + 이름 복사</button>
+          <button class="btn small ghost" data-copy-target="kataOutFlat">붙여쓰기 복사</button>
+        </div>
+        <p class="hint" id="kataWarn" hidden>영문이 포함되어 있습니다. 카타카나 칸에는 카타카나만 넣고, 영문 표기는 여권과 동일하게 사용하세요.</p>
+        <p class="hint">카타카나는 한글 발음을 일본어 표기로 옮긴 <strong>참고값</strong>입니다. 여권 영문 표기와 실제 발음은 다를 수 있으니, 항공권·여권과 대조해 최종 확인하세요. (예: 김민수 → キム ミンス, 홍길동 → ホン ギルドン)</p>
+      </div>
+
+      <div class="card">
+        <h3>비고란(備考欄) 일본어 생성기</h3>
+        <p class="ja-name" style="margin-bottom:12px">용량과 기간을 고르면 예약 비고란에 붙여 넣을 문장을 만듭니다.</p>
+        <div class="two-col">
+          <label class="field" style="margin-bottom:10px">
+            <span class="lbl">용량</span>
+            <select id="noteDose">
+              <option value="2.5">2.5mg</option>
+              <option value="5" selected>5mg</option>
+              <option value="7.5">7.5mg</option>
+              <option value="10">10mg</option>
+              <option value="12.5">12.5mg</option>
+              <option value="15">15mg</option>
+            </select>
+          </label>
+          <label class="field" style="margin-bottom:10px">
+            <span class="lbl">기간</span>
+            <select id="noteMonths">
+              <option value="1">1개월(4펜)</option>
+              <option value="2">2개월(8펜)</option>
+              <option value="3" selected>3개월(12펜)</option>
+            </select>
+          </label>
+        </div>
+        <label class="check"><input type="checkbox" id="noteCert" checked>영문 처방·소지 증명서 문의</label>
+        <label class="check"><input type="checkbox" id="noteFirst">초진 대면 진료 희망</label>
+        <div class="out-label">일본어 (비고란)</div>
+        <div class="output ja" id="noteJa"><span class="placeholder">—</span></div>
+        <div class="out-label">한국어 뜻</div>
+        <div class="output" id="noteKo" style="font-size:12.5px;color:var(--ink-2)"><span class="placeholder">—</span></div>
+        <div class="copy-row">
+          <button class="btn small primary" style="grid-column:auto;min-height:38px" data-copy-target="noteJa">일본어 복사</button>
+          <button class="btn small ghost" data-copy-target="noteKo">한국어 복사</button>
+        </div>
+        <p class="hint">‘12펜(3개월분)’이 한국 휴대 반입 상한입니다. 3개월을 넘겨 예약하면 반입 기준을 초과하므로, 예약 전에 반입 규정을 먼저 확인하세요.</p>
+      </div>
+
+      <div class="tip-card">
+        <h4>예약 입력 실전 팁</h4>
+        <ul>
+          <li>예약 폼은 대부분 일본어입니다. 브라우저 번역 기능을 켜고, <strong>フリガナ</strong> 칸에는 위에서 만든 카타카나를 넣으세요.</li>
+          <li>전화번호는 한국 번호도 입력되는 경우가 많습니다(3-4-4 형식). 국가번호를 요구하면 +82를 붙입니다.</li>
+          <li>주소·우편번호는 실제로 묵을 숙소 기준이 원칙입니다. 숙소가 미정이거나 시스템이 허용하는 경우에만 <strong>0000000</strong>으로 넘기고, 확정 후 클리닉에 알리세요.</li>
+          <li>재고가 부족하면 클리닉이 일본 내 주소로 나중에 보내는 경우가 있어, 숙소 주소·체크인 날짜를 메모해 두면 좋습니다.</li>
+          <li>예약 완료 메일이 오지 않으면 예약이 안 된 것일 수 있습니다. 스팸함까지 확인하세요.</li>
+          <li>여러 명이 함께 가면 <strong>1인 1예약</strong>(각자 다른 메일·전화번호)이 원칙인 곳이 많습니다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ TAB 3: 비용 계산기 ============ -->
+    <section class="panel" id="panel-cost" role="tabpanel" aria-labelledby="tab-cost" hidden>
+      <div class="section-head">
+        <h2 class="panel-title">비용 계산기</h2>
+        <p class="panel-sub">클리닉 공개 가격을 기준으로 약값·진찰료·증명서·기타 비용을 합산하고, 원화 환산과 <strong>800달러 면세 한도</strong>를 함께 확인합니다. 환율은 참고값이며 직접 수정할 수 있습니다.</p>
+      </div>
+
+      <div class="card">
+        <label class="field">
+          <span class="lbl">클리닉</span>
+          <select id="calcClinic"></select>
+          <span class="hint" id="calcClinicHint">—</span>
+        </label>
+        <label class="field">
+          <span class="lbl">용량</span>
+          <select id="calcDose"></select>
+          <span class="hint" id="calcDoseHint">—</span>
+        </label>
+        <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px">기간</span>
+        <div class="seg" id="calcMonths" role="group" aria-label="기간 선택">
+          <button type="button" data-months="1">1개월</button>
+          <button type="button" data-months="2">2개월</button>
+          <button type="button" data-months="3" class="is-active">3개월</button>
+        </div>
+        <label class="check"><input type="checkbox" id="calcCert">영문 증명서 포함</label>
+        <label class="field" style="margin-bottom:10px">
+          <span class="lbl">영문 증명서 비용(엔)</span>
+          <input type="number" id="calcCertFee" inputmode="numeric" min="0" step="10" value="8800">
+        </label>
+        <label class="field" style="margin-bottom:10px">
+          <span class="lbl">보냉 용품·기타 비용(엔)</span>
+          <input type="number" id="calcExtra" inputmode="numeric" min="0" step="10" value="0">
+        </label>
+        <label class="field" style="margin-bottom:0">
+          <span class="lbl">참고 환율 (1엔 = ? 원)</span>
+          <input type="number" id="calcRate" inputmode="decimal" min="0" step="0.01" value="9.3">
+          <span class="hint">참고 환율 · 직접 수정 가능 (예: 100엔 = 930원)</span>
+        </label>
+      </div>
+
+      <div class="card">
+        <div class="sum-row"><span>약값 <span id="sumDrugLabel"></span></span><strong id="sumDrug">—</strong></div>
+        <div class="sum-row"><span>진찰료</span><strong id="sumConsult">—</strong></div>
+        <div class="sum-row"><span>영문 증명서</span><strong id="sumCert">—</strong></div>
+        <div class="sum-row"><span>기타</span><strong id="sumExtra">—</strong></div>
+        <div class="sum-row grand"><span>합계(엔)</span><strong id="sumJpy">—</strong></div>
+        <div class="sum-row krw"><span>원화 환산</span><strong id="sumKrw">—</strong></div>
+        <p class="sum-note" id="sumNote">—</p>
+        <p class="sum-note" id="sumPens">—</p>
+      </div>
+
+      <div class="card">
+        <h3>한국 예상 비용 · 교통비 비교</h3>
+        <p class="ja-name" style="margin-bottom:10px">같은 개월 수를 한국에서 구매할 때의 예상 비용과 왕복 교통비를 넣으면, 일본 총 지출과 차액을 보여줍니다.</p>
+        <label class="field" style="margin-bottom:10px">
+          <span class="lbl">한국 월 예상 비용(원)</span>
+          <input type="number" id="krMonthly" inputmode="numeric" min="0" step="10000" placeholder="예: 320000">
+          <span class="hint">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)로 언급된 범위가 있습니다. 특정 기관을 지목하지 않는 참고값이며, 실제 금액은 직접 확인해 입력하세요.</span>
+        </label>
+        <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px">왕복 교통비(원)</span>
+        <div class="seg" id="transportPresets" role="group" aria-label="교통비 예시">
+          <button type="button" data-transport="0">0원</button>
+          <button type="button" data-transport="150000">15만 원</button>
+          <button type="button" data-transport="350000">35만 원</button>
+        </div>
+        <label class="field" style="margin-bottom:10px">
+          <span class="lbl">직접 입력(원)</span>
+          <input type="number" id="transportCost" inputmode="numeric" min="0" step="10000" value="0">
+          <span class="hint">0원=이미 여행 중 · 15만 원=부산↔대마도 배편 예시 · 35만 원=항공권 예시 (모두 수정 가능한 참고값)</span>
+        </label>
+        <div class="sum-row"><span>일본 총 지출</span><strong id="beJapan">—</strong></div>
+        <div class="sum-row"><span>한국 동일 개월 예상</span><strong id="beKorea">—</strong></div>
+        <div class="sum-row grand"><span>예상 차액</span><strong id="beDiff" style="font-size:16px;text-align:right">—</strong></div>
+        <p class="status ok" id="beStatus">한국 예상 비용을 입력하면 차액을 계산합니다.</p>
+        <p class="hint">일본 총 지출 = 약값 + 진찰료·증명서·기타 + 교통비(원화 환산 기준). 이 도구는 국내 시세를 자체적으로 주장하지 않으며, 입력값은 이 기기 안에서만 계산에 쓰입니다.</p>
+      </div>
+
+      <div class="card">
+        <h3>한·일 처방·반입 비교</h3>
+        <p class="ja-name" style="margin-bottom:10px">일반 참고용 비교입니다. 특정 기관을 권하지 않으며, 처방 가능 여부는 진료한 의사가 판단합니다.</p>
+        <table class="price cmp" style="border-collapse:collapse">
+          <thead><tr><th style="text-align:left">항목</th><th style="text-align:left">한국</th><th style="text-align:left">일본</th></tr></thead>
+          <tbody>
+            <tr><td>접근성·소요시간</td><td style="text-align:left">국내 진료 후 수령 (당일~며칠)</td><td style="text-align:left">대면 진료 당일 수령 또는 온라인 진료 후 2~7일 배송 · 여행 일정 필요</td></tr>
+            <tr><td>일반 비용 수준</td><td style="text-align:left">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)</td><td style="text-align:left">클리닉 공개가 기준 · ‘클리닉’ 탭 참조</td></tr>
+            <tr><td>1회 반입 한도</td><td style="text-align:left">해당 없음(국내 처방)</td><td style="text-align:left">자가치료용 3개월분(12펜)까지 휴대 반입</td></tr>
+            <tr><td>부작용·중복투약 관리</td><td style="text-align:left">국내 DUR·진료 연속성 있음</td><td style="text-align:left">국내 DUR 미연동 · 귀국 후 복용 이력을 의료기관에 직접 고지</td></tr>
+            <tr><td>양도·재판매</td><td style="text-align:left" colspan="2">자가치료 목적 반입품이라도 양도·재판매는 약사법 위반으로 처벌 대상입니다.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card" id="dutyCard">
+        <h3>800달러 면세 한도 합산 체크</h3>
+        <p class="ja-name" style="margin-bottom:10px">마운자로 비용과 다른 해외 구매액을 합쳐 미화 800달러를 넘는지 확인합니다.</p>
+        <label class="field" style="margin-bottom:10px">
+          <span class="lbl">다른 해외 구매액 (선택)</span>
+          <div style="display:flex;gap:8px">
+            <input type="number" id="otherAmount" inputmode="numeric" min="0" step="100" value="0" style="flex:1">
+            <select id="otherUnit" style="flex:0 0 86px">
+              <option value="JPY" selected>엔</option>
+              <option value="KRW">원</option>
+            </select>
+          </div>
+        </label>
+        <label class="field" style="margin-bottom:10px">
+          <span class="lbl">1달러 = ? 엔</span>
+          <input type="number" id="usdJpy" inputmode="decimal" min="1" step="0.1" value="155">
+          <span class="hint">환율 참고값 · 직접 수정 가능</span>
+        </label>
+        <div class="sum-row"><span>마운자로 합계</span><strong id="dutyClinic">—</strong></div>
+        <div class="sum-row"><span>다른 구매</span><strong id="dutyOther">—</strong></div>
+        <div class="sum-row grand" style="font-size:13px"><span>합산(미화)</span><strong id="dutySum" style="font-size:17px">—</strong></div>
+        <p class="status ok" id="dutyStatus">—</p>
+        <div class="tip-card" style="margin:12px 0 0">
+          <h4>합산 함정 — 꼭 확인하세요</h4>
+          <ul>
+            <li>자가치료용 마운자로 <strong>3개월분(12펜) 이내</strong>는 의약품 자진신고 대상에서 빠지지만, 이는 <strong>800달러 면세 한도가 따로 면제된다는 뜻이 아닙니다</strong>.</li>
+            <li>스마트안경·면세품 등 다른 고가 구매와 합산해 <strong>미화 800달러</strong>를 넘으면 입국 세관 신고·과세 대상이 될 수 있습니다.</li>
+            <li>클리닉의 자유진료 처방약은 <strong>일본 소비세 면세(Tax-Free) 대상이 아닙니다</strong>. 면세점 구매액과 성격이 다릅니다.</li>
+            <li>세관 판단은 현장에서 이루어지므로, 이 계산은 준비용 참고값입니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TAB 4: 반입·보냉 ============ -->
+    <section class="panel" id="panel-import" role="tabpanel" aria-labelledby="tab-import" hidden>
+      <div class="section-head">
+        <h2 class="panel-title">반입 · 보냉 체크리스트</h2>
+        <p class="panel-sub">2026-11-12 개정된 한국 입국 기준과 기내 보냉 실무를 정리했습니다. 체크 상태는 이 기기 브라우저에만 저장됩니다.</p>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-top"><span>준비 진행률</span><span class="pct" id="clPct">0%</span></div>
+        <div class="bar"><i id="clBar"></i></div>
+        <div class="progress-top" style="margin-top:7px;font-weight:600;color:var(--muted);font-size:11.5px">
+          <span id="clCount">0 / 0 항목</span>
+          <button class="btn small ghost" id="clReset" style="min-height:26px;padding:0 8px;font-size:11px">초기화</button>
+        </div>
+      </div>
+
+      <div class="card" id="checkList"></div>
+
+      <div class="card">
+        <h3>보안검색대 제시용 일본어</h3>
+        <p class="ja-name" style="margin-bottom:8px">보냉제를 꺼내며 이 문구와 처방 증빙을 함께 보여주세요.</p>
+        <span class="ja-quote" id="secPhrase">冷蔵が必要な処方薬（マンジャロ）の保冷剤です。</span>
+        <div class="copy-row">
+          <button class="btn small primary" style="min-height:38px" data-copy-target="secPhrase">일본어 복사</button>
+        </div>
+        <p class="hint">추가로 “처방전·약봉투·본인 이름이 적힌 영수증”을 함께 꺼내 두면 확인이 빠릅니다.</p>
+      </div>
+
+      <div class="tip-card">
+        <h4>보냉 실무 메모</h4>
+        <ul>
+          <li>보냉제는 얼린 상태여도 젤·액체류로 분류됩니다. <strong>개당 100g(100mL) 이하</strong>만 1L 투명 지퍼백(1인 1개)에 담아 반입할 수 있습니다.</li>
+          <li>일본 다이소 보냉제는 <strong>80g×3</strong>, <strong>50g×6</strong>처럼 절취선으로 붙은 제품이 많습니다. 가위로 낱개 분리해야 개당 100g 이하로 인정되기 쉽습니다(처음부터 분리된 70g×2 제품도 있음).</li>
+          <li>냉장 의약품과 동봉한 보냉제는 용량 예외가 인정되지만, 보안검색대에서 꺼내 위 문구와 함께 보여주는 편이 수월합니다.</li>
+          <li>얼린 팩이 펜에 직접 닿으면 동결될 수 있습니다. 수건·키친타월로 한 겹 감싸고, 반드시 <strong>기내 수하물</strong>로 들고 타세요(위탁 화물칸은 동결 위험).</li>
+          <li>일본 현지 기준이며, 항공사·공항에 따라 운영이 다를 수 있습니다. 출국 전 항공사 안내를 한 번 더 확인하세요.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ TAB 5: 실전 팁·FAQ ============ -->
+    <section class="panel" id="panel-faq" role="tabpanel" aria-labelledby="tab-faq" hidden>
+      <div class="section-head">
+        <h2 class="panel-title">실전 팁 · FAQ</h2>
+        <p class="panel-sub">실제 여행 중에 부딪히는 질문만 모았습니다. 개인 정보나 특정인의 일정은 포함하지 않았고, 모두 공개 기준·공식 페이지에서 확인한 내용입니다.</p>
+      </div>
+
+      <div class="info-card">
+        <h4>이 탭의 성격</h4>
+        <p>처방·반입·보안검색·세관 실무에 대한 <strong>일반 참고 정보</strong>입니다. 의료적 판단이나 법률 자문이 아니며, 최종 기준은 현지 의사·항공사·세관의 안내를 따릅니다.</p>
+      </div>
+
+      <div id="faqList"></div>
+
+      <div class="card" style="margin-top:14px">
+        <h3>한 줄 요약</h3>
+        <ul class="note-list">
+          <li>3개월분(12펜) 이내 · 본인 휴대 · 기내 수하물</li>
+          <li>보냉제 개당 100g 이하 + 1L 지퍼백</li>
+          <li>처방전·영수증·원래 박스 지참</li>
+          <li>다른 구매와 합산해 800달러 초과 여부 확인</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-foot">
+    <p>정보 도우미 프로토타입 · 2026-11 확인 기준<br>의료기관 알선·예약 대행·의약품 광고가 아니며, 처방 여부와 용량은 현지 의사 판단에 따릅니다.</p>
+  </footer>
+
+  <nav class="tabbar" role="tablist" aria-label="주요 메뉴">
+    <button class="tab is-active" role="tab" id="tab-clinics" data-tab="clinics" aria-selected="true" aria-controls="panel-clinics">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9.5L12 4l8 5.5V20"></path><path d="M9.5 20v-5.5h5V20"></path><path d="M12 8.2v2.6M10.7 9.5h2.6"></path></svg>
+      <span>클리닉</span>
+    </button>
+    <button class="tab" role="tab" id="tab-booking" data-tab="booking" aria-selected="false" aria-controls="panel-booking">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16v13H4z"></path><path d="M4 10.5h16M8.5 4v4M15.5 4v4"></path><path d="M8.5 14h3M8.5 17h6"></path></svg>
+      <span>예약</span>
+    </button>
+    <button class="tab" role="tab" id="tab-cost" data-tab="cost" aria-selected="false" aria-controls="panel-cost">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="3" width="15" height="18" rx="2.5"></rect><path d="M8.5 7.5h7M8.5 12h2.5M13 12h2.5M8.5 16h2.5M13 16h2.5"></path></svg>
+      <span>비용</span>
+    </button>
+    <button class="tab" role="tab" id="tab-import" data-tab="import" aria-selected="false" aria-controls="panel-import">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v3.2H9z"></path><path d="M7 7.7h10l1.4 3.3V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6.4 19v-8z"></path><path d="M9.5 12.5h5M12 15v3.5"></path></svg>
+      <span>반입</span>
+    </button>
+    <button class="tab" role="tab" id="tab-faq" data-tab="faq" aria-selected="false" aria-controls="panel-faq">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M9.6 9.6a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9"></path><path d="M12 17h.01"></path></svg>
+      <span>팁</span>
+    </button>
+  </nav>
+</div>
+
+<div class="modal" id="complianceModal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="complianceTitle">
+    <h2 id="complianceTitle">이 앱이 하는 일과 하지 않는 일</h2>
+    <p><strong>본 프로토타입은 의료기관 알선·예약 대행·의약품 광고 목적이 아니며, 각 기관이 공개한 일반 정보와 방문 준비 도구를 정리한 정보 도우미입니다. 처방 여부 및 용량은 반드시 현지 의사의 대면 진료 판단에 따릅니다.</strong></p>
+    <ul>
+      <li>가격·진료시간·주소는 각 기관 공식 페이지에서 <strong>2026-11 확인</strong>한 값이며, 이후 변경될 수 있습니다. 예약 전 공식 페이지에서 다시 확인하세요.</li>
+      <li>예약·결제·진료는 모두 해당 기관과 이용자 사이에서 이루어집니다. 이 앱은 대신 예약하거나 수수료를 받지 않습니다.</li>
+      <li>마운자로의 체중 관리 목적 사용은 일본에서 승인된 효능·효과 범위 밖(자유진료)이며, 일본 건강보험이 적용되지 않습니다.</li>
+      <li>이름·금액 등 입력값은 서버로 전송되지 않습니다. 체크리스트 상태와 계산기 설정(환율·금액)만 이 기기 브라우저(localStorage)에 저장되고, 입력한 이름은 저장하지 않습니다.</li>
+      <li>반입·세관 정보는 일반 참고이며 법률 자문이 아닙니다. 최종 판단은 세관·항공사 안내를 따릅니다.</li>
+      <li>공개 전·수익화 전에는 관련 법령(의료법·약사법·의료광고 가이드라인 등) 검토가 필요합니다.</li>
+    </ul>
+    <button class="btn primary" id="complianceClose" style="width:100%">확인</button>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------------------------------------------------------------
+     1. 검증된 기관 데이터 (2026-11 확인 · 각 기관 공식 페이지)
+     --------------------------------------------------------------- */
+  var CLINICS = [
+    {
+      id: 'silk_kanda',
+      region: '도쿄',
+      name: '도쿄실크클리닉 간다점',
+      nameJa: '東京シルククリニック 神田院',
+      area: '지요다구 간다',
+      station: 'JR 간다역 동·남쪽 출구 도보 1분',
+      address: '〒101-0044 東京都千代田区鍛冶町2-2-9 第二登栄ビル 5階(5A)',
+      hours: '11:00~14:00 / 15:00~20:00 (14~15시 휴진, 마지막 예약 19:30) · 일요일 진료, 12/31~1/3 휴진',
+      phone: '—',
+      bookingUrl: 'https://connect.kireipass.jp/clinics/tokyosilkclinic_kanda/menus/265844/confirm?large_category_id=0&page_id=1666&small_category_id=0',
+      bookingLabel: '공식 예약(키레이패스)',
+      officialUrl: 'https://tokyosilkclinic.com/menu/909/',
+      koreanUrl: 'https://silk-hp.pages.dev/mounjaro/ko',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E9%8D%9B%E5%86%B6%E7%94%BA2-2-9',
+      tiers: {
+        '2.5': { m1: 8000, m3: 22500 },
+        '5': { m1: 14000, m3: 40500 },
+        '7.5': { m1: 22000, m3: 64500 },
+        '10': { m1: 28000, m3: 81000 },
+        '12.5': { m1: 34000, m3: 99000 }
+      },
+      priceNote: '내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준)으로 계산. 15mg은 간다점 취급 없음(신주쿠점만).',
+      consultFee: 0,
+      consultNote: '처방 시 진찰료 0엔 · 미처방 시 5,500엔',
+      cancel: '전날 20:00(JST) 이후 취소·변경, 15분 이상 지각 시 5,500엔',
+      cert: '영문 증명서 8,800엔(한국 등 추가 서류 국가) · 그 외 5,500엔',
+      certFee: 8800,
+      korean: { level: 'info', label: '한국어 안내 페이지', detail: '한국어 안내 페이지·LINE 한국어 문의 가능. 진료는 일본어/영어(번역 앱·통역 동반 가능, 클리닉이 통역을 준비하지는 않음).' },
+      notes: [
+        '예약 필수(키레이패스) · 예약 없이 방문 시 진료 불가',
+        '재고 부족 시 클리닉 부담으로 일본 내 추후 배송',
+        '1회 처방 기본 6개월분까지(7개월분 이상은 의사 판단, 최대 12개월분)'
+      ]
+    },
+    {
+      id: 'silk_shinjuku',
+      region: '도쿄',
+      name: '도쿄실크클리닉 신주쿠점',
+      nameJa: '東京シルククリニック 新宿院',
+      area: '신주쿠구 신주쿠',
+      station: '신주쿠교엔마에역 도보 1분',
+      address: '〒160-0022 東京都新宿区新宿1-16-16 テェアカテリーナ 202',
+      hours: '11:00~14:00 / 15:00~20:00 (14~15시 휴진) · 부정기 휴진',
+      phone: '03-5315-0939',
+      bookingUrl: 'https://connect.kireipass.jp/clinics/tokyosilkclinic/menus/265548/confirm?large_category_id=0&page_id=1394&small_category_id=0',
+      bookingLabel: '공식 예약(키레이패스)',
+      officialUrl: 'https://tokyosilkclinic.com/menu/909/',
+      koreanUrl: 'https://silk-hp.pages.dev/mounjaro/ko',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF1-16-16',
+      tiers: {
+        '2.5': { m1: 8000, m3: 22500 },
+        '5': { m1: 14000, m3: 40500 },
+        '7.5': { m1: 22000, m3: 64500 },
+        '10': { m1: 28000, m3: 81000 },
+        '12.5': { m1: 34000, m3: 99000 },
+        '15': { m1: 42000, m3: 123000 }
+      },
+      priceNote: '내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준). 15mg은 신주쿠점만 취급.',
+      consultFee: 0,
+      consultNote: '처방 시 진찰료 0엔 · 미처방 시 5,500엔',
+      cancel: '전날 20:00(JST) 이후 취소·변경, 15분 이상 지각 시 5,500엔',
+      cert: '영문 증명서 8,800엔(한국 등 추가 서류 국가) · 그 외 5,500엔',
+      certFee: 8800,
+      korean: { level: 'info', label: '한국어 안내 페이지', detail: '한국어 안내 페이지·LINE 한국어 문의 가능. 진료는 일본어/영어(번역 앱·통역 동반 가능).' },
+      notes: [
+        '예약 필수(키레이패스) · 전화 예약 불가(공식 LINE 안내)',
+        '재고 부족 시 클리닉 부담으로 일본 내 추후 배송',
+        '1회 처방 기본 6개월분까지(7개월분 이상은 의사 판단)'
+      ]
+    },
+    {
+      id: 'japannet_ginza',
+      region: '도쿄',
+      name: '재팬넷클리닉 (뷰티온클리닉 긴자)',
+      nameJa: 'ジャパンネットクリニック / ビューティーオンクリニック銀座',
+      area: '주오구 긴자·신바시',
+      station: 'JR·도쿄메트로 신바시역 도보 4분 · 긴자역 도보 8분 · 히가시긴자역 도보 6분',
+      address: '〒104-0061 東京都中央区銀座8-9-7 HULIC & New GINZA 8 11F',
+      hours: '매일 10:00~20:40 (11/25·12/2 휴진, 12/9부터 수요일도 진료) · 예약 우선, 예약 없이 방문 가능',
+      phone: '080-4300-8569 (카카오톡 ID: japanclinic)',
+      bookingUrl: 'https://japannetclinic.com/',
+      bookingLabel: '공식 예약·문의',
+      officialUrl: 'https://japannetclinic.com/ja/mounjaro/',
+      koreanUrl: 'https://japannetclinic.com/',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A78-9-7',
+      tiers: {
+        '2.5': { m1: 22000, m3: 34584 },
+        '5': { m1: 39600, m3: 66891 },
+        '7.5': { m1: 57200, m3: 99924 },
+        '10': { m1: 76264, m3: 133232 },
+        '12.5': { m1: 95336, m3: 166540 }
+      },
+      priceNote: '1펜 단위 가격(2.5mg 5,500엔·5mg 9,900엔·7.5mg 14,300엔 등)의 4펜 환산과 3개월 플랜 월액 기준. 3개월 플랜이 1펜 단위보다 저렴합니다.',
+      consultFee: 3630,
+      consultNote: '초진료 3,630엔(세금 포함) · 재진 1,500엔',
+      cancel: '공식 페이지에 취소 수수료 별도 표기 확인되지 않음(예약 시 확인)',
+      cert: '영문 처방전 7,370엔(일본 내 주소 확인 불가 시 필수)',
+      certFee: 7370,
+      korean: { level: 'full', label: '한국어 진료', detail: '한국인 대표원장이 한국어로 진료·상담, 접수·안내도 한국어. 호텔 배송 3,300엔, 결제는 한국 발급 카드·카카오뱅크 계좌이체·카카오페이 가능.' },
+      notes: [
+        '일본 주소가 확인되지 않으면 영문 처방전 발행료가 필수로 붙습니다',
+        '비거주자는 처방 시 초진료 + 영문 처방전 = 11,000엔(세금 포함, 약값 별도)',
+        '2.5mg은 재고 상황에 따라 입고 대기 안내가 붙을 수 있음'
+      ]
+    },
+    {
+      id: 'modena_tenjin',
+      region: '후쿠오카',
+      name: '모데나클리닉 텐진본원',
+      nameJa: 'モデナクリニック 天神本院',
+      area: '후쿠오카시 주오구 다이묘',
+      station: '덴진·다이묘 지역 (공식 페이지에 최근접 역 도보 표기 없음)',
+      address: '〒810-0041 福岡県福岡市中央区大名2-1-7 FPG links DAIMYO 4F',
+      hours: '9:30~18:00 (부정기 휴일) · 당일 시술 최종 접수 17:00',
+      phone: '092-738-5785 (일본어만)',
+      bookingUrl: 'https://line.me/R/ti/p/@883segwo',
+      bookingLabel: '공식 LINE 예약',
+      officialUrl: 'https://modena-clinic.com/menu/4430/',
+      koreanUrl: 'https://modena-clinic.com/mounjaro-kr/',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%A4%A7%E5%90%8D2-1-7',
+      tiers: {
+        '2.5': { m1: 12500, m3: 37500 },
+        '5': { m1: 22800, m3: 68400 },
+        '7.5': { m1: 32300, m3: 96900 },
+        '10': { m1: 40500, m3: 121500 }
+      },
+      priceNote: '1개월(4펜) 공개 가격 기준 · 세금 포함. 다개월 할인은 공식 페이지에 별도 표기 없어 월액 × 개월로 계산.',
+      consultFee: 0,
+      consultNote: '진찰료·카운셀링 무료(약값만) · 희망 시 채혈 4,950엔',
+      cancel: '예약 3일 전까지 웹 마이페이지, 이후 전화·LINE (수수료 표기 확인 안 됨)',
+      cert: '처방내용서(영문) 무료(여권 지참, 진단서는 미발급)',
+      certFee: 0,
+      korean: { level: 'info', label: '한국어 문진표·페이지', detail: '한국어 문진표·한국어 안내 페이지·LINE 한국어 안내 있음. 진료·전화는 일본어로 진행되어 번역 앱이나 일본어 동반자가 필요합니다.' },
+      notes: [
+        '마운자로 예약은 공식 LINE 전용 (WEB·전화·메일 예약 불가)',
+        '예약 없이 방문하면 마운자로 처방 불가',
+        '1회 진료당 원칙 3개월분까지 · 보냉백은 3펜 이상 무료, 1~2펜 220엔',
+        '국외 반출 통관 책임은 본인 · 클리닉은 보증하지 않음'
+      ]
+    },
+    {
+      id: 'fontana_tenjin',
+      region: '후쿠오카',
+      name: '폰타나클리닉 텐진',
+      nameJa: 'フォンタナクリニック天神 (FONTANA CLINIC)',
+      area: '후쿠오카시 주오구 이마이즈미',
+      station: '니시테츠 후쿠오카(텐진)역 남쪽 출구 도보 7분 · 덴진미나미역 도보 7분 · 덴진역 도보 10분',
+      address: '〒810-0021 福岡県福岡市中央区今泉1-18-23 CASA FONTANA 2F',
+      hours: '10:00~19:00 (평일·토·일·공휴일 동일) · 완전 예약제',
+      phone: '092-753-5205 (카카오톡 ID: fontanaclinic)',
+      bookingUrl: 'https://fontana-clinic.jp/kr/',
+      bookingLabel: '공식 예약·상담(한국어)',
+      officialUrl: 'https://fontana-clinic.jp/mounjaro-jp/',
+      koreanUrl: 'https://fontana-clinic.jp/kr/',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BB%8A%E6%B3%891-18-23',
+      tiers: {
+        '2.5': { m1: 15800, m3: 46200 },
+        '5': { m1: 25400, m3: 72000 },
+        '7.5': { m1: 40600, m3: 116100 },
+        '10': { m1: 48900, m3: 139500 },
+        '12.5': { m1: 60000, m3: 171000 },
+        '15': { m1: 68300, m3: 193500 }
+      },
+      priceNote: '내원 수령 1개월(4펜) 기준 · 세금 포함 · 진찰료 0. 온라인 진료 후 배송은 약값 + 2,500엔(일본 국내 배송비 + 일·영 처방전 발급 포함).',
+      consultFee: 0,
+      consultNote: '초진·재진료 무료 · 온라인 진료는 배송+처방전 2,500엔',
+      cancel: '온라인 진료는 진료 전날 24시까지 문진표 미작성 시 예약 자동 취소(공식 안내)',
+      cert: '일·영 처방전이 온라인 진료 2,500엔에 포함',
+      certFee: 0,
+      korean: { level: 'staff', label: '한국어 상담 스태프', detail: '한국어 대응 스태프가 매일 근무하며 예약·수령·배송을 한국어로 상담합니다(카카오톡 fontanaclinic). 한국에 있을 때 예약·상담도 가능하다고 공식 페이지에 안내되어 있습니다.' },
+      tsushima: true,
+      notes: [
+        '대마도(쓰시마) 숙소·야마토 운수 영업소로 냉장 배송 안내(공식 한국어 페이지, 보통 2~3일)',
+        '대마도 방문 약 1주일 전까지 온라인 진료를 마치라고 안내',
+        '이동용 보냉백·아이스팩 무료 제공',
+        '숙소의 냉장 보관·대리 수령 가능 여부는 직접 확인 필요 · 클리닉은 수령·보관을 보증하지 않음'
+      ]
+    },
+    {
+      id: 'daibikai_shinsaibashi',
+      region: '오사카',
+      name: '대미회클리닉 심사이바시본원',
+      nameJa: '大美会クリニック 心斎橋本院',
+      area: '오사카시 주오구 히가시심사이바시',
+      station: '심사이바시역 도보 6분 · 난바역 도보 12분',
+      address: '大阪市中央区東心斎橋2-8-28 周防町GEOビル3F',
+      hours: '월~토 11:00~21:00 · 일·공휴일 11:00~20:00 (연말연시만 휴진)',
+      phone: '0120-373-889',
+      bookingUrl: 'https://osaka-bc.com/reserve/',
+      bookingLabel: '공식 웹 예약(24시간)',
+      officialUrl: 'https://osaka-bc.com/price/1941/',
+      koreanUrl: '',
+      mapsUrl: 'https://maps.app.goo.gl/YfQVcurASB3FzRdG7',
+      tiers: {
+        '2.5': { m1: 17800, m2: 34800, m3: 51000 },
+        '5': { m1: 32000, m2: 62000, m3: 91200 }
+      },
+      priceNote: '내원(클리닉) 구매 기준 · 세금 포함 · 예약 시점 가격 확인 필요. 7.5mg·10mg은 공식 가격표에 온라인 진료 기준 4개 54,000엔 / 66,000엔 표기(내원 취급은 문의).',
+      consultFee: 0,
+      consultNote: '진찰료·재진료·송료 무료 · 채혈 2,000엔(내원 필요)',
+      cancel: '공식 페이지에 취소 수수료 별도 표기 확인되지 않음(예약 시 확인)',
+      cert: '영문 증명서 발급·비용 공식 페이지에 표기 확인 안 됨',
+      certFee: 0,
+      korean: { level: 'none', label: '한국어 표기 확인 안 됨', detail: '공식 페이지에 한국어 안내 표기가 확인되지 않았습니다. 일본어 예약 폼·진료로, 번역 앱이 필요합니다.' },
+      notes: [
+        '일요일·공휴일도 진료(11:00~20:00)',
+        '1펜(1주) 단위 구매 가능 · 온라인 진료는 별도 앱 안내',
+        '20세 미만·BMI 18 미만은 처방 대상 아님'
+      ]
+    },
+    {
+      id: 'tsuwabuki_suita',
+      region: '오사카',
+      name: '스이타역앞 츠와부키 내과·정형외과',
+      nameJa: '吹田駅前つわぶき内科・整形外科',
+      area: '스이타시 아사히초',
+      station: 'JR 스이타역 앞 (스이타 산쿠스 1번관 1F)',
+      address: '〒564-0027 大阪府吹田市朝日町1-1 吹田さんくす1番館 1F',
+      hours: '8:30~13:00 / 14:00~20:00 (화 14:00~18:00, 금 14:00~19:00) · 일·공휴일 휴진',
+      phone: '—',
+      bookingUrl: 'https://www.tsuwabuki-clinic.com/obesity/',
+      bookingLabel: '공식 페이지(전화 예약)',
+      officialUrl: 'https://www.tsuwabuki-clinic.com/obesity/',
+      koreanUrl: '',
+      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%90%B9%E7%94%B0%E5%B8%82%E6%9C%9D%E6%97%A5%E7%94%BA1-1',
+      tiers: {
+        '2.5': { m1: 12000, m3: 36000 },
+        '5': { m1: 18000, m3: 54000 },
+        '7.5': { m1: 24000, m3: 72000 },
+        '10': { m1: 30000, m3: 90000 },
+        '12.5': { m1: 35000, m3: 105000 },
+        '15': { m1: 41000, m3: 123000 }
+      },
+      priceNote: '1개월(4펜) 가격에 진찰료 포함 · 4펜 단위 처방. 다개월 할인 표기 없음.',
+      consultFee: 0,
+      consultNote: '진찰료 포함 · 처방이 없으면 초진료 3,500엔, 필요 검사 별도',
+      cancel: '공식 페이지에 취소 수수료 표기 확인 안 됨',
+      cert: '영문 증명서 발급·비용 공식 페이지에 표기 확인 안 됨',
+      certFee: 0,
+      korean: { level: 'none', label: '한국어 표기 확인 안 됨', detail: '공식 페이지에 한국어 안내 표기가 확인되지 않았습니다. 일본어 진료로, 번역 앱이 필요합니다.' },
+      notes: [
+        '대면 진료만 (온라인 진료 표기 없음)',
+        '마운자로는 BMI 23 미만 처방 불가 · 20세 미만 불가',
+        '오사카 중심가에서 떨어진 스이타 지역'
+      ]
+    }
+  ];
+
+  /* ---------------------------------------------------------------
+     2. 체크리스트 / FAQ 데이터
+     --------------------------------------------------------------- */
+  var CHECK_ITEMS = [
+    { id: 'period', title: '본인 자가치료용 3개월분(12펜) 이내', desc: '2026-11-12 개정 기준. 해외에서 정식 처방받은 약도 자가치료 목적에 한해 최대 3개월 투여량(12펜)까지 본인 휴대 반입이 허용됩니다.' },
+    { id: 'no_mail', title: '우편·특송(직구) 구매는 불가', desc: '해외 직구·우편 구매는 허용되지 않습니다. 반드시 본인이 직접 처방받아 휴대해야 합니다.' },
+    { id: 'cabin', title: '기내 수하물로 반입', desc: '위탁 수하물은 화물칸에서 얼 수 있습니다. 반드시 기내에 들고 타세요.' },
+    { id: 'gel', title: '보냉제 개당 100g(100mL) 이하 + 1L 지퍼백', desc: '얼린 보냉제도 젤·액체류로 분류됩니다. 개당 100g 이하로 분리해 1L 투명 지퍼백(1인 1개)에 담으세요.' },
+    { id: 'papers', title: '처방전·약봉투·본인 이름 영수증 지참', desc: '6펜을 넘으면 세관에서 본인 명의 정식 처방인지 확인이 붙을 수 있습니다. 영문 증명서가 없어도 이 서류들과 원래 박스·라벨을 그대로 챙기세요.' },
+    { id: 'phrase', title: '보안검색대 제시용 일본어 문구 준비', desc: '「冷蔵が必要な処方薬（マンジャロ）の保冷剤です。」 — 보냉제를 꺼내며 문구와 처방 증빙을 함께 보여주세요.' },
+    { id: 'wrap', title: '보냉제가 펜에 직접 닿지 않게', desc: '얼린 팩에 직접 닿으면 동결될 수 있습니다. 수건·키친타월로 한 겹 감싸세요.' },
+    { id: 'fridge', title: '귀국 후 2~8°C 냉장 보관', desc: '사용 전 보관 온도를 지키고, 사용 직전에는 실온에 잠시 두어 차가운 상태로 주사하지 않도록 합니다.' },
+    { id: 'customs', title: '다른 구매와 합산해 800달러 확인', desc: '의약품이 자진신고 대상에서 빠져도, 다른 면세품·쇼핑과 합산해 미화 800달러를 넘으면 신고·과세 대상이 될 수 있습니다.' }
+  ];
+
+  var FAQ_ITEMS = [
+    {
+      q: '보냉제 100g 규격, 다이소 제품은 어떻게 챙기나요?',
+      body: '<p>나리타공항·일본 국토교통성 기준으로 <strong>보냉제는 얼린 상태여도 젤·액체류</strong>로 분류됩니다. 개당 <strong>100g(100mL) 이하</strong>만 1L 투명 지퍼백(1인 1개)에 담아 반입할 수 있습니다.</p>'
+        + '<p>일본 다이소 보냉제는 <strong>80g×3</strong>, <strong>50g×6</strong>처럼 절취선으로 붙은 제품이 많아, 그대로 넣으면 한 덩어리로 보입니다. <strong>가위로 낱개 분리</strong>해야 개당 100g 이하로 인정되기 쉽습니다. 처음부터 낱개로 분리된 <strong>70g×2</strong> 제품도 있습니다.</p>'
+        + '<p>냉장 의약품(마운자로)과 동봉한 보냉제는 용량 예외가 인정되지만, 보안검색대에서 꺼내 아래 문구와 영수증·처방 증빙을 함께 제시하면 수월합니다.</p>'
+        + '<span class="ja-quote">冷蔵が必要な処方薬（マンジャロ）の保冷剤です。</span>'
+        + '<p>펜이 얼린 보냉제에 직접 닿아 동결되지 않도록 <strong>수건·키친타월로 한 겹 감싸</strong> 기내 수하물로 반입하세요. 위탁 수하물은 화물칸 동결 위험이 있습니다.</p>'
+    },
+    {
+      q: '대마도(쓰시마)에서 받으려면 어떻게 하나요?',
+      body: '<p>대마도 <strong>섬 안에서 마운자로를 처방하는 방문형 병원은 2026-11 기준 확인된 곳이 0곳</strong>입니다. 그래서 실제로는 일본 본토 클리닉의 <strong>온라인 진료 → 대마도 배송 → 배편 픽업</strong> 순서로 받습니다.</p>'
+        + '<p>출발 약 1주일 전까지 온라인 진료를 마치고, 진료할 때 <strong>대마도 숙소나 야마토 운수 영업소</strong>를 수령지로 지정하세요. 냉장 택배는 보통 2~3일 걸립니다.</p>'
+        + '<p>영업소는 2곳입니다. 북부 히타카츠는 <strong>対馬比田勝営業所</strong>(〒817-1701 対馬市上対馬町比田勝488, 8:00~19:00, 코드 090953), 남부 이즈하라는 <strong>対馬営業所</strong>(〒817-0322 対馬市美津島町鶏知字陽樽ノ濱乙513-1, 8:00~20:00, 코드 090950)입니다. <strong>편의점·무인함 수령은 불가</strong>하고, 여권과 송장번호가 필요하며, 보관은 도착일 포함 <strong>최대 3일·연장 불가</strong>입니다.</p>'
+        + '<p>부산에서 히타카츠 약 1시간 20분, 이즈하라 약 2시간 20분입니다(선사·편별 상이). 결항에 대비해 하루 여유를 두고, 숙소의 냉장 보관·대리 수령 여부를 미리 확인하세요.</p>'
+        + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="clinics" data-region-set="대마도">대마도 수령 가이드 열기</button></p>'
+    },
+    {
+      q: '800달러 면세 한도, 마운자로는 어떻게 계산되나요?',
+      body: '<p>2026-11-12 개정 기준으로 자가치료용 마운자로 <strong>3개월분(12펜) 이내</strong>는 의약품 자진신고 대상에서 제외됩니다. 다만 이는 <strong>800달러 면세 한도가 별도로 면제된다는 뜻이 아닙니다</strong>.</p>'
+        + '<p>해외에서 다른 고가 쇼핑(예: 스마트안경·면세품 등)을 함께 하면 <strong>합산 금액이 미화 800달러를 넘어 입국 세관 신고 대상</strong>이 될 수 있습니다. ‘비용’ 탭의 합산 계산기에서 마운자로 비용과 다른 구매액을 넣어 바로 확인할 수 있습니다.</p>'
+        + '<p>또한 클리닉의 <strong>자유진료 처방약은 일본 소비세 면세(Tax-Free) 대상이 아닙니다</strong>. 면세점에서 산 물건과 성격이 다르니 영수증을 구분해 보관하세요.</p>'
+        + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="cost">합산 계산기 열기</button></p>'
+    },
+    {
+      q: '예약 폼의 주소·우편번호는 어떻게 넣나요?',
+      body: '<p>원칙은 <strong>실제로 묵을 숙소 주소</strong>입니다. 숙소가 아직 확정되지 않았거나 시스템이 허용하는 경우에만 우편번호를 <strong>0000000</strong> 등으로 넘기고, 숙소가 정해지면 클리닉에 알려 주세요.</p>'
+        + '<p>재고가 부족하면 클리닉이 나중에 <strong>일본 내 주소로 배송</strong>하는 경우가 있습니다. 숙소 주소·체크인 날짜·숙박자 이름을 메모해 두면 수령이 수월합니다.</p>'
+        + '<p>전화번호는 한국 번호도 입력되는 경우가 많고(3-4-4 형식), フリガナ 칸에는 이름을 카타카나로 넣습니다. ‘예약’ 탭의 변환기를 쓰세요.</p>'
+        + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="booking">이름 변환기 열기</button></p>'
+    },
+    {
+      q: '취소·변경 수수료와 예약 경로, 어떻게 확인하나요?',
+      body: '<p>취소 규정은 클리닉마다 다릅니다. 예를 들어 도쿄실크클리닉은 <strong>전날 20:00(JST) 이후 취소·변경이나 15분 이상 지각 시 5,500엔</strong>이 붙습니다. 일정이 흔들릴 수 있다면 <strong>마감 시각</strong>을 먼저 확인하세요.</p>'
+        + '<p>전화 예약이 되지 않고 <strong>키레이패스(KireiPass)·공식 LINE 전용</strong>인 곳이 많습니다. 특히 마운자로는 LINE 예약만 받는 클리닉도 있어, 예약 경로를 먼저 확인하는 편이 빠릅니다.</p>'
+        + '<p>빈자리는 갑자기 열리는 경우가 있습니다. 일정이 임박했다면 하루에 몇 번씩 예약 페이지를 확인하고, 취소표가 열리면 바로 잡으세요. 예약 완료 메일이 오지 않으면 예약이 안 된 것일 수 있으니 스팸함까지 확인합니다.</p>'
+    },
+    {
+      q: '영문 증명서는 꼭 필요한가요? 없으면 어떻게 하나요?',
+      body: '<p>영문 증명서는 법적 필수 서류가 아니라 <strong>세관·보안검색용 보조 소명 자료</strong>입니다. 다만 <strong>6펜을 초과</strong>(예: 12펜)해 반입하면 세관에서 본인 명의 정식 처방인지 확인이 붙을 수 있습니다.</p>'
+        + '<p>증명서를 발급하지 않아도 <strong>본인 영문명·약품명·개수가 적힌 영수증</strong>과 <strong>원래 박스·라벨</strong>을 그대로 챙기면 소명에 도움이 됩니다. 클리닉에 따라 영문 처방전 발행이 필수인 곳(비거주자 기준)도 있으니 예약 시 확인하세요.</p>'
+        + '<p>투약 후 컨디션 관리는 개인차가 큽니다. 수분을 나눠 마시고 식사를 거르지 않는 정도의 일반적인 생활 참고만 기억하고, 불편이 지속되면 처방한 의사나 현지 의료기관에 상담하세요. 이 앱은 의료 조언을 제공하지 않습니다.</p>'
+    }
+  ];
+
+  var KATA_OVERRIDES = {
+    '김': 'キム', '이': 'イ', '박': 'パク', '최': 'チェ', '정': 'チョン', '강': 'カン', '조': 'ジョ',
+    '윤': 'ユン', '장': 'チャン', '임': 'イム', '한': 'ハン', '오': 'オ', '서': 'ソ', '신': 'シン',
+    '권': 'クォン', '황': 'ファン', '안': 'アン', '송': 'ソン', '전': 'ジョン', '홍': 'ホン', '유': 'ユ',
+    '고': 'コ', '문': 'ムン', '손': 'ソン', '양': 'ヤン', '배': 'ペ', '백': 'ペク', '허': 'ホ', '남': 'ナム',
+    '심': 'シム', '노': 'ノ', '하': 'ハ', '곽': 'クァク', '성': 'ソン', '차': 'チャ', '주': 'ジュ', '우': 'ウ',
+    '구': 'ク', '민': 'ミン', '나': 'ナ', '진': 'ジン', '지': 'ジ', '엄': 'オム', '채': 'チェ', '원': 'ウォン',
+    '천': 'チョン', '방': 'パン', '공': 'コン', '현': 'ヒョン', '함': 'ハム', '변': 'ビョン', '염': 'ヨム',
+    '여': 'ヨ', '추': 'チュ', '도': 'ト', '소': 'ソ', '석': 'ソク', '선': 'ソン', '설': 'ソル', '마': 'マ',
+    '길': 'キル', '연': 'ヨン', '위': 'ウィ', '표': 'ピョ', '명': 'ミョン', '기': 'キ', '반': 'パン', '왕': 'ワン',
+    '금': 'クム', '옥': 'オク', '육': 'ユク', '인': 'イン', '맹': 'メン', '제': 'ジェ', '모': 'モ', '탁': 'タク',
+    '국': 'クク', '어': 'オ', '은': 'ウン', '편': 'ピョン', '용': 'ヨン', '예': 'イェ', '경': 'キョン',
+    '봉': 'ボン', '사': 'サ', '부': 'プ', '수': 'ス', '섭': 'ソプ', '혁': 'ヒョク', '혜': 'ヘ', '희': 'ヒ',
+    '의': 'ウィ', '례': 'レ', '록': 'ロク', '철': 'チョル', '훈': 'フン', '식': 'シク', '영': 'ヨン',
+    '재': 'ジェ', '태': 'テ', '규': 'キュ', '미': 'ミ', '숙': 'スク', '순': 'スン', '림': 'リム', '익': 'イク',
+    '복': 'ボク', '승': 'スン', '완': 'ワン', '환': 'ファン', '욱': 'ウク', '람': 'ラム', '별': 'ビョル'
+  };
+
+  var INITIAL_TABLE = {
+    'ㄱ': { a: 'カ', ya: 'キャ', eo: 'コ', yeo: 'キョ', o: 'コ', yo: 'キョ', u: 'ク', yu: 'キュ', eu: 'ク', i: 'キ' },
+    'ㄲ': { a: 'カ', ya: 'キャ', eo: 'コ', yeo: 'キョ', o: 'コ', yo: 'キョ', u: 'ク', yu: 'キュ', eu: 'ク', i: 'キ' },
+    'ㄴ': { a: 'ナ', ya: 'ニャ', eo: 'ノ', yeo: 'ニョ', o: 'ノ', yo: 'ニョ', u: 'ヌ', yu: 'ニュ', eu: 'ヌ', i: 'ニ' },
+    'ㄷ': { a: 'ダ', ya: 'ジャ', eo: 'ト', yeo: 'ジョ', o: 'ト', yo: 'ジョ', u: 'ドゥ', yu: 'ジュ', eu: 'ドゥ', i: 'ジ' },
+    'ㄸ': { a: 'ダ', ya: 'ジャ', eo: 'ト', yeo: 'ジョ', o: 'ト', yo: 'ジョ', u: 'ドゥ', yu: 'ジュ', eu: 'ドゥ', i: 'ジ' },
+    'ㄹ': { a: 'ラ', ya: 'リャ', eo: 'ロ', yeo: 'リョ', o: 'ロ', yo: 'リョ', u: 'ル', yu: 'リュ', eu: 'ル', i: 'リ' },
+    'ㅁ': { a: 'マ', ya: 'ミャ', eo: 'モ', yeo: 'ミョ', o: 'モ', yo: 'ミョ', u: 'ム', yu: 'ミュ', eu: 'ム', i: 'ミ' },
+    'ㅂ': { a: 'パ', ya: 'ピャ', eo: 'ポ', yeo: 'ピョ', o: 'ポ', yo: 'ピョ', u: 'プ', yu: 'ピュ', eu: 'プ', i: 'ピ' },
+    'ㅃ': { a: 'パ', ya: 'ピャ', eo: 'ポ', yeo: 'ピョ', o: 'ポ', yo: 'ピョ', u: 'プ', yu: 'ピュ', eu: 'プ', i: 'ピ' },
+    'ㅅ': { a: 'サ', ya: 'シャ', eo: 'ソ', yeo: 'ショ', o: 'ソ', yo: 'ショ', u: 'ス', yu: 'シュ', eu: 'ス', i: 'シ' },
+    'ㅆ': { a: 'サ', ya: 'シャ', eo: 'ソ', yeo: 'ショ', o: 'ソ', yo: 'ショ', u: 'ス', yu: 'シュ', eu: 'ス', i: 'シ' },
+    'ㅇ': { a: 'ア', ya: 'ヤ', eo: 'オ', yeo: 'ヨ', o: 'オ', yo: 'ヨ', u: 'ウ', yu: 'ユ', eu: 'ウ', i: 'イ' },
+    'ㅈ': { a: 'ジャ', ya: 'ジャ', eo: 'ジョ', yeo: 'ジョ', o: 'ジョ', yo: 'ジョ', u: 'ジュ', yu: 'ジュ', eu: 'ジュ', i: 'ジ' },
+    'ㅉ': { a: 'ジャ', ya: 'ジャ', eo: 'ジョ', yeo: 'ジョ', o: 'ジョ', yo: 'ジョ', u: 'ジュ', yu: 'ジュ', eu: 'ジュ', i: 'ジ' },
+    'ㅊ': { a: 'チャ', ya: 'チャ', eo: 'チョ', yeo: 'チョ', o: 'チョ', yo: 'チョ', u: 'チュ', yu: 'チュ', eu: 'チュ', i: 'チ' },
+    'ㅋ': { a: 'カ', ya: 'キャ', eo: 'コ', yeo: 'キョ', o: 'コ', yo: 'キョ', u: 'ク', yu: 'キュ', eu: 'ク', i: 'キ' },
+    'ㅌ': { a: 'タ', ya: 'チャ', eo: 'ト', yeo: 'チョ', o: 'ト', yo: 'チョ', u: 'トゥ', yu: 'チュ', eu: 'トゥ', i: 'チ' },
+    'ㅍ': { a: 'パ', ya: 'ピャ', eo: 'ポ', yeo: 'ピョ', o: 'ポ', yo: 'ピョ', u: 'プ', yu: 'ピュ', eu: 'プ', i: 'ピ' },
+    'ㅎ': { a: 'ハ', ya: 'ヒャ', eo: 'ホ', yeo: 'ヒョ', o: 'ホ', yo: 'ヒョ', u: 'フ', yu: 'ヒュ', eu: 'フ', i: 'ヒ' }
+  };
+
+  var MEDIAL_CLASS = {
+    'ㅏ': 'a', 'ㅐ': 'e', 'ㅑ': 'ya', 'ㅒ': 'ye', 'ㅓ': 'eo', 'ㅔ': 'e', 'ㅕ': 'yeo', 'ㅖ': 'ye',
+    'ㅗ': 'o', 'ㅘ': 'wa', 'ㅙ': 'we', 'ㅚ': 'we', 'ㅛ': 'yo', 'ㅜ': 'u', 'ㅝ': 'wo', 'ㅞ': 'we',
+    'ㅟ': 'wi', 'ㅠ': 'yu', 'ㅡ': 'eu', 'ㅢ': 'ui', 'ㅣ': 'i'
+  };
+
+  var WA_TABLE = {
+    'ㄱ': 'クァ', 'ㄴ': 'ナ', 'ㄷ': 'ダ', 'ㄹ': 'ラ', 'ㅁ': 'マ', 'ㅂ': 'バ', 'ㅅ': 'サ',
+    'ㅇ': 'ワ', 'ㅈ': 'ジャ', 'ㅊ': 'チャ', 'ㅋ': 'クァ', 'ㅌ': 'タ', 'ㅍ': 'パ', 'ㅎ': 'ファ'
+  };
+
+  var FINAL_TABLE = {
+    '': '', 'ㄱ': 'ク', 'ㄲ': 'ク', 'ㄳ': 'ク', 'ㄴ': 'ン', 'ㄵ': 'ン', 'ㄶ': 'ン', 'ㄷ': 'ッ',
+    'ㄹ': 'ル', 'ㄺ': 'ルク', 'ㄻ': 'ルム', 'ㄼ': 'ル', 'ㄽ': 'ル', 'ㄾ': 'ル', 'ㄿ': 'ルプ', 'ㅀ': 'ル',
+    'ㅁ': 'ム', 'ㅂ': 'プ', 'ㅄ': 'プ', 'ㅅ': 'ッ', 'ㅆ': 'ッ', 'ㅇ': 'ン', 'ㅈ': 'ッ', 'ㅊ': 'ッ',
+    'ㅋ': 'ク', 'ㅌ': 'ッ', 'ㅍ': 'プ', 'ㅎ': 'ッ'
+  };
+
+  var INITIAL_LIST = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+  var MEDIAL_LIST = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'];
+  var FINAL_LIST = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+
+  /* ---------------------------------------------------------------
+     3. 한글 → 카타카나
+     --------------------------------------------------------------- */
+  // 앞 음절이 모음·비음·유음으로 끝나면 평음 ㄱ·ㄷ·ㅂ·ㅈ이 유성음으로 들립니다(예: 홍길동 → ホンギルドン).
+  var VOICE_MAP = {
+    'カ': 'ガ', 'キ': 'ギ', 'ク': 'グ', 'ケ': 'ゲ', 'コ': 'ゴ',
+    'タ': 'ダ', 'チ': 'ヂ', 'ツ': 'ヅ', 'テ': 'デ', 'ト': 'ド',
+    'ハ': 'バ', 'ヒ': 'ビ', 'フ': 'ブ', 'ヘ': 'ベ', 'ホ': 'ボ'
+  };
+  var VOICE_INITIALS = { 'ㄱ': 1, 'ㄲ': 1, 'ㄷ': 1, 'ㄸ': 1, 'ㅂ': 1, 'ㅃ': 1 };
+  var SONORANT_FINALS = { '': 1, 'ㄴ': 1, 'ㅁ': 1, 'ㅇ': 1, 'ㄹ': 1 };
+
+  function voiceKana(kana) {
+    if (!kana) return kana;
+    var head = kana.charAt(0);
+    if (VOICE_MAP[head]) return VOICE_MAP[head] + kana.slice(1);
+    return kana;
+  }
+
+  function hangulToKatakana(text) {
+    if (!text) return '';
+    var out = '';
+    var prevFinal = null;
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charAt(i);
+      var code = ch.charCodeAt(0);
+      if (code >= 0xAC00 && code <= 0xD7A3) {
+        if (Object.prototype.hasOwnProperty.call(KATA_OVERRIDES, ch)) {
+          var oIdx = code - 0xAC00;
+          var oIni = INITIAL_LIST[Math.floor(oIdx / 588)];
+          var oFin = FINAL_LIST[oIdx % 28];
+          var ov = KATA_OVERRIDES[ch];
+          if (prevFinal !== null && VOICE_INITIALS[oIni] && SONORANT_FINALS[prevFinal]) ov = voiceKana(ov);
+          out += ov;
+          prevFinal = oFin;
+          continue;
+        }
+        var sIndex = code - 0xAC00;
+        var ini = INITIAL_LIST[Math.floor(sIndex / 588)];
+        var med = MEDIAL_LIST[Math.floor((sIndex % 588) / 28)];
+        var fin = FINAL_LIST[sIndex % 28];
+        var cls = MEDIAL_CLASS[med];
+        var base = '';
+        if (cls === 'wa') {
+          base = WA_TABLE[ini] || 'ワ';
+        } else if (cls === 'wo' || cls === 'wi' || cls === 'ui' || cls === 'we') {
+          var row = INITIAL_TABLE[ini] || INITIAL_TABLE['ㅇ'];
+          if (cls === 'wi') base = row.i + 'ィ';
+          else if (cls === 'ui') base = row.u + 'イ';
+          else if (cls === 'wo') base = row.o + 'ァ';
+          else base = row.e;
+        } else {
+          var table = INITIAL_TABLE[ini] || INITIAL_TABLE['ㅇ'];
+          base = table[cls] || table.a;
+        }
+        if (prevFinal !== null && VOICE_INITIALS[ini] && SONORANT_FINALS[prevFinal]) {
+          base = voiceKana(base);
+        }
+        var finKata = FINAL_TABLE.hasOwnProperty(fin) ? FINAL_TABLE[fin] : '';
+        out += base + finKata;
+        prevFinal = fin;
+      } else {
+        out += ch;
+        prevFinal = null;
+      }
+    }
+    return out;
+  }
+
+  /* ---------------------------------------------------------------
+     4. 예약 비고란 생성
+     --------------------------------------------------------------- */
+  function buildNote(dose, months, opts) {
+    opts = opts || {};
+    var pens = months * 4;
+    var ja = [];
+    var ko = [];
+    ja.push('マンジャロ ' + dose + 'mg を ' + months + 'ヶ月分（合計' + pens + '本）希望します。');
+    ko.push('마운자로 ' + dose + 'mg ' + months + '개월분(합계 ' + pens + '펜)을 희망합니다.');
+    if (opts.firstVisit) {
+      ja.push('初診のため、対面での診療を希望します。');
+      ko.push('초진이므로 대면 진료를 희망합니다.');
+    }
+    if (opts.cert) {
+      ja.push('帰国の際に必要な英字の処方証明書についても相談したいです。');
+      ko.push('귀국 시 필요한 영문 처방 증명서에 대해서도 상담하고 싶습니다.');
+    }
+    ja.push('氏名（カタカナ）：＿＿＿＿　※当日は旅券を持参します。');
+    ko.push('성명(카타카나): ____ ※당일 여권을 지참합니다.');
+    return { ja: ja.join('\n'), ko: ko.join('\n'), pens: pens };
+  }
+
+  /* ---------------------------------------------------------------
+     5. 비용 계산
+     --------------------------------------------------------------- */
+  function monthTotal(tier, months) {
+    if (!tier) return null;
+    if (months === 1) return tier.m1;
+    if (months === 2) {
+      if (typeof tier.m2 === 'number') return tier.m2;
+      if (typeof tier.m3 === 'number') return Math.round(tier.m3 / 3 * 2);
+      return tier.m1 * 2;
+    }
+    if (typeof tier.m3 === 'number') return tier.m3;
+    if (typeof tier.m2 === 'number') return Math.round(tier.m2 / 2 * 3);
+    return tier.m1 * 3;
+  }
+
+  function calcQuote(input) {
+    var clinic = input.clinic || null;
+    var months = input.months || 1;
+    var drug;
+    if (clinic && input.customMonthly) {
+      drug = input.customMonthly * months;
+    } else if (clinic) {
+      var tier = clinic.tiers ? clinic.tiers[input.dose] : null;
+      drug = monthTotal(tier, months);
+    } else {
+      drug = (input.customMonthly || 0) * months;
+    }
+    if (drug === null || typeof drug !== 'number' || isNaN(drug)) drug = 0;
+    var consult = clinic && input.includeConsult !== false ? (clinic.consultFee || 0) : 0;
+    var cert = input.includeCert ? (input.certFee || 0) : 0;
+    var extra = input.extra || 0;
+    var jpy = drug + consult + cert + extra;
+    var rate = input.rate || 0;
+    return { drug: drug, consult: consult, cert: cert, extra: extra, jpy: jpy, krw: Math.round(jpy * rate), pens: months * 4 };
+  }
+
+  function dutyCheck(input) {
+    var usdJpy = input.usdJpy > 0 ? input.usdJpy : 155;
+    var rate = input.rate > 0 ? input.rate : 9.3;
+    var otherJpy = input.otherUnit === 'KRW' ? (input.otherAmount / rate) : input.otherAmount;
+    var clinicUsd = (input.clinicJpy || 0) / usdJpy;
+    var otherUsd = (otherJpy || 0) / usdJpy;
+    var total = clinicUsd + otherUsd;
+    return {
+      clinicUsd: clinicUsd,
+      otherUsd: otherUsd,
+      totalUsd: total,
+      limit: 800,
+      over: total > 800,
+      excess: Math.max(0, total - 800)
+    };
+  }
+
+  // 일본 총 지출(원화) vs 한국 동일 개월 예상 비용
+  function breakEven(input) {
+    var japan = (input.jpyKrw || 0) + (input.transport || 0);
+    var korea = (input.krMonthly || 0) * (input.months || 0);
+    return { japan: japan, korea: korea, diff: japan - korea };
+  }
+
+  /* ---------------------------------------------------------------
+     6. 포맷 유틸
+     --------------------------------------------------------------- */
+  function yen(n) {
+    if (n === null || n === undefined || isNaN(n)) return '—';
+    return '¥' + Number(n).toLocaleString('ja-JP');
+  }
+  function won(n) {
+    if (n === null || n === undefined || isNaN(n)) return '—';
+    return '₩' + Number(n).toLocaleString('ko-KR');
+  }
+  function usd(n) {
+    if (n === null || n === undefined || isNaN(n)) return '—';
+    return '$' + Number(n).toFixed(0);
+  }
+  function num(v) {
+    var n = parseFloat(String(v).replace(/,/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+  function esc(s) {
+    return String(s === undefined || s === null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  /* ---------------------------------------------------------------
+     7. DOM
+     --------------------------------------------------------------- */
+  var state = { tab: 'clinics', region: '전체', months: 3, clinicId: 'silk_kanda', dose: '5' };
+  var STORE_KEY = 'jmh.checklist.v1';
+  var CALC_KEY = 'jmh.calc.v1';
+
+  function loadCalc() {
+    try { var raw = localStorage.getItem(CALC_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+  function saveCalc() {
+    try {
+      localStorage.setItem(CALC_KEY, JSON.stringify({
+        clinicId: $('calcClinic').value,
+        dose: $('calcDose').value,
+        months: state.months,
+        rate: $('calcRate').value,
+        usdJpy: $('usdJpy').value,
+        krMonthly: $('krMonthly').value,
+        transport: $('transportCost').value,
+        certFee: $('calcCertFee').value,
+        cert: $('calcCert').checked
+      }));
+    } catch (e) {}
+  }
+
+  function $(id) { return document.getElementById(id); }
+
+  function showToast(msg) {
+    var wrap = $('toastWrap');
+    if (!wrap) return;
+    var el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = msg;
+    wrap.appendChild(el);
+    if (typeof requestAnimationFrame === 'function') {
+      requestAnimationFrame(function () { el.classList.add('show'); });
+    } else {
+      el.classList.add('show');
+    }
+    var remove = function () {
+      el.classList.remove('show');
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 240);
+    };
+    setTimeout(remove, 1900);
+  }
+
+  function copyText(text, label) {
+    if (!text) { showToast('복사할 내용이 없습니다'); return; }
+    var done = function () { showToast(label || '복사했습니다'); };
+    var fallback = function () {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        done();
+      } catch (e) {
+        showToast('복사가 지원되지 않습니다. 길게 눌러 선택하세요.');
+      }
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  function koreanBadge(c) {
+    if (!c.korean) return '';
+    if (c.korean.level === 'full') return '<span class="badge ok">한국어 진료 확인</span>';
+    if (c.korean.level === 'staff') return '<span class="badge ok">한국어 상담 스태프</span>';
+    if (c.korean.level === 'info') return '<span class="badge ok">한국어 안내 페이지</span>';
+    return '<span class="badge">한국어 표기 확인 안 됨</span>';
+  }
+
+  function priceTable(c) {
+    var doses = Object.keys(c.tiers);
+    var rows = doses.map(function (d) {
+      var t = c.tiers[d];
+      return '<tr><td>' + d + 'mg</td><td>' + yen(t.m1) + '</td><td>' + yen(monthTotal(t, 3)) + '</td></tr>';
+    }).join('');
+    return '<div class="price-block">'
+      + '<div class="price-head"><span>공개 가격 · 2026-11 확인</span><span>세금 포함</span></div>'
+      + '<table class="price"><thead><tr><th>용량</th><th>1개월(4펜)</th><th>3개월(12펜)</th></tr></thead><tbody>'
+      + rows + '</tbody></table>'
+      + '<div class="price-foot">' + esc(c.priceNote) + '</div>'
+      + '</div>';
+  }
+
+  function clinicCard(c) {
+    var notes = c.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
+    return '<article class="card">'
+      + '<div class="card-top"><div><h3>' + esc(c.name) + '</h3><p class="ja-name">' + esc(c.nameJa) + '</p></div>'
+      + '<span class="badge region">' + esc(c.region) + '</span></div>'
+      + '<div class="badge-row">' + koreanBadge(c)
+      + (c.tsushima ? '<span class="badge warn">' + esc(c.region) + ' · 대마도 배송</span>' : '')
+      + '<span class="badge">' + esc(c.area) + '</span></div>'
+      + '<dl class="meta">'
+      + '<div class="meta-row"><dt>주소</dt><dd>' + esc(c.address) + '</dd></div>'
+      + '<div class="meta-row"><dt>가는 길</dt><dd>' + esc(c.station) + '</dd></div>'
+      + '<div class="meta-row"><dt>진료시간</dt><dd>' + esc(c.hours) + '</dd></div>'
+      + '<div class="meta-row"><dt>연락처</dt><dd>' + esc(c.phone) + '</dd></div>'
+      + '<div class="meta-row"><dt>비용 규칙</dt><dd>' + esc(c.consultNote) + '<br>' + esc(c.cancel) + '<br>' + esc(c.cert) + '</dd></div>'
+      + '</dl>'
+      + '<div class="korean-note">' + esc(c.korean.detail) + '</div>'
+      + priceTable(c)
+      + '<ul class="note-list">' + notes + '</ul>'
+      + '<div class="actions">'
+      + '<a class="btn primary" href="' + esc(c.bookingUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(c.bookingLabel) + '</a>'
+      + '<a class="btn" href="' + esc(c.mapsUrl) + '" target="_blank" rel="noopener noreferrer">구글 지도</a>'
+      + '<button class="btn ghost" type="button" data-calc="' + esc(c.id) + '">계산기에 넣기</button>'
+      + '</div>'
+      + '<div class="copy-row" style="margin-top:8px">'
+      + '<a class="btn small ghost" href="' + esc(c.officialUrl) + '" target="_blank" rel="noopener noreferrer">공식 페이지</a>'
+      + (c.koreanUrl ? '<a class="btn small ghost" href="' + esc(c.koreanUrl) + '" target="_blank" rel="noopener noreferrer">한국어 안내</a>' : '')
+      + '</div>'
+      + '</article>';
+  }
+
+  function tsushimaGuide() {
+    function office(id, region, jp, addr, hours, code) {
+      return '<div style="border:1px solid var(--line-2);border-radius:12px;padding:11px 12px;margin-top:8px;background:#fbfdfd">'
+        + '<div style="font-size:12.5px;font-weight:700">' + region + ' · ' + jp + '</div>'
+        + '<div style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:3px">' + addr + '<br>' + hours + ' · 영업소 코드 ' + code + '</div>'
+        + '<div class="copy-row" style="margin-top:8px"><button class="btn small ghost" type="button" data-copy-target="' + id + '">주소·코드 복사</button></div>'
+        + '<span id="' + id + '" hidden>' + jp + ' / ' + addr + ' / ' + code + ' / ' + hours + '</span>'
+        + '</div>';
+    }
+    return '<div class="card" style="border-color:#cfe6df">'
+      + '<div class="card-top"><div><h3>대마도(쓰시마) 수령 가이드</h3>'
+      + '<p class="ja-name">2026-11 확인 · 공개 안내 기준</p></div>'
+      + '<span class="badge warn">섬 내 처방 0곳</span></div>'
+      + '<p class="korean-note" style="background:var(--amber-soft);border:1px solid #f2dfbd;color:#6b521f;margin-top:10px">'
+      + '대마도 <strong>섬 안에서 마운자로를 처방하는 방문형 병원은 현재 확인된 곳이 0곳</strong>입니다(2026-11, 공개 안내 기준). '
+      + '실제로는 <strong>일본 본토 클리닉의 온라인 진료 → 대마도 배송 → 배편 픽업</strong> 순서를 씁니다.</p>'
+      + '<ol class="note-list" style="padding-left:18px">'
+      + '<li><strong>출발 약 1주일 전</strong> 한국에서 클리닉 온라인 진료를 마칩니다. 폰타나클리닉은 한국에서 예약·상담이 가능하다고 공식 페이지에 안내하고 있습니다.</li>'
+      + '<li>진료 시 <strong>대마도 숙소 또는 야마토 운수 영업소</strong>를 수령지로 지정합니다. 냉장(쿨) 택배는 보통 2~3일 걸립니다.</li>'
+      + '<li>부산항 배편으로 입도해 수령 — <strong>히타카츠 약 1시간 20분, 이즈하라 약 2시간 20분</strong>(선사·편별 상이).</li>'
+      + '</ol>'
+      + '<div class="out-label" style="margin-top:12px">야마토 운수 영업소 2곳 (편의점·무인함 수령 불가)</div>'
+      + office('offHita', '북부 · 히타카츠항', 'ヤマト運輸 対馬比田勝営業所', '〒817-1701 長崎県対馬市上対馬町比田勝488', '8:00~19:00', '090953')
+      + office('offIzu', '남부 · 이즈하라항', 'ヤマト運輸 対馬営業所（対馬美津島）', '〒817-0322 長崎県対馬市美津島町鶏知字陽樽ノ濱乙513-1', '8:00~20:00', '090950')
+      + '<div class="tip-card" style="margin:12px 0 0">'
+      + '<h4>수령 전 꼭 확인</h4><ul>'
+      + '<li>보관은 <strong>도착일 포함 최대 3일</strong>, 연장 불가. 지나면 클리닉으로 반송됩니다. 수령 희망일은 여행 전날로 잡으세요.</li>'
+      + '<li>수령 시 <strong>여권 + 송장번호</strong>가 필요합니다. 송장번호는 클리닉·야마토 메일에서 확인합니다.</li>'
+      + '<li>기상 결항에 대비해 일정에 <strong>하루 여유</strong>를 두세요. 배가 결항해도 약은 이미 영업소에 도착해 있습니다.</li>'
+      + '<li>숙소가 냉장 택배를 받아 주고 냉장 보관해 주는지 <strong>예약 전에 직접 확인</strong>하세요. 민박·에어비앤비는 영업소 수령을 권합니다.</li>'
+      + '<li>쿨택배는 0~10℃, 마운자로 권장 보관은 2~8℃입니다. 도착 즉시 냉장하고 <strong>동결은 피하세요</strong>.</li>'
+      + '<li>한국 체류 중 비대면 진료로 받는 경우, 약은 일본 국내로만 배송됩니다. 한국 반입은 <strong>휴대 반입 원칙</strong>과 통관 요건을 사전에 확인하세요.</li>'
+      + '</ul></div>'
+      + '</div>';
+  }
+
+  function renderClinics() {
+    var list = $('clinicList');
+    if (!list) return;
+    var q = ($('clinicSearch').value || '').trim().toLowerCase();
+    var koreanOnly = $('koreanOnly').checked;
+    var items = CLINICS.filter(function (c) {
+      if (state.region === '대마도') { if (!c.tsushima) return false; }
+      else if (state.region !== '전체' && c.region !== state.region) return false;
+      if (koreanOnly && c.korean.level === 'none') return false;
+      if (!q) return true;
+      var hay = [c.name, c.nameJa, c.area, c.station, c.region].join(' ').toLowerCase();
+      return hay.indexOf(q) !== -1;
+    });
+    var guide = state.region === '대마도' ? tsushimaGuide() : '';
+    $('resultCount').textContent = items.length + '곳';
+    if (!items.length) {
+      list.innerHTML = guide + '<div class="empty">조건에 맞는 기관이 없습니다.<br>필터를 풀거나 다른 검색어를 입력해 보세요.</div>';
+      return;
+    }
+    list.innerHTML = guide + items.map(clinicCard).join('');
+  }
+
+  function setRegion(region) {
+    state.region = region;
+    var chips = document.querySelectorAll('#regionChips .chip');
+    for (var i = 0; i < chips.length; i++) {
+      var on = chips[i].getAttribute('data-region') === region;
+      chips[i].classList.toggle('is-active', on);
+      chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    renderClinics();
+  }
+
+  function switchTab(tab) {
+    state.tab = tab;
+    var panels = ['clinics', 'booking', 'cost', 'import', 'faq'];
+    panels.forEach(function (p) {
+      var panel = $('panel-' + p);
+      if (panel) panel.hidden = (p !== tab);
+      var btn = $('tab-' + p);
+      if (btn) {
+        btn.classList.toggle('is-active', p === tab);
+        btn.setAttribute('aria-selected', p === tab ? 'true' : 'false');
+      }
+    });
+    window.scrollTo(0, 0);
+    if (tab === 'import') updateChecklistUI();
+  }
+
+  /* ---------- 이름 변환 ---------- */
+  function updateKata() {
+    var sur = $('surName').value.trim();
+    var given = $('givenName').value.trim();
+    var out = $('kataOut');
+    var flat = $('kataOutFlat');
+    if (!sur && !given) {
+      out.innerHTML = '<span class="placeholder">한글을 입력하면 카타카나로 바뀝니다.</span>';
+      flat.innerHTML = '<span class="placeholder">—</span>';
+      if ($('kataWarn')) $('kataWarn').hidden = true;
+      return;
+    }
+    var s = hangulToKatakana(sur);
+    var g = hangulToKatakana(given);
+    var joined = (s && g) ? s + ' ' + g : (s || g);
+    out.textContent = joined;
+    flat.textContent = (s + g) || '—';
+    var hasLatin = /[A-Za-z]/.test(sur + given);
+    if ($('kataWarn')) $('kataWarn').hidden = !hasLatin;
+  }
+
+  /* ---------- 비고란 ---------- */
+  function updateNote() {
+    var r = buildNote($('noteDose').value, parseInt($('noteMonths').value, 10), {
+      cert: $('noteCert').checked,
+      firstVisit: $('noteFirst').checked
+    });
+    $('noteJa').textContent = r.ja;
+    $('noteKo').textContent = r.ko;
+  }
+
+  /* ---------- 비용 ---------- */
+  function fillClinicSelect() {
+    var sel = $('calcClinic');
+    var html = CLINICS.map(function (c) {
+      return '<option value="' + esc(c.id) + '">' + esc(c.region) + ' · ' + esc(c.name) + '</option>';
+    }).join('');
+    html += '<option value="custom">직접 입력(월 약값)</option>';
+    sel.innerHTML = html;
+    sel.value = state.clinicId;
+  }
+
+  function fillDoseSelect() {
+    var sel = $('calcDose');
+    var c = CLINICS.filter(function (x) { return x.id === state.clinicId; })[0];
+    if (!c) {
+      sel.innerHTML = '<option value="custom">직접 입력</option>';
+      return;
+    }
+    var doses = Object.keys(c.tiers);
+    sel.innerHTML = doses.map(function (d) {
+      return '<option value="' + esc(d) + '">' + esc(d) + 'mg</option>';
+    }).join('') + '<option value="custom">직접 입력(월 약값)</option>';
+    if (doses.indexOf(state.dose) === -1) state.dose = doses[0];
+    sel.value = state.dose;
+  }
+
+  function updateCost() {
+    var c = CLINICS.filter(function (x) { return x.id === $('calcClinic').value; })[0] || null;
+    var dose = $('calcDose').value;
+    var months = state.months;
+    var rate = num($('calcRate').value) || 9.3;
+    var certOn = $('calcCert').checked;
+    var certFee = num($('calcCertFee').value);
+    var extra = num($('calcExtra').value);
+    var customMonthly = 0;
+
+    if (dose === 'custom') {
+      if (!$('customMonthly')) {
+        var wrap = document.createElement('label');
+        wrap.className = 'field';
+        wrap.id = 'customWrap';
+        wrap.innerHTML = '<span class="lbl">월 약값(엔)</span><input type="number" id="customMonthly" inputmode="numeric" min="0" step="100" value="0">';
+        var host = $('calcDose').parentNode.parentNode;
+        host.insertBefore(wrap, $('calcDose').parentNode.nextSibling);
+        $('customMonthly').addEventListener('input', updateCost);
+      }
+      $('customWrap').hidden = false;
+      customMonthly = num($('customMonthly').value);
+      $('calcDoseHint').textContent = '공개 가격표에 없는 조건은 직접 입력해 계산하세요.';
+    } else if ($('customWrap')) {
+      $('customWrap').hidden = true;
+      $('calcDoseHint').textContent = c ? c.priceNote : '—';
+    }
+
+    var q = calcQuote({
+      clinic: c,
+      dose: dose,
+      months: months,
+      customMonthly: customMonthly,
+      includeCert: certOn,
+      certFee: certFee,
+      extra: extra,
+      rate: rate
+    });
+
+    $('calcClinicHint').textContent = c
+      ? (c.nameJa + ' · ' + c.consultNote)
+      : '직접 입력 모드';
+    if (dose !== 'custom') $('calcDoseHint').textContent = c ? c.priceNote : '—';
+
+    $('sumDrugLabel').textContent = '(' + months + '개월)';
+    $('sumDrug').textContent = yen(q.drug);
+    $('sumConsult').textContent = q.consult ? yen(q.consult) : '0엔';
+    $('sumCert').textContent = q.cert ? yen(q.cert) : '미포함';
+    $('sumExtra').textContent = q.extra ? yen(q.extra) : '0엔';
+    $('sumJpy').textContent = yen(q.jpy);
+    $('sumKrw').textContent = won(q.krw);
+
+    var notes = [];
+    if (c) notes.push('진찰료: ' + c.consultNote);
+    if (c && c.id === 'japannet_ginza') notes.push('일본 주소가 확인되지 않으면 영문 처방전 7,370엔이 필수입니다.');
+    if (c && c.id === 'tsuwabuki_suita') notes.push('표기 가격에 진찰료가 포함되어 있습니다.');
+    if (c && c.tsushima) notes.push('대마도 수령이면 배송+일·영 처방전 2,500엔을 ‘기타 비용’에 넣어 계산하세요.');
+    $('sumNote').textContent = notes.join(' · ');
+
+    var pens = q.pens;
+    $('sumPens').textContent = '총 ' + pens + '펜' + (pens > 12 ? ' — 한국 휴대 반입 상한(12펜)을 넘습니다.' : (pens === 12 ? ' — 한국 휴대 반입 상한(3개월분)과 같습니다.' : ' — 반입 상한(12펜) 이내입니다.'));
+
+    // 한국 비용 · 교통비 비교
+    var krMonth = num($('krMonthly').value);
+    var transport = num($('transportCost').value);
+    var be = breakEven({ jpyKrw: q.krw, transport: transport, krMonthly: krMonth, months: months });
+    var japanTotal = be.japan;
+    var koreaTotal = be.korea;
+    $('beJapan').textContent = won(japanTotal);
+    $('beKorea').textContent = krMonth > 0 ? won(koreaTotal) : '—';
+    var beStatus = $('beStatus');
+    var beDiff = $('beDiff');
+    if (krMonth > 0) {
+      var diff = japanTotal - koreaTotal;
+      if (diff === 0) {
+        beDiff.textContent = '±0원';
+        beDiff.style.color = '';
+        beStatus.className = 'status ok';
+        beStatus.textContent = '같은 수준입니다(약값·부가비용·교통비 포함).';
+      } else if (diff > 0) {
+        beDiff.textContent = '+' + won(diff) + ' · 일본이 비쌈';
+        beDiff.style.color = 'var(--red)';
+        beStatus.className = 'status over';
+        beStatus.textContent = '일본 쪽이 ' + won(diff) + ' 더 듭니다. 항공·숙박을 이미 쓰는 일정이라면 교통비를 0원으로 두고 비교해 보세요.';
+      } else {
+        beDiff.textContent = '−' + won(Math.abs(diff)) + ' · 일본이 저렴';
+        beDiff.style.color = 'var(--brand-2)';
+        beStatus.className = 'status ok';
+        beStatus.textContent = '일본 쪽이 ' + won(Math.abs(diff)) + ' 적게 듭니다(입력하신 한국 비용·교통비 기준).';
+      }
+    } else {
+      beDiff.textContent = '—';
+      beDiff.style.color = '';
+      beStatus.className = 'status ok';
+      beStatus.textContent = '한국 예상 비용을 입력하면 차액을 계산합니다.';
+    }
+
+    saveCalc();
+
+    // 800달러
+    var d = dutyCheck({
+      clinicJpy: q.jpy,
+      otherAmount: num($('otherAmount').value),
+      otherUnit: $('otherUnit').value,
+      usdJpy: num($('usdJpy').value),
+      rate: rate
+    });
+    $('dutyClinic').textContent = usd(d.clinicUsd);
+    $('dutyOther').textContent = usd(d.otherUsd);
+    $('dutySum').textContent = usd(d.totalUsd);
+    var st = $('dutyStatus');
+    if (d.over) {
+      st.className = 'status over';
+      st.textContent = '한도 초과 약 ' + usd(d.excess) + ' — 자진신고·과세 대상이 될 수 있습니다. 영수증을 모아 두고 세관에 문의하세요.';
+    } else {
+      st.className = 'status ok';
+      st.textContent = '800달러 이내(여유 ' + usd(800 - d.totalUsd) + ') — 다만 최종 판단은 입국 세관의 안내를 따릅니다.';
+    }
+  }
+
+  /* ---------- 체크리스트 ---------- */
+  function loadChecklist() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function saveChecklist(obj) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(obj)); } catch (e) {}
+  }
+  function renderChecklist() {
+    var box = $('checkList');
+    if (!box) return;
+    var saved = loadChecklist();
+    box.innerHTML = CHECK_ITEMS.map(function (it) {
+      var on = !!saved[it.id];
+      return '<label class="check-item' + (on ? ' done' : '') + '">'
+        + '<input type="checkbox" data-check="' + esc(it.id) + '"' + (on ? ' checked' : '') + '>'
+        + '<span><span class="ct">' + esc(it.title) + '</span><span class="cd">' + esc(it.desc) + '</span></span>'
+        + '</label>';
+    }).join('');
+    updateChecklistUI();
+  }
+  function updateChecklistUI() {
+    var saved = loadChecklist();
+    var total = CHECK_ITEMS.length;
+    var done = 0;
+    for (var i = 0; i < CHECK_ITEMS.length; i++) if (saved[CHECK_ITEMS[i].id]) done++;
+    var pct = total ? Math.round(done / total * 100) : 0;
+    if ($('clPct')) $('clPct').textContent = pct + '%';
+    if ($('clBar')) $('clBar').style.width = pct + '%';
+    if ($('clCount')) $('clCount').textContent = done + ' / ' + total + ' 항목';
+    var boxes = document.querySelectorAll('[data-check]');
+    for (var j = 0; j < boxes.length; j++) {
+      var b = boxes[j];
+      var label = b.parentNode;
+      if (label && label.classList) label.classList.toggle('done', b.checked);
+    }
+  }
+
+  /* ---------- FAQ ---------- */
+  function renderFaq() {
+    var box = $('faqList');
+    if (!box) return;
+    box.innerHTML = FAQ_ITEMS.map(function (f, i) {
+      return '<details class="faq">'
+        + '<summary><span class="idx">' + (i + 1) + '</span><span>' + esc(f.q) + '</span>'
+        + '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></summary>'
+        + '<div class="faq-body">' + f.body + '</div>'
+        + '</details>';
+    }).join('');
+  }
+
+  /* ---------- init ---------- */
+  function init() {
+    var savedCalc = loadCalc();
+    if (savedCalc) {
+      if (savedCalc.months) state.months = parseInt(savedCalc.months, 10) || 3;
+      if (savedCalc.clinicId) state.clinicId = savedCalc.clinicId;
+      if (savedCalc.dose) state.dose = savedCalc.dose;
+      ['calcRate', 'usdJpy', 'krMonthly', 'transportCost', 'calcCertFee'].forEach(function (k) {
+        if (savedCalc[k] !== undefined && savedCalc[k] !== null) $(k).value = savedCalc[k];
+      });
+      if (savedCalc.cert) $('calcCert').checked = true;
+    }
+
+    // tabs
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].addEventListener('click', function () {
+        switchTab(this.getAttribute('data-tab'));
+      });
+    }
+
+    // compliance modal
+    var modal = $('complianceModal');
+    $('complianceBtn').addEventListener('click', function () { modal.hidden = false; });
+    $('complianceClose').addEventListener('click', function () { modal.hidden = true; });
+    modal.addEventListener('click', function (e) { if (e.target === modal) modal.hidden = true; });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
+    });
+
+    // clinics
+    var chips = document.querySelectorAll('#regionChips .chip');
+    for (var k = 0; k < chips.length; k++) {
+      chips[k].addEventListener('click', function () {
+        setRegion(this.getAttribute('data-region'));
+      });
+    }
+    $('koreanOnly').addEventListener('change', renderClinics);
+    $('clinicSearch').addEventListener('input', renderClinics);
+    $('clinicList').addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('[data-calc]') : null;
+      if (!btn) return;
+      var id = btn.getAttribute('data-calc');
+      var c = CLINICS.filter(function (x) { return x.id === id; })[0];
+      if (!c) return;
+      state.clinicId = id;
+      state.dose = Object.keys(c.tiers)[0];
+      $('calcClinic').value = id;
+      fillDoseSelect();
+      $('calcCertFee').value = c.certFee || 0;
+      updateCost();
+      switchTab('cost');
+      showToast(c.name + ' 기준으로 계산기에 넣었습니다');
+    });
+
+    // booking
+    ['surName', 'givenName'].forEach(function (id) {
+      $(id).addEventListener('input', updateKata);
+    });
+    ['noteDose', 'noteMonths', 'noteCert', 'noteFirst'].forEach(function (id) {
+      $(id).addEventListener('change', updateNote);
+    });
+
+    // cost
+    fillClinicSelect();
+    fillDoseSelect();
+    $('calcClinic').addEventListener('change', function () {
+      state.clinicId = this.value;
+      var c = CLINICS.filter(function (x) { return x.id === state.clinicId; })[0];
+      if (c) {
+        state.dose = Object.keys(c.tiers)[0];
+        $('calcCertFee').value = c.certFee || 0;
+      }
+      fillDoseSelect();
+      updateCost();
+    });
+    $('calcDose').addEventListener('change', function () {
+      state.dose = this.value;
+      updateCost();
+    });
+    var mBtns = document.querySelectorAll('#calcMonths button');
+    for (var m = 0; m < mBtns.length; m++) {
+      mBtns[m].addEventListener('click', function () {
+        state.months = parseInt(this.getAttribute('data-months'), 10);
+        for (var n = 0; n < mBtns.length; n++) mBtns[n].classList.toggle('is-active', mBtns[n] === this);
+        updateCost();
+      });
+    }
+    ['calcCert', 'calcCertFee', 'calcExtra', 'calcRate', 'krMonthly', 'transportCost', 'otherAmount', 'otherUnit', 'usdJpy'].forEach(function (id) {
+      $(id).addEventListener('input', updateCost);
+      $(id).addEventListener('change', updateCost);
+    });
+    var tp = document.querySelectorAll('#transportPresets button');
+    for (var q2 = 0; q2 < tp.length; q2++) {
+      tp[q2].addEventListener('click', function () {
+        $('transportCost').value = this.getAttribute('data-transport');
+        for (var w = 0; w < tp.length; w++) tp[w].classList.toggle('is-active', tp[w] === this);
+        updateCost();
+      });
+    }
+    if (tp.length) tp[0].classList.add('is-active');
+    for (var mm = 0; mm < mBtns.length; mm++) {
+      mBtns[mm].classList.toggle('is-active', parseInt(mBtns[mm].getAttribute('data-months'), 10) === state.months);
+    }
+
+    // checklist
+    renderChecklist();
+    $('checkList').addEventListener('change', function (e) {
+      var cb = e.target;
+      if (!cb || !cb.getAttribute || !cb.getAttribute('data-check')) return;
+      var obj = loadChecklist();
+      if (cb.checked) obj[cb.getAttribute('data-check')] = true;
+      else delete obj[cb.getAttribute('data-check')];
+      saveChecklist(obj);
+      updateChecklistUI();
+      if (cb.checked && Object.keys(obj).length === CHECK_ITEMS.length) showToast('준비 항목을 모두 확인했습니다');
+    });
+    $('clReset').addEventListener('click', function () {
+      saveChecklist({});
+      renderChecklist();
+      showToast('체크리스트를 초기화했습니다');
+    });
+
+    // faq
+    renderFaq();
+    $('faqList').addEventListener('click', function (e) {
+      var jump = e.target.closest ? e.target.closest('[data-tab-jump]') : null;
+      if (jump) {
+        var rg = jump.getAttribute('data-region-set');
+        if (rg) setRegion(rg);
+        switchTab(jump.getAttribute('data-tab-jump'));
+      }
+    });
+
+    // copy delegation (document-level)
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest ? e.target.closest('[data-copy-target]') : null;
+      if (!btn) return;
+      var target = $(btn.getAttribute('data-copy-target'));
+      if (!target) return;
+      var text = (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') ? target.value : target.textContent;
+      copyText(text.trim(), '복사했습니다');
+    });
+
+    // PWA: 서비스 워커 등록 (https·localhost 에서만. file:// 로 열면 조용히 건너뜁니다)
+    try {
+      if ('serviceWorker' in navigator) {
+        var secureEnough = location.protocol === 'https:' ||
+          location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        if (secureEnough) {
+          navigator.serviceWorker.register('./sw.js').catch(function () {});
+        }
+      }
+    } catch (e) { /* 등록 실패는 앱 동작에 영향을 주지 않습니다 */ }
+
+    // initial renders
+    renderClinics();
+    updateKata();
+    updateNote();
+    updateCost();
+  }
+
+  // 테스트용 노출 (브라우저 동작에는 영향 없음)
+  window.JMH = {
+    hangulToKatakana: hangulToKatakana,
+    buildNote: buildNote,
+    calcQuote: calcQuote,
+    dutyCheck: dutyCheck,
+    breakEven: breakEven,
+    monthTotal: monthTotal,
+    CLINICS: CLINICS,
+    CHECK_ITEMS: CHECK_ITEMS,
+    FAQ_ITEMS: FAQ_ITEMS
+  };
+
+  if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  }
+})();
+</script>
+</body>
+</html>
