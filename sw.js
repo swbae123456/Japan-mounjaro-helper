@@ -1,13 +1,15 @@
 /* 일본 마운자로 방문 도우미 — Service Worker
  * 전략: 캐시 우선 + 백그라운드 갱신(stale-while-revalidate)
- * 앱은 단일 index.html(인라인 CSS/JS)이라 캐시 목록이 작습니다.
+ * index.html(인라인 CSS/JS) + clinics.json(기관 데이터) 구조입니다.
+ * v2: 한/영(KO/EN) UI, clinics.json 프리캐시 추가.
  */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
   './',
   './index.html',
+  './clinics.json',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'

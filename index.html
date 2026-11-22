@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0e7c66">
 <meta name="color-scheme" content="light">
-<meta name="description" content="일본 마운자로 처방·수령·한국 반입 준비를 위한 공개 정보 정리와 방문 도우미. 알선·예약 대행이 아닙니다.">
+<meta name="description" content="일본 마운자로 처방·수령·반입 준비를 위한 공개 정보 정리와 방문 도우미(한국어·영어). 알선·예약 대행이 아닙니다. Informational directory and preparation tool for visitors to Japan — not medical brokerage, booking agency or prescription drug advertising.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -14,7 +14,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
-<title>일본 마운자로 방문 도우미 (프로토타입)</title>
+<title>일본 마운자로 방문 도우미 — 준비 도구</title>
 <style>
   :root{
     --bg:#f3f5f7;
@@ -75,15 +75,31 @@
     background:linear-gradient(145deg,#128e75,#0a5f4f);
     display:flex;align-items:center;justify-content:center;color:#fff;
   }
+  .brand-text{flex:1 1 auto;min-width:0}
   .brand h1{font-size:16.5px;line-height:1.25;margin:0;letter-spacing:-.02em}
   .brand p{margin:1px 0 0;font-size:11px;color:var(--muted);letter-spacing:-.01em}
+
+  /* language switch */
+  .lang-switch{
+    flex:0 0 auto;display:flex;gap:2px;background:#eef1f4;border:1px solid var(--line);
+    padding:2px;border-radius:10px;
+  }
+  .lang-btn{
+    border:0;background:transparent;font-family:var(--font);
+    font-size:11.5px;font-weight:700;letter-spacing:-.01em;
+    color:var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;line-height:1.1;
+    min-width:38px;
+  }
+  .lang-btn.is-active{background:#fff;color:var(--brand-2);box-shadow:0 1px 3px rgba(16,24,40,.14)}
+  .lang-btn:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+
   .top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
   .compliance-pill{
     display:inline-flex;align-items:center;gap:6px;
     border:1px solid #cfe6df;background:var(--brand-soft);color:var(--brand-2);
     font-size:11.5px;font-weight:600;line-height:1;
     padding:7px 10px;border-radius:999px;cursor:pointer;
-    font-family:var(--font);
+    font-family:var(--font);text-align:left;
   }
   .compliance-pill:active{transform:scale(.98)}
   .verified-tag{font-size:10.5px;color:var(--muted)}
@@ -117,6 +133,32 @@
   .switch input:checked + span{background:var(--brand)}
   .switch input:checked + span::after{transform:translateX(16px)}
   .switch input:focus-visible + span{outline:2px solid var(--brand);outline-offset:2px}
+  .switch i{font-style:normal}
+
+  .sort-row{display:flex;align-items:center;gap:8px;margin:0 0 10px}
+  .sort-label{font-size:11.5px;font-weight:700;color:var(--muted);flex:0 0 auto}
+  .sort-select{
+    flex:1 1 auto;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:10px;
+    background:#fff;color:var(--ink);font-family:var(--font);font-size:12.5px;font-weight:600;
+  }
+  details.compare{
+    background:#fff;border:1px solid var(--line);border-radius:14px;margin:0 0 12px;box-shadow:var(--shadow);overflow:hidden;
+  }
+  details.compare > summary{
+    list-style:none;cursor:pointer;padding:12px 13px;font-size:12.5px;font-weight:700;line-height:1.45;
+    display:flex;gap:8px;align-items:center;color:var(--ink-2);
+  }
+  details.compare > summary::-webkit-details-marker{display:none}
+  details.compare > summary .chev{margin-left:auto;flex:0 0 auto;color:var(--muted);transition:transform .18s}
+  details.compare[open] > summary .chev{transform:rotate(45deg)}
+  .compare-body{padding:0 12px 12px}
+  .compare-note{font-size:10.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  table.cmp-price{width:100%;border-collapse:collapse;font-size:11.5px}
+  table.cmp-price th,table.cmp-price td{padding:7px 6px;border-top:1px solid var(--line-2);text-align:right;font-variant-numeric:tabular-nums}
+  table.cmp-price th{font-size:10px;color:var(--muted);font-weight:700;background:#f8fafb}
+  table.cmp-price th:first-child,table.cmp-price td:first-child{text-align:left;font-weight:600;color:var(--ink);white-space:normal}
+  table.cmp-price td:first-child small{display:block;font-weight:500;color:var(--muted);font-size:10px}
+  table.cmp-price tr.missing td{color:var(--muted)}
 
   .search-wrap{position:relative;margin-bottom:12px}
   .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
@@ -132,7 +174,7 @@
     box-shadow:var(--shadow);padding:15px;margin-bottom:12px;
   }
   .card h3{margin:0;font-size:15.5px;letter-spacing:-.02em;line-height:1.3}
-  .ja-name{margin:2px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:0}
+  .ja-name{margin:2px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:0;line-height:1.55}
   .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
   .badge{
     display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;
@@ -144,7 +186,7 @@
   .badge.warn{background:var(--amber-soft);color:var(--amber);border-color:#f2dfbd}
 
   .meta{margin:11px 0 0;display:grid;gap:6px}
-  .meta-row{display:grid;grid-template-columns:52px 1fr;gap:8px;font-size:12.5px;line-height:1.5}
+  .meta-row{display:grid;grid-template-columns:64px 1fr;gap:8px;font-size:12.5px;line-height:1.5}
   .meta-row dt{color:var(--muted);font-weight:600;font-size:11.5px;padding-top:1px}
   .meta-row dd{margin:0;color:var(--ink-2)}
   .meta-row dd a{color:var(--brand-2);text-decoration:none;word-break:break-all}
@@ -176,7 +218,7 @@
     min-height:42px;padding:0 13px;border-radius:11px;border:1px solid var(--line);
     background:#fff;color:var(--ink);font-size:13.5px;font-weight:700;
     font-family:var(--font);text-decoration:none;cursor:pointer;line-height:1.2;
-    transition:background .14s,transform .06s;
+    transition:background .14s,transform .06s;text-align:center;
   }
   .btn:active{transform:scale(.985)}
   .btn.primary{grid-column:1 / -1;background:var(--brand);border-color:var(--brand);color:#fff}
@@ -216,6 +258,14 @@
   .out-label{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin:10px 0 4px}
   .copy-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
   .copy-row .btn{flex:1;min-width:132px}
+
+  /* phrases */
+  .phrase{
+    border:1px solid var(--line-2);border-radius:12px;padding:11px 12px;margin-top:9px;background:#fbfcfd;
+  }
+  .phrase-ja{font-size:14px;color:var(--ink);line-height:1.55;letter-spacing:.01em}
+  .phrase-en{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:3px}
+  .phrase .btn{margin-top:8px}
 
   .tip-card{background:var(--amber-soft);border:1px solid #f0dcba;border-radius:var(--radius);padding:13px 14px;margin-bottom:12px}
   .tip-card h4{margin:0 0 6px;font-size:12.5px;color:var(--amber);letter-spacing:-.01em}
@@ -347,9 +397,13 @@
           <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"></path>
         </svg>
       </div>
-      <div>
-        <h1>일본 마운자로 방문 도우미</h1>
-        <p>공개 정보 정리 · 예약은 각 기관 공식 페이지에서</p>
+      <div class="brand-text">
+        <h1 id="brandTitle" data-en="Japan Mounjaro Visit Helper">일본 마운자로 방문 도우미</h1>
+        <p id="brandSub" data-en="Public information · book on the clinic's official page">공개 정보 정리 · 예약은 각 기관 공식 페이지에서</p>
+      </div>
+      <div class="lang-switch" role="group" aria-label="언어 / Language">
+        <button type="button" class="lang-btn is-active" id="langKo" data-lang="ko" aria-pressed="true">한국어</button>
+        <button type="button" class="lang-btn" id="langEn" data-lang="en" aria-pressed="false">EN</button>
       </div>
     </div>
     <div class="top-row">
@@ -357,53 +411,71 @@
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path>
         </svg>
-        정보 도우미 · 알선 아님
+        <span data-en="Information only · not a broker">정보 도우미 · 알선 아님</span>
       </button>
-      <span class="verified-tag">가격·시간 2026-11 확인</span>
+      <span class="verified-tag" data-en="Prices &amp; hours checked 2026-11">가격·시간 2026-11 확인</span>
     </div>
   </header>
 
   <main>
-    <!-- ============ TAB 1: 클리닉 ============ -->
+    <!-- ============ TAB 1: 클리닉 / Clinics ============ -->
     <section class="panel" id="panel-clinics" role="tabpanel" aria-labelledby="tab-clinics">
       <div class="section-head">
-        <h2 class="panel-title">클리닉 정보</h2>
-        <p class="panel-sub">각 기관이 공식 페이지에 공개한 주소·진료시간·가격만 정리했습니다. 표기 가격은 <strong>2026-11 확인 기준</strong>이며, 최신 조건은 예약 전 공식 페이지에서 확인하세요.</p>
+        <h2 class="panel-title" data-en="Clinics">클리닉 정보</h2>
+        <p class="panel-sub" data-en-html="Only the address, hours and prices each clinic publishes on its own official page. Prices reflect a &lt;strong&gt;2026-11 check&lt;/strong&gt;; confirm current terms on the official page before booking.">각 기관이 공식 페이지에 공개한 주소·진료시간·가격만 정리했습니다. 표기 가격은 <strong>2026-11 확인 기준</strong>이며, 최신 조건은 예약 전 공식 페이지에서 확인하세요.</p>
       </div>
 
       <div class="chips" id="regionChips" role="group" aria-label="지역 필터">
-        <button class="chip is-active" data-region="전체" aria-pressed="true">전체</button>
-        <button class="chip" data-region="도쿄" aria-pressed="false">도쿄</button>
-        <button class="chip" data-region="후쿠오카" aria-pressed="false">후쿠오카</button>
-        <button class="chip" data-region="오사카" aria-pressed="false">오사카</button>
-        <button class="chip" data-region="대마도" aria-pressed="false">대마도 수령</button>
+        <button class="chip is-active" data-region-key="all" data-en="All" aria-pressed="true">전체</button>
+        <button class="chip" data-region-key="tokyo" data-en="Tokyo" aria-pressed="false">도쿄</button>
+        <button class="chip" data-region-key="fukuoka" data-en="Fukuoka" aria-pressed="false">후쿠오카</button>
+        <button class="chip" data-region-key="osaka" data-en="Osaka" aria-pressed="false">오사카</button>
+        <button class="chip" data-region-key="other" data-en="Other (Nagoya · Sapporo)" aria-pressed="false">기타(나고야·삿포로)</button>
+        <button class="chip" data-region-key="tsushima" data-en="Tsushima (delivery)" aria-pressed="false">대마도 수령</button>
       </div>
 
       <div class="filter-row">
-        <label class="switch"><input type="checkbox" id="koreanOnly"><span></span>한국어 안내 확인됨</label>
-        <span class="verified-tag" id="resultCount">6곳</span>
+        <label class="switch"><input type="checkbox" id="koreanOnly"><span></span><i id="langFilterLabel" data-en="English support verified">한국어 안내 확인됨</i></label>
+        <span class="verified-tag" id="resultCount">7곳</span>
       </div>
+
+      <div class="sort-row">
+        <label class="sort-label" for="sortMode" data-en="Sort">정렬</label>
+        <select id="sortMode" class="sort-select">
+          <option value="default" data-en="Default">기본순</option>
+          <option value="price25" data-en="2.5mg published price: low → high">2.5mg 공개가 낮은순</option>
+          <option value="price5" data-en="5mg published price: low → high">5mg 공개가 낮은순</option>
+        </select>
+      </div>
+
+      <details class="compare" id="compareBox">
+        <summary><span data-en="Published price comparison (simple price order — not a recommendation)">공개가 비교표 (단순 가격순 · 추천 아님)</span>
+          <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+        </summary>
+        <div class="compare-body" id="compareBody"></div>
+      </details>
 
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path>
         </svg>
-        <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" aria-label="클리닉 또는 역 이름 검색" autocomplete="off">
+        <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" data-en-ph="Search by clinic or station" aria-label="클리닉 또는 역 이름 검색" autocomplete="off">
       </div>
 
       <div id="clinicList" class="clinic-list"></div>
 
-      <p class="hint" style="padding:0 2px 6px">‘한국어 안내 확인됨’은 해당 기관 공식 페이지에 한국어 안내(페이지·문진표·진료)가 표기된 경우만 포함합니다. 진료 언어는 기관마다 다르니 카드의 ‘한국어 안내’ 줄을 먼저 확인하세요. 가격은 자유진료(보험 적용 외) 기준이며, 처방 여부·용량은 진료한 의사가 판단합니다.</p>
+      <p class="hint" id="clinicHint" style="padding:0 2px 6px" data-en="The language toggle above filters clinics where the official page confirms Korean support; in English mode it shows clinics whose official page confirms English (or Korean/Japanese/English) consultation. Language support differs by clinic — read the language line on each card first. Prices are self-pay (outside Japanese health insurance); whether a prescription is issued and at what dose is decided by the doctor who sees you.">‘한국어 안내 확인됨’은 해당 기관 공식 페이지에 한국어 안내(페이지·문진표·진료)가 표기된 경우만 포함합니다. 진료 언어는 기관마다 다르니 카드의 ‘한국어 안내’ 줄을 먼저 확인하세요. 가격은 자유진료(보험 적용 외) 기준이며, 처방 여부·용량은 진료한 의사가 판단합니다.</p>
     </section>
 
-    <!-- ============ TAB 2: 예약 도우미 ============ -->
+    <!-- ============ TAB 2: 예약 / Booking ============ -->
     <section class="panel" id="panel-booking" role="tabpanel" aria-labelledby="tab-booking" hidden>
       <div class="section-head">
-        <h2 class="panel-title">예약 도우미</h2>
-        <p class="panel-sub">일본 예약 폼의 <strong>フリガナ(후리가나)</strong>와 비고란(備考欄)에 붙여 넣을 문구를 만듭니다. 입력값은 서버로 전송되지 않고 저장되지 않습니다.</p>
+        <h2 class="panel-title" data-en="Booking helper">예약 도우미</h2>
+        <p class="panel-sub" data-en="Build the Japanese text to paste into a clinic's booking form: a name reading guide, useful phrases and a ready-made 備考欄 note. Nothing you type is sent anywhere or saved.">일본 예약 폼의 <strong>フリガナ(후리가나)</strong>와 비고란(備考欄)에 붙여 넣을 문구를 만듭니다. 입력값은 서버로 전송되지 않고 저장되지 않습니다.</p>
       </div>
 
-      <div class="card">
+      <!-- KO: 한글 이름 → 카타카나 -->
+      <div class="card" data-lang-only="ko">
         <h3>한글 이름 → 카타카나</h3>
         <p class="ja-name" style="margin-bottom:12px">성과 이름을 따로 입력하면 예약 폼의 姓 / 名 칸에 그대로 쓸 수 있습니다.</p>
         <div class="two-col">
@@ -428,12 +500,34 @@
         <p class="hint">카타카나는 한글 발음을 일본어 표기로 옮긴 <strong>참고값</strong>입니다. 여권 영문 표기와 실제 발음은 다를 수 있으니, 항공권·여권과 대조해 최종 확인하세요. (예: 김민수 → キム ミンス, 홍길동 → ホン ギルドン)</p>
       </div>
 
+      <!-- EN: passport name guide + phrases -->
+      <div data-lang-only="en">
+        <div class="card">
+          <h3>Your name on a Japanese booking form</h3>
+          <p class="ja-name" style="margin-bottom:12px">KireiPass and most clinic forms ask for 姓 (surname), 名 (given name) and フリガナ (a katakana reading).</p>
+          <div class="info-card" style="margin:0 0 10px">
+            <p>Type your name in <strong>Latin letters exactly as printed in your passport</strong>. Staff match the booking to your passport at reception, and the alphabet spelling is what they check.</p>
+          </div>
+          <ul class="note-list" style="margin-top:0">
+            <li>The katakana field (フリガナ) is a reading, not a translation. If you already have a katakana reading, paste it; otherwise leave it blank or write the same spelling in Latin letters.</li>
+            <li>Do not invent a Japanese name to make the form accept it — a mismatch with your passport causes problems at reception and at customs.</li>
+            <li>Some forms ask for a Japanese address and phone number. See the address tip below; a foreign mobile number is usually accepted in 3-4-4 format with the country code.</li>
+            <li>Bring your passport on the day. The booking, the prescription and the receipt should all carry the same name.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Useful Japanese for the visit</h3>
+          <p class="ja-name" style="margin-bottom:6px">Tap copy and show the screen, or read it out. Staff are used to foreign patients with a translation app.</p>
+          <div id="phraseList"></div>
+        </div>
+      </div>
+
       <div class="card">
-        <h3>비고란(備考欄) 일본어 생성기</h3>
-        <p class="ja-name" style="margin-bottom:12px">용량과 기간을 고르면 예약 비고란에 붙여 넣을 문장을 만듭니다.</p>
+        <h3 data-en="Japanese note for the booking form's 備考欄">비고란(備考欄) 일본어 생성기</h3>
+        <p class="ja-name" style="margin-bottom:12px" data-en="Choose the dose and length; the app writes the Japanese sentence you paste into the remarks field, with a plain-language meaning underneath.">용량과 기간을 고르면 예약 비고란에 붙여 넣을 문장을 만듭니다.</p>
         <div class="two-col">
           <label class="field" style="margin-bottom:10px">
-            <span class="lbl">용량</span>
+            <span class="lbl" data-en="Dose">용량</span>
             <select id="noteDose">
               <option value="2.5">2.5mg</option>
               <option value="5" selected>5mg</option>
@@ -444,28 +538,34 @@
             </select>
           </label>
           <label class="field" style="margin-bottom:10px">
-            <span class="lbl">기간</span>
+            <span class="lbl" data-en="Length">기간</span>
             <select id="noteMonths">
-              <option value="1">1개월(4펜)</option>
-              <option value="2">2개월(8펜)</option>
-              <option value="3" selected>3개월(12펜)</option>
+              <option value="1" data-en="1 month (4 pens)">1개월(4펜)</option>
+              <option value="2" data-en="2 months (8 pens)">2개월(8펜)</option>
+              <option value="3" selected data-en="3 months (12 pens)">3개월(12펜)</option>
             </select>
           </label>
         </div>
-        <label class="check"><input type="checkbox" id="noteCert" checked>영문 처방·소지 증명서 문의</label>
-        <label class="check"><input type="checkbox" id="noteFirst">초진 대면 진료 희망</label>
-        <div class="out-label">일본어 (비고란)</div>
+        <label class="check"><input type="checkbox" id="noteCert" checked><span data-en="Ask about an English prescription certificate">영문 처방·소지 증명서 문의</span></label>
+        <label class="check"><input type="checkbox" id="noteFirst"><span data-en="First-visit in-person consultation">초진 대면 진료 희망</span></label>
+        <div class="out-label" data-en="Japanese (remarks field)">일본어 (비고란)</div>
         <div class="output ja" id="noteJa"><span class="placeholder">—</span></div>
-        <div class="out-label">한국어 뜻</div>
-        <div class="output" id="noteKo" style="font-size:12.5px;color:var(--ink-2)"><span class="placeholder">—</span></div>
-        <div class="copy-row">
+        <div class="out-label" data-en="Meaning (Korean)" data-lang-only="ko">한국어 뜻</div>
+        <div class="output" id="noteKo" data-lang-only="ko" style="font-size:12.5px;color:var(--ink-2)"><span class="placeholder">—</span></div>
+        <div class="out-label" data-lang-only="en">Meaning (English)</div>
+        <div class="output" id="noteEn" data-lang-only="en" style="font-size:12.5px;color:var(--ink-2)"><span class="placeholder">—</span></div>
+        <div class="copy-row" data-lang-only="ko">
           <button class="btn small primary" style="grid-column:auto;min-height:38px" data-copy-target="noteJa">일본어 복사</button>
           <button class="btn small ghost" data-copy-target="noteKo">한국어 복사</button>
         </div>
-        <p class="hint">‘12펜(3개월분)’이 한국 휴대 반입 상한입니다. 3개월을 넘겨 예약하면 반입 기준을 초과하므로, 예약 전에 반입 규정을 먼저 확인하세요.</p>
+        <div class="copy-row" data-lang-only="en">
+          <button class="btn small primary" style="grid-column:auto;min-height:38px" data-copy-target="noteJa">Copy Japanese</button>
+          <button class="btn small ghost" data-copy-target="noteEn">Copy English meaning</button>
+        </div>
+        <p class="hint" id="noteHint">‘12펜(3개월분)’이 한국 휴대 반입 상한입니다. 3개월을 넘겨 예약하면 반입 기준을 초과하므로, 예약 전에 반입 규정을 먼저 확인하세요.</p>
       </div>
 
-      <div class="tip-card">
+      <div class="tip-card" data-lang-only="ko">
         <h4>예약 입력 실전 팁</h4>
         <ul>
           <li>예약 폼은 대부분 일본어입니다. 브라우저 번역 기능을 켜고, <strong>フリガナ</strong> 칸에는 위에서 만든 카타카나를 넣으세요.</li>
@@ -476,163 +576,211 @@
           <li>여러 명이 함께 가면 <strong>1인 1예약</strong>(각자 다른 메일·전화번호)이 원칙인 곳이 많습니다.</li>
         </ul>
       </div>
+
+      <div class="tip-card" data-lang-only="en">
+        <h4>Booking-form tips</h4>
+        <ul>
+          <li>Most booking forms are Japanese only. Turn on your browser's translate feature and keep the name spelling identical to your passport.</li>
+          <li>A foreign mobile number usually fits the 3-4-4 split; add your country code where a form asks for one.</li>
+          <li>Use the address of the hotel you will actually stay at. Only use <strong>0000000</strong> when the hotel is not booked yet and the form accepts it — then tell the clinic the real address once you have it.</li>
+          <li>If stock runs short, a clinic may ship the pens later within Japan, so keep your hotel address, check-in date and the name on the booking handy.</li>
+          <li>No confirmation email may mean no booking. Check the spam folder before travelling.</li>
+          <li>For two or more people, most clinics want one booking per person with a different email and phone number.</li>
+        </ul>
+      </div>
     </section>
 
-    <!-- ============ TAB 3: 비용 계산기 ============ -->
+    <!-- ============ TAB 3: 비용 / Cost ============ -->
     <section class="panel" id="panel-cost" role="tabpanel" aria-labelledby="tab-cost" hidden>
       <div class="section-head">
-        <h2 class="panel-title">비용 계산기</h2>
-        <p class="panel-sub">클리닉 공개 가격을 기준으로 약값·진찰료·증명서·기타 비용을 합산하고, 원화 환산과 <strong>800달러 면세 한도</strong>를 함께 확인합니다. 환율은 참고값이며 직접 수정할 수 있습니다.</p>
+        <h2 class="panel-title" data-en="Cost calculator">비용 계산기</h2>
+        <p class="panel-sub" id="costSub" data-en="Add up drug cost, consultation, certificate and extras from published clinic prices, then convert to US dollars at a rate you can edit. Nothing here is a quote — the clinic sets the final charge.">클리닉 공개 가격을 기준으로 약값·진찰료·증명서·기타 비용을 합산하고, 원화 환산과 <strong>800달러 면세 한도</strong>를 함께 확인합니다. 환율은 참고값이며 직접 수정할 수 있습니다.</p>
       </div>
 
       <div class="card">
         <label class="field">
-          <span class="lbl">클리닉</span>
+          <span class="lbl" data-en="Clinic">클리닉</span>
           <select id="calcClinic"></select>
           <span class="hint" id="calcClinicHint">—</span>
         </label>
         <label class="field">
-          <span class="lbl">용량</span>
+          <span class="lbl" data-en="Dose">용량</span>
           <select id="calcDose"></select>
           <span class="hint" id="calcDoseHint">—</span>
         </label>
-        <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px">기간</span>
+        <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px" data-en="Length">기간</span>
         <div class="seg" id="calcMonths" role="group" aria-label="기간 선택">
-          <button type="button" data-months="1">1개월</button>
-          <button type="button" data-months="2">2개월</button>
-          <button type="button" data-months="3" class="is-active">3개월</button>
+          <button type="button" data-months="1" data-en="1 mo">1개월</button>
+          <button type="button" data-months="2" data-en="2 mo">2개월</button>
+          <button type="button" data-months="3" class="is-active" data-en="3 mo">3개월</button>
         </div>
-        <label class="check"><input type="checkbox" id="calcCert">영문 증명서 포함</label>
+        <label class="check"><input type="checkbox" id="calcCert"><span data-en="Include English certificate">영문 증명서 포함</span></label>
         <label class="field" style="margin-bottom:10px">
-          <span class="lbl">영문 증명서 비용(엔)</span>
+          <span class="lbl" data-en="English certificate fee (JPY)">영문 증명서 비용(엔)</span>
           <input type="number" id="calcCertFee" inputmode="numeric" min="0" step="10" value="8800">
         </label>
         <label class="field" style="margin-bottom:10px">
-          <span class="lbl">보냉 용품·기타 비용(엔)</span>
+          <span class="lbl" data-en="Cold-chain gear / other cost (JPY)">보냉 용품·기타 비용(엔)</span>
           <input type="number" id="calcExtra" inputmode="numeric" min="0" step="10" value="0">
         </label>
-        <label class="field" style="margin-bottom:0">
-          <span class="lbl">참고 환율 (1엔 = ? 원)</span>
-          <input type="number" id="calcRate" inputmode="decimal" min="0" step="0.01" value="9.3">
-          <span class="hint">참고 환율 · 직접 수정 가능 (예: 100엔 = 930원)</span>
-        </label>
+        <div data-lang-only="ko">
+          <label class="field" style="margin-bottom:0">
+            <span class="lbl">참고 환율 (1엔 = ? 원)</span>
+            <input type="number" id="calcRate" inputmode="decimal" min="0" step="0.01" value="9.3">
+            <span class="hint">참고 환율 · 직접 수정 가능 (예: 100엔 = 930원)</span>
+          </label>
+        </div>
+        <div data-lang-only="en">
+          <label class="field" style="margin-bottom:0">
+            <span class="lbl">Reference rate — 1 USD = ? JPY</span>
+            <input type="number" id="usdRate" inputmode="decimal" min="1" step="0.1" value="154">
+            <span class="hint">Reference rate — editable. The dollar figure is only a guide; your card issuer applies its own rate.</span>
+          </label>
+        </div>
       </div>
 
       <div class="card">
-        <div class="sum-row"><span>약값 <span id="sumDrugLabel"></span></span><strong id="sumDrug">—</strong></div>
-        <div class="sum-row"><span>진찰료</span><strong id="sumConsult">—</strong></div>
-        <div class="sum-row"><span>영문 증명서</span><strong id="sumCert">—</strong></div>
-        <div class="sum-row"><span>기타</span><strong id="sumExtra">—</strong></div>
-        <div class="sum-row grand"><span>합계(엔)</span><strong id="sumJpy">—</strong></div>
-        <div class="sum-row krw"><span>원화 환산</span><strong id="sumKrw">—</strong></div>
+        <div class="sum-row"><span><span data-en="Drug cost">약값</span> <span id="sumDrugLabel"></span></span><strong id="sumDrug">—</strong></div>
+        <div class="sum-row"><span data-en="Consultation fee">진찰료</span><strong id="sumConsult">—</strong></div>
+        <div class="sum-row"><span data-en="English certificate">영문 증명서</span><strong id="sumCert">—</strong></div>
+        <div class="sum-row"><span data-en="Other">기타</span><strong id="sumExtra">—</strong></div>
+        <div class="sum-row grand"><span data-en="Total (JPY)">합계(엔)</span><strong id="sumJpy">—</strong></div>
+        <div class="sum-row krw" id="sumKrwRow"><span>원화 환산</span><strong id="sumKrw">—</strong></div>
+        <div class="sum-row krw" id="sumUsdRow" hidden><span data-en="US dollars at the reference rate">달러 환산(참고)</span><strong id="sumUsd">—</strong></div>
         <p class="sum-note" id="sumNote">—</p>
         <p class="sum-note" id="sumPens">—</p>
       </div>
 
-      <div class="card">
-        <h3>한국 예상 비용 · 교통비 비교</h3>
-        <p class="ja-name" style="margin-bottom:10px">같은 개월 수를 한국에서 구매할 때의 예상 비용과 왕복 교통비를 넣으면, 일본 총 지출과 차액을 보여줍니다.</p>
-        <label class="field" style="margin-bottom:10px">
-          <span class="lbl">한국 월 예상 비용(원)</span>
-          <input type="number" id="krMonthly" inputmode="numeric" min="0" step="10000" placeholder="예: 320000">
-          <span class="hint">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)로 언급된 범위가 있습니다. 특정 기관을 지목하지 않는 참고값이며, 실제 금액은 직접 확인해 입력하세요.</span>
-        </label>
-        <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px">왕복 교통비(원)</span>
-        <div class="seg" id="transportPresets" role="group" aria-label="교통비 예시">
-          <button type="button" data-transport="0">0원</button>
-          <button type="button" data-transport="150000">15만 원</button>
-          <button type="button" data-transport="350000">35만 원</button>
-        </div>
-        <label class="field" style="margin-bottom:10px">
-          <span class="lbl">직접 입력(원)</span>
-          <input type="number" id="transportCost" inputmode="numeric" min="0" step="10000" value="0">
-          <span class="hint">0원=이미 여행 중 · 15만 원=부산↔대마도 배편 예시 · 35만 원=항공권 예시 (모두 수정 가능한 참고값)</span>
-        </label>
-        <div class="sum-row"><span>일본 총 지출</span><strong id="beJapan">—</strong></div>
-        <div class="sum-row"><span>한국 동일 개월 예상</span><strong id="beKorea">—</strong></div>
-        <div class="sum-row grand"><span>예상 차액</span><strong id="beDiff" style="font-size:16px;text-align:right">—</strong></div>
-        <p class="status ok" id="beStatus">한국 예상 비용을 입력하면 차액을 계산합니다.</p>
-        <p class="hint">일본 총 지출 = 약값 + 진찰료·증명서·기타 + 교통비(원화 환산 기준). 이 도구는 국내 시세를 자체적으로 주장하지 않으며, 입력값은 이 기기 안에서만 계산에 쓰입니다.</p>
-      </div>
-
-      <div class="card">
-        <h3>한·일 처방·반입 비교</h3>
-        <p class="ja-name" style="margin-bottom:10px">일반 참고용 비교입니다. 특정 기관을 권하지 않으며, 처방 가능 여부는 진료한 의사가 판단합니다.</p>
-        <table class="price cmp" style="border-collapse:collapse">
-          <thead><tr><th style="text-align:left">항목</th><th style="text-align:left">한국</th><th style="text-align:left">일본</th></tr></thead>
-          <tbody>
-            <tr><td>접근성·소요시간</td><td style="text-align:left">국내 진료 후 수령 (당일~며칠)</td><td style="text-align:left">대면 진료 당일 수령 또는 온라인 진료 후 2~7일 배송 · 여행 일정 필요</td></tr>
-            <tr><td>일반 비용 수준</td><td style="text-align:left">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)</td><td style="text-align:left">클리닉 공개가 기준 · ‘클리닉’ 탭 참조</td></tr>
-            <tr><td>1회 반입 한도</td><td style="text-align:left">해당 없음(국내 처방)</td><td style="text-align:left">자가치료용 3개월분(12펜)까지 휴대 반입</td></tr>
-            <tr><td>부작용·중복투약 관리</td><td style="text-align:left">국내 DUR·진료 연속성 있음</td><td style="text-align:left">국내 DUR 미연동 · 귀국 후 복용 이력을 의료기관에 직접 고지</td></tr>
-            <tr><td>양도·재판매</td><td style="text-align:left" colspan="2">자가치료 목적 반입품이라도 양도·재판매는 약사법 위반으로 처벌 대상입니다.</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card" id="dutyCard">
-        <h3>800달러 면세 한도 합산 체크</h3>
-        <p class="ja-name" style="margin-bottom:10px">마운자로 비용과 다른 해외 구매액을 합쳐 미화 800달러를 넘는지 확인합니다.</p>
-        <label class="field" style="margin-bottom:10px">
-          <span class="lbl">다른 해외 구매액 (선택)</span>
-          <div style="display:flex;gap:8px">
-            <input type="number" id="otherAmount" inputmode="numeric" min="0" step="100" value="0" style="flex:1">
-            <select id="otherUnit" style="flex:0 0 86px">
-              <option value="JPY" selected>엔</option>
-              <option value="KRW">원</option>
-            </select>
+      <!-- KO only: 한국 비용 비교 · 800달러 면세 -->
+      <div data-lang-only="ko">
+        <div class="card">
+          <h3>한국 예상 비용 · 교통비 비교</h3>
+          <p class="ja-name" style="margin-bottom:10px">같은 개월 수를 한국에서 구매할 때의 예상 비용과 왕복 교통비를 넣으면, 일본 총 지출과 차액을 보여줍니다.</p>
+          <label class="field" style="margin-bottom:10px">
+            <span class="lbl">한국 월 예상 비용(원)</span>
+            <input type="number" id="krMonthly" inputmode="numeric" min="0" step="10000" placeholder="예: 320000">
+            <span class="hint">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)로 언급된 범위가 있습니다. 특정 기관을 지목하지 않는 참고값이며, 실제 금액은 직접 확인해 입력하세요.</span>
+          </label>
+          <span class="lbl" style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px">왕복 교통비(원)</span>
+          <div class="seg" id="transportPresets" role="group" aria-label="교통비 예시">
+            <button type="button" data-transport="0">0원</button>
+            <button type="button" data-transport="150000">15만 원</button>
+            <button type="button" data-transport="350000">35만 원</button>
           </div>
-        </label>
-        <label class="field" style="margin-bottom:10px">
-          <span class="lbl">1달러 = ? 엔</span>
-          <input type="number" id="usdJpy" inputmode="decimal" min="1" step="0.1" value="155">
-          <span class="hint">환율 참고값 · 직접 수정 가능</span>
-        </label>
-        <div class="sum-row"><span>마운자로 합계</span><strong id="dutyClinic">—</strong></div>
-        <div class="sum-row"><span>다른 구매</span><strong id="dutyOther">—</strong></div>
-        <div class="sum-row grand" style="font-size:13px"><span>합산(미화)</span><strong id="dutySum" style="font-size:17px">—</strong></div>
-        <p class="status ok" id="dutyStatus">—</p>
-        <div class="tip-card" style="margin:12px 0 0">
-          <h4>합산 함정 — 꼭 확인하세요</h4>
+          <label class="field" style="margin-bottom:10px">
+            <span class="lbl">직접 입력(원)</span>
+            <input type="number" id="transportCost" inputmode="numeric" min="0" step="10000" value="0">
+            <span class="hint">0원=이미 여행 중 · 15만 원=부산↔대마도 배편 예시 · 35만 원=항공권 예시 (모두 수정 가능한 참고값)</span>
+          </label>
+          <div class="sum-row"><span>일본 총 지출</span><strong id="beJapan">—</strong></div>
+          <div class="sum-row"><span>한국 동일 개월 예상</span><strong id="beKorea">—</strong></div>
+          <div class="sum-row grand"><span>예상 차액</span><strong id="beDiff" style="font-size:16px;text-align:right">—</strong></div>
+          <p class="status ok" id="beStatus">한국 예상 비용을 입력하면 차액을 계산합니다.</p>
+          <p class="hint">일본 총 지출 = 약값 + 진찰료·증명서·기타 + 교통비(원화 환산 기준). 이 도구는 국내 시세를 자체적으로 주장하지 않으며, 입력값은 이 기기 안에서만 계산에 쓰입니다.</p>
+        </div>
+
+        <div class="card">
+          <h3>한·일 처방·반입 비교</h3>
+          <p class="ja-name" style="margin-bottom:10px">일반 참고용 비교입니다. 특정 기관을 권하지 않으며, 처방 가능 여부는 진료한 의사가 판단합니다.</p>
+          <table class="price cmp" style="border-collapse:collapse">
+            <thead><tr><th style="text-align:left">항목</th><th style="text-align:left">한국</th><th style="text-align:left">일본</th></tr></thead>
+            <tbody>
+              <tr><td>접근성·소요시간</td><td style="text-align:left">국내 진료 후 수령 (당일~며칠)</td><td style="text-align:left">대면 진료 당일 수령 또는 온라인 진료 후 2~7일 배송 · 여행 일정 필요</td></tr>
+              <tr><td>일반 비용 수준</td><td style="text-align:left">2026-11 보도 기준 월 28~38만 원대(용량·기관별 차이)</td><td style="text-align:left">클리닉 공개가 기준 · ‘클리닉’ 탭 참조</td></tr>
+              <tr><td>1회 반입 한도</td><td style="text-align:left">해당 없음(국내 처방)</td><td style="text-align:left">자가치료용 3개월분(12펜)까지 휴대 반입</td></tr>
+              <tr><td>부작용·중복투약 관리</td><td style="text-align:left">국내 DUR·진료 연속성 있음</td><td style="text-align:left">국내 DUR 미연동 · 귀국 후 복용 이력을 의료기관에 직접 고지</td></tr>
+              <tr><td>양도·재판매</td><td style="text-align:left" colspan="2">자가치료 목적 반입품이라도 양도·재판매는 약사법 위반으로 처벌 대상입니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" id="dutyCard">
+          <h3>800달러 면세 한도 합산 체크</h3>
+          <p class="ja-name" style="margin-bottom:10px">마운자로 비용과 다른 해외 구매액을 합쳐 미화 800달러를 넘는지 확인합니다.</p>
+          <label class="field" style="margin-bottom:10px">
+            <span class="lbl">다른 해외 구매액 (선택)</span>
+            <div style="display:flex;gap:8px">
+              <input type="number" id="otherAmount" inputmode="numeric" min="0" step="100" value="0" style="flex:1">
+              <select id="otherUnit" style="flex:0 0 86px">
+                <option value="JPY" selected>엔</option>
+                <option value="KRW">원</option>
+              </select>
+            </div>
+          </label>
+          <label class="field" style="margin-bottom:10px">
+            <span class="lbl">1달러 = ? 엔</span>
+            <input type="number" id="usdJpy" inputmode="decimal" min="1" step="0.1" value="155">
+            <span class="hint">환율 참고값 · 직접 수정 가능</span>
+          </label>
+          <div class="sum-row"><span>마운자로 합계</span><strong id="dutyClinic">—</strong></div>
+          <div class="sum-row"><span>다른 구매</span><strong id="dutyOther">—</strong></div>
+          <div class="sum-row grand" style="font-size:13px"><span>합산(미화)</span><strong id="dutySum" style="font-size:17px">—</strong></div>
+          <p class="status ok" id="dutyStatus">—</p>
+          <div class="tip-card" style="margin:12px 0 0">
+            <h4>합산 함정 — 꼭 확인하세요</h4>
+            <ul>
+              <li>자가치료용 마운자로 <strong>3개월분(12펜) 이내</strong>는 의약품 자진신고 대상에서 빠지지만, 이는 <strong>800달러 면세 한도가 따로 면제된다는 뜻이 아닙니다</strong>.</li>
+              <li>스마트안경·면세품 등 다른 고가 구매와 합산해 <strong>미화 800달러</strong>를 넘으면 입국 세관 신고·과세 대상이 될 수 있습니다.</li>
+              <li>클리닉의 자유진료 처방약은 <strong>일본 소비세 면세(Tax-Free) 대상이 아닙니다</strong>. 면세점 구매액과 성격이 다릅니다.</li>
+              <li>세관 판단은 현장에서 이루어지므로, 이 계산은 준비용 참고값입니다.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- EN only: what the total covers, tax-free & customs note -->
+      <div data-lang-only="en">
+        <div class="card">
+          <h3>What this total does and does not include</h3>
+          <ul class="note-list" style="margin-top:6px">
+            <li>Every clinic price here is <strong>self-pay</strong> (outside Japanese health insurance) and includes Japanese consumption tax.</li>
+            <li><strong>Japan tax-free does not apply to a self-pay clinic prescription.</strong> A prescription is not a tax-free-shop purchase, so the pens cannot be bought duty-free at the clinic.</li>
+            <li><strong>Check your home country's personal-import and customs rules for prescription medicines, including GLP-1 pens, before you travel.</strong> Limits, paperwork and permitted quantities differ by country — this app only covers the Japanese side.</li>
+            <li>A first-visit fee, an English prescription, hotel delivery or a cold bag may be charged on top; add them under Other.</li>
+            <li>Figures are a preparation aid. The clinic decides the final charge and the doctor decides whether and at what dose a prescription is issued.</li>
+          </ul>
+        </div>
+        <div class="tip-card">
+          <h4>Typical extras you may need to add</h4>
           <ul>
-            <li>자가치료용 마운자로 <strong>3개월분(12펜) 이내</strong>는 의약품 자진신고 대상에서 빠지지만, 이는 <strong>800달러 면세 한도가 따로 면제된다는 뜻이 아닙니다</strong>.</li>
-            <li>스마트안경·면세품 등 다른 고가 구매와 합산해 <strong>미화 800달러</strong>를 넘으면 입국 세관 신고·과세 대상이 될 수 있습니다.</li>
-            <li>클리닉의 자유진료 처방약은 <strong>일본 소비세 면세(Tax-Free) 대상이 아닙니다</strong>. 면세점 구매액과 성격이 다릅니다.</li>
-            <li>세관 판단은 현장에서 이루어지므로, 이 계산은 준비용 참고값입니다.</li>
+            <li>First visit: some clinics charge a first-visit fee (for example ¥3,630 at JapanNet Ginza, already included above when that clinic is selected).</li>
+            <li>English prescription or certificate: often required for non-residents with no Japanese address (see each clinic's fee line).</li>
+            <li>Hotel delivery: for example ¥3,300 at JapanNet Ginza, ¥2,500 with Fontana's online consultation.</li>
+            <li>Cold bag: usually free for 3+ pens, around ¥220 for one or two pens.</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- ============ TAB 4: 반입·보냉 ============ -->
+    <!-- ============ TAB 4: 반입·보냉 / Packing ============ -->
     <section class="panel" id="panel-import" role="tabpanel" aria-labelledby="tab-import" hidden>
       <div class="section-head">
-        <h2 class="panel-title">반입 · 보냉 체크리스트</h2>
-        <p class="panel-sub">2026-11-12 개정된 한국 입국 기준과 기내 보냉 실무를 정리했습니다. 체크 상태는 이 기기 브라우저에만 저장됩니다.</p>
+        <h2 class="panel-title" id="importTitle" data-en="Packing &amp; cold chain">반입 · 보냉 체크리스트</h2>
+        <p class="panel-sub" id="importSub" data-en="Getting refrigerated pens through Japanese airport security and home: cabin-only carry, ice packs split to 100 g each in one 1 L bag, and your own country's import limit checked before you fly. Check states are stored only in this browser.">2026-11-12 개정된 한국 입국 기준과 기내 보냉 실무를 정리했습니다. 체크 상태는 이 기기 브라우저에만 저장됩니다.</p>
       </div>
 
       <div class="progress-wrap">
-        <div class="progress-top"><span>준비 진행률</span><span class="pct" id="clPct">0%</span></div>
+        <div class="progress-top"><span data-en="Preparation progress">준비 진행률</span><span class="pct" id="clPct">0%</span></div>
         <div class="bar"><i id="clBar"></i></div>
         <div class="progress-top" style="margin-top:7px;font-weight:600;color:var(--muted);font-size:11.5px">
           <span id="clCount">0 / 0 항목</span>
-          <button class="btn small ghost" id="clReset" style="min-height:26px;padding:0 8px;font-size:11px">초기화</button>
+          <button class="btn small ghost" id="clReset" style="min-height:26px;padding:0 8px;font-size:11px" data-en="Reset">초기화</button>
         </div>
       </div>
 
       <div class="card" id="checkList"></div>
 
       <div class="card">
-        <h3>보안검색대 제시용 일본어</h3>
-        <p class="ja-name" style="margin-bottom:8px">보냉제를 꺼내며 이 문구와 처방 증빙을 함께 보여주세요.</p>
+        <h3 data-en="Japanese phrase for airport security">보안검색대 제시용 일본어</h3>
+        <p class="ja-name" style="margin-bottom:8px" data-en="Take the cold packs out of your bag and show this line together with your prescription and the receipt in your name.">보냉제를 꺼내며 이 문구와 처방 증빙을 함께 보여주세요.</p>
         <span class="ja-quote" id="secPhrase">冷蔵が必要な処方薬（マンジャロ）の保冷剤です。</span>
         <div class="copy-row">
-          <button class="btn small primary" style="min-height:38px" data-copy-target="secPhrase">일본어 복사</button>
+          <button class="btn small primary" style="min-height:38px" data-copy-target="secPhrase" data-en="Copy Japanese">일본어 복사</button>
         </div>
-        <p class="hint">추가로 “처방전·약봉투·본인 이름이 적힌 영수증”을 함께 꺼내 두면 확인이 빠릅니다.</p>
+        <p class="hint" data-en="Showing the prescription, the pen box or a receipt with your name together with the packs makes the check quicker.">추가로 “처방전·약봉투·본인 이름이 적힌 영수증”을 함께 꺼내 두면 확인이 빠릅니다.</p>
       </div>
 
-      <div class="tip-card">
+      <div class="tip-card" data-lang-only="ko">
         <h4>보냉 실무 메모</h4>
         <ul>
           <li>보냉제는 얼린 상태여도 젤·액체류로 분류됩니다. <strong>개당 100g(100mL) 이하</strong>만 1L 투명 지퍼백(1인 1개)에 담아 반입할 수 있습니다.</li>
@@ -642,67 +790,85 @@
           <li>일본 현지 기준이며, 항공사·공항에 따라 운영이 다를 수 있습니다. 출국 전 항공사 안내를 한 번 더 확인하세요.</li>
         </ul>
       </div>
+
+      <div class="tip-card" data-lang-only="en">
+        <h4>Cold-chain practice at the airport</h4>
+        <ul>
+          <li>Ice and gel packs count as gel or liquid even when frozen. Security allows pieces of <strong>100 g (100 mL) or less</strong>, together in one 1 L clear zip bag per person.</li>
+          <li>Japanese 100-yen-shop packs often come joined by cut-lines (<strong>80 g × 3</strong>, <strong>50 g × 6</strong>). Separate them with scissors so each piece is under 100 g; some packs (<strong>70 g × 2</strong>) are already split.</li>
+          <li>Packs packed with refrigerated medicine are normally given an allowance, but take them out and show the Japanese phrase above with your documents.</li>
+          <li>A frozen pack touching a pen can freeze it. Wrap the packs in a towel or kitchen paper and keep them in your <strong>cabin bag</strong> — the cargo hold can freeze them.</li>
+          <li>This is Japanese practice as published; airlines and airports differ. Check your airline's rules once more before departure.</li>
+        </ul>
+      </div>
     </section>
 
-    <!-- ============ TAB 5: 실전 팁·FAQ ============ -->
+    <!-- ============ TAB 5: 실전 팁 / FAQ ============ -->
     <section class="panel" id="panel-faq" role="tabpanel" aria-labelledby="tab-faq" hidden>
       <div class="section-head">
-        <h2 class="panel-title">실전 팁 · FAQ</h2>
-        <p class="panel-sub">실제 여행 중에 부딪히는 질문만 모았습니다. 개인 정보나 특정인의 일정은 포함하지 않았고, 모두 공개 기준·공식 페이지에서 확인한 내용입니다.</p>
+        <h2 class="panel-title" data-en="Practical FAQ">실전 팁 · FAQ</h2>
+        <p class="panel-sub" data-en="The questions that actually come up on the trip, in plain language. No personal information or anyone's itinerary is included; everything comes from public guidance and official pages.">실제 여행 중에 부딪히는 질문만 모았습니다. 개인 정보나 특정인의 일정은 포함하지 않았고, 모두 공개 기준·공식 페이지에서 확인한 내용입니다.</p>
       </div>
 
       <div class="info-card">
-        <h4>이 탭의 성격</h4>
-        <p>처방·반입·보안검색·세관 실무에 대한 <strong>일반 참고 정보</strong>입니다. 의료적 판단이나 법률 자문이 아니며, 최종 기준은 현지 의사·항공사·세관의 안내를 따릅니다.</p>
+        <h4 data-en="What this tab is">이 탭의 성격</h4>
+        <p data-en="General reference on prescriptions, import, airport security and customs. It is not medical or legal advice; the doctor, the airline and your own country's customs have the final word.">처방·반입·보안검색·세관 실무에 대한 <strong>일반 참고 정보</strong>입니다. 의료적 판단이나 법률 자문이 아니며, 최종 기준은 현지 의사·항공사·세관의 안내를 따릅니다.</p>
       </div>
 
       <div id="faqList"></div>
 
       <div class="card" style="margin-top:14px">
-        <h3>한 줄 요약</h3>
-        <ul class="note-list">
+        <h3 data-en="One-line summary">한 줄 요약</h3>
+        <ul class="note-list" id="summaryKo" data-lang-only="ko">
           <li>3개월분(12펜) 이내 · 본인 휴대 · 기내 수하물</li>
           <li>보냉제 개당 100g 이하 + 1L 지퍼백</li>
           <li>처방전·영수증·원래 박스 지참</li>
           <li>다른 구매와 합산해 800달러 초과 여부 확인</li>
+        </ul>
+        <ul class="note-list" id="summaryEn" data-lang-only="en">
+          <li>Carry it yourself — never ship prescription medicine</li>
+          <li>Cabin bag only; cold packs of 100 g or less, one 1 L clear bag</li>
+          <li>Original boxes, prescription copy and a receipt in your name</li>
+          <li>Check your own country's prescription-medicine import limit</li>
         </ul>
       </div>
     </section>
   </main>
 
   <footer class="app-foot">
-    <p>정보 도우미 프로토타입 · 2026-11 확인 기준<br>의료기관 알선·예약 대행·의약품 광고가 아니며, 처방 여부와 용량은 현지 의사 판단에 따릅니다.</p>
+    <p id="footKo" data-lang-only="ko">정보 도우미 프로토타입 · 2026-11 확인 기준<br>의료기관 알선·예약 대행·의약품 광고가 아니며, 처방 여부와 용량은 현지 의사 판단에 따릅니다.</p>
+    <p id="footEn" data-lang-only="en">Informational prototype · checked 2026-11<br>Not medical brokerage, booking agency or prescription drug advertising. Prescription eligibility and dosage are decided solely by the doctor who sees you in Japan.</p>
   </footer>
 
   <nav class="tabbar" role="tablist" aria-label="주요 메뉴">
     <button class="tab is-active" role="tab" id="tab-clinics" data-tab="clinics" aria-selected="true" aria-controls="panel-clinics">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9.5L12 4l8 5.5V20"></path><path d="M9.5 20v-5.5h5V20"></path><path d="M12 8.2v2.6M10.7 9.5h2.6"></path></svg>
-      <span>클리닉</span>
+      <span data-en="Clinics">클리닉</span>
     </button>
     <button class="tab" role="tab" id="tab-booking" data-tab="booking" aria-selected="false" aria-controls="panel-booking">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16v13H4z"></path><path d="M4 10.5h16M8.5 4v4M15.5 4v4"></path><path d="M8.5 14h3M8.5 17h6"></path></svg>
-      <span>예약</span>
+      <span data-en="Booking">예약</span>
     </button>
     <button class="tab" role="tab" id="tab-cost" data-tab="cost" aria-selected="false" aria-controls="panel-cost">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="3" width="15" height="18" rx="2.5"></rect><path d="M8.5 7.5h7M8.5 12h2.5M13 12h2.5M8.5 16h2.5M13 16h2.5"></path></svg>
-      <span>비용</span>
+      <span data-en="Cost">비용</span>
     </button>
     <button class="tab" role="tab" id="tab-import" data-tab="import" aria-selected="false" aria-controls="panel-import">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v3.2H9z"></path><path d="M7 7.7h10l1.4 3.3V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6.4 19v-8z"></path><path d="M9.5 12.5h5M12 15v3.5"></path></svg>
-      <span>반입</span>
+      <span data-en="Packing">반입</span>
     </button>
     <button class="tab" role="tab" id="tab-faq" data-tab="faq" aria-selected="false" aria-controls="panel-faq">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M9.6 9.6a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9"></path><path d="M12 17h.01"></path></svg>
-      <span>팁</span>
+      <span data-en="Tips">팁</span>
     </button>
   </nav>
 </div>
 
 <div class="modal" id="complianceModal" hidden>
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="complianceTitle">
-    <h2 id="complianceTitle">이 앱이 하는 일과 하지 않는 일</h2>
-    <p><strong>본 프로토타입은 의료기관 알선·예약 대행·의약품 광고 목적이 아니며, 각 기관이 공개한 일반 정보와 방문 준비 도구를 정리한 정보 도우미입니다. 처방 여부 및 용량은 반드시 현지 의사의 대면 진료 판단에 따릅니다.</strong></p>
-    <ul>
+    <h2 id="complianceTitle" data-en="What this app does and does not do">이 앱이 하는 일과 하지 않는 일</h2>
+    <p id="complianceLead" data-en-html="&lt;strong&gt;This prototype is an informational directory and preparation tool built from what each clinic publishes. It is not medical brokerage, a booking agency or prescription drug advertising. Prescription eligibility and dosage are determined solely by a licensed physician in Japan during consultation.&lt;/strong&gt;"><strong>본 프로토타입은 의료기관 알선·예약 대행·의약품 광고 목적이 아니며, 각 기관이 공개한 일반 정보와 방문 준비 도구를 정리한 정보 도우미입니다. 처방 여부 및 용량은 반드시 현지 의사의 대면 진료 판단에 따릅니다.</strong></p>
+    <ul id="complianceList">
       <li>가격·진료시간·주소는 각 기관 공식 페이지에서 <strong>2026-11 확인</strong>한 값이며, 이후 변경될 수 있습니다. 예약 전 공식 페이지에서 다시 확인하세요.</li>
       <li>예약·결제·진료는 모두 해당 기관과 이용자 사이에서 이루어집니다. 이 앱은 대신 예약하거나 수수료를 받지 않습니다.</li>
       <li>마운자로의 체중 관리 목적 사용은 일본에서 승인된 효능·효과 범위 밖(자유진료)이며, 일본 건강보험이 적용되지 않습니다.</li>
@@ -710,7 +876,15 @@
       <li>반입·세관 정보는 일반 참고이며 법률 자문이 아닙니다. 최종 판단은 세관·항공사 안내를 따릅니다.</li>
       <li>공개 전·수익화 전에는 관련 법령(의료법·약사법·의료광고 가이드라인 등) 검토가 필요합니다.</li>
     </ul>
-    <button class="btn primary" id="complianceClose" style="width:100%">확인</button>
+    <ul id="complianceListEn" data-lang-only="en" hidden>
+      <li>Prices, hours and addresses were checked on each clinic's official page in <strong>2026-11</strong> and can change. Confirm again on the official page before booking.</li>
+      <li>Booking, payment and consultation all happen between you and the clinic. This app does not book on your behalf and takes no commission.</li>
+      <li>Using Mounjaro for weight management is outside the approved indication in Japan (self-pay) and is not covered by Japanese health insurance.</li>
+      <li>What you type (names, amounts) is never sent to a server. Only the checklist state and calculator settings (rates, amounts) are kept in this browser's localStorage; names are not stored.</li>
+      <li>Import and customs notes are general information, not legal advice. Your own country's customs and your airline have the final say.</li>
+      <li>Legal review (medical law, pharmaceutical law, advertising guidelines and so on) is needed before public release or monetisation.</li>
+    </ul>
+    <button class="btn primary" id="complianceClose" style="width:100%" data-en="Got it">확인</button>
   </div>
 </div>
 
@@ -721,318 +895,160 @@
   'use strict';
 
   /* ---------------------------------------------------------------
-     1. 검증된 기관 데이터 (2026-11 확인 · 각 기관 공식 페이지)
+     0. 검증된 기관 데이터 (clinics.json 사본 · file:// 오프라인 폴백)
+        이 블록은 tools/embed_clinics.py 가 clinics.json 에서 자동 생성합니다.
      --------------------------------------------------------------- */
-  var CLINICS = [
-    {
-      id: 'silk_kanda',
-      region: '도쿄',
-      name: '도쿄실크클리닉 간다점',
-      nameJa: '東京シルククリニック 神田院',
-      area: '지요다구 간다',
-      station: 'JR 간다역 동·남쪽 출구 도보 1분',
-      address: '〒101-0044 東京都千代田区鍛冶町2-2-9 第二登栄ビル 5階(5A)',
-      hours: '11:00~14:00 / 15:00~20:00 (14~15시 휴진, 마지막 예약 19:30) · 일요일 진료, 12/31~1/3 휴진',
-      phone: '—',
-      bookingUrl: 'https://connect.kireipass.jp/clinics/tokyosilkclinic_kanda/menus/265844/confirm?large_category_id=0&page_id=1666&small_category_id=0',
-      bookingLabel: '공식 예약(키레이패스)',
-      officialUrl: 'https://tokyosilkclinic.com/menu/909/',
-      koreanUrl: 'https://silk-hp.pages.dev/mounjaro/ko',
-      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E9%8D%9B%E5%86%B6%E7%94%BA2-2-9',
-      tiers: {
-        '2.5': { m1: 8000, m3: 22500 },
-        '5': { m1: 14000, m3: 40500 },
-        '7.5': { m1: 22000, m3: 64500 },
-        '10': { m1: 28000, m3: 81000 },
-        '12.5': { m1: 34000, m3: 99000 }
+  /* CLINICS_JSON_START */
+  var CLINICS_DATA = {"schema":1,"verified":"2026-11","note":"Clinic data for the Japan Mounjaro visit helper. Every price, address and hours entry was checked on the clinic's own official page in 2026-11. Prices are self-pay (not covered by Japanese health insurance) and tax included unless stated. This file is fetched at runtime by index.html; the same data is embedded there as a file:// / offline fallback.","clinics":[{"id":"silk_kanda","regionKey":"tokyo","name":{"ko":"도쿄실크클리닉 간다점","en":"Tokyo Silk Clinic — Kanda"},"nameJa":"東京シルククリニック 神田院","area":{"ko":"지요다구 간다","en":"Kanda, Chiyoda-ku"},"station":{"ko":"JR 간다역 동·남쪽 출구 도보 1분","en":"1 min walk from JR Kanda Station (east/south exit)"},"address":"〒101-0044 東京都千代田区鍛冶町2-2-9 第二登栄ビル 5階(5A)","hours":{"ko":"11:00~14:00 / 15:00~20:00 (14~15시 휴진, 마지막 예약 19:30) · 일요일 진료, 12/31~1/3 휴진","en":"11:00–14:00 / 15:00–20:00 (closed 14:00–15:00, last booking 19:30) · open Sundays · closed 31 Dec–3 Jan"},"phone":"—","phoneNote":{"ko":"","en":""},"bookingUrl":"https://connect.kireipass.jp/clinics/tokyosilkclinic_kanda/menus/265844/confirm?large_category_id=0&page_id=1666&small_category_id=0","bookingLabel":{"ko":"공식 예약(키레이패스)","en":"Book (official KireiPass)"},"officialUrl":"https://tokyosilkclinic.com/menu/909/","localUrl":"https://silk-hp.pages.dev/mounjaro/ko","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%8D%83%E4%BB%A3%E7%94%B0%E5%8C%BA%E9%8D%9B%E5%86%B6%E7%94%BA2-2-9","tiers":{"2.5":{"m1":8000,"m3":22500},"5":{"m1":14000,"m3":40500},"7.5":{"m1":22000,"m3":64500},"10":{"m1":28000,"m3":81000},"12.5":{"m1":34000,"m3":99000}},"priceNote":{"ko":"내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준)으로 계산. 15mg은 간다점 취급 없음(신주쿠점만).","en":"In-clinic prescription, tax included. 1 month = 4 pens; 2–5 month courses are charged at ¥7,500 per month (5 mg basis). 15 mg is not stocked at Kanda (Shinjuku only)."},"consultFee":0,"consultNote":{"ko":"처방 시 진찰료 0엔 · 미처방 시 5,500엔","en":"¥0 consultation when a prescription is issued · ¥5,500 if no prescription"},"cancel":{"ko":"전날 20:00(JST) 이후 취소·변경, 15분 이상 지각 시 5,500엔","en":"Cancel or change after 20:00 JST the day before, or arrive more than 15 min late: ¥5,500"},"cert":{"ko":"영문 증명서 8,800엔(한국 등 추가 서류 국가) · 그 외 5,500엔","en":"English certificate ¥8,800 (for countries such as Korea that ask for extra paperwork) · ¥5,500 otherwise"},"certFee":8800,"lang":{"ko":{"level":"info","label":"한국어 안내 페이지","detail":"한국어 안내 페이지·LINE 한국어 문의 가능. 진료는 일본어/영어(번역 앱·통역 동반 가능, 클리닉이 통역을 준비하지는 않음)."},"en":{"level":"full","label":"English consultation available","detail":"The official page states consultations are available in Japanese and English. A Korean information page and Korean LINE inquiries also exist. The clinic does not arrange an interpreter for you."}},"notes":{"ko":["예약 필수(키레이패스) · 예약 없이 방문 시 진료 불가","재고 부족 시 클리닉 부담으로 일본 내 추후 배송","1회 처방 기본 6개월분까지(7개월분 이상은 의사 판단, 최대 12개월분)"],"en":["Booking required through KireiPass — no walk-ins","If stock runs short, the clinic ships within Japan at its own cost","Up to 6 months per prescription by default (7+ months only at the doctor's discretion, maximum 12 months)"]}},{"id":"silk_shinjuku","regionKey":"tokyo","name":{"ko":"도쿄실크클리닉 신주쿠점","en":"Tokyo Silk Clinic — Shinjuku"},"nameJa":"東京シルククリニック 新宿院","area":{"ko":"신주쿠구 신주쿠","en":"Shinjuku, Shinjuku-ku"},"station":{"ko":"신주쿠교엔마에역 도보 1분","en":"1 min walk from Shinjuku-gyoemmae Station"},"address":"〒160-0022 東京都新宿区新宿1-16-16 テェアカテリーナ 202","hours":{"ko":"11:00~14:00 / 15:00~20:00 (14~15시 휴진) · 부정기 휴진","en":"11:00–14:00 / 15:00–20:00 (closed 14:00–15:00) · occasional irregular closures"},"phone":"03-5315-0939","phoneNote":{"ko":"","en":""},"bookingUrl":"https://connect.kireipass.jp/clinics/tokyosilkclinic/menus/265548/confirm?large_category_id=0&page_id=1394&small_category_id=0","bookingLabel":{"ko":"공식 예약(키레이패스)","en":"Book (official KireiPass)"},"officialUrl":"https://tokyosilkclinic.com/menu/909/","localUrl":"https://silk-hp.pages.dev/mounjaro/ko","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF1-16-16","tiers":{"2.5":{"m1":8000,"m3":22500},"5":{"m1":14000,"m3":40500},"7.5":{"m1":22000,"m3":64500},"10":{"m1":28000,"m3":81000},"12.5":{"m1":34000,"m3":99000},"15":{"m1":42000,"m3":123000}},"priceNote":{"ko":"내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준). 15mg은 신주쿠점만 취급.","en":"In-clinic prescription, tax included. 1 month = 4 pens; 2–5 month courses are charged at ¥7,500 per month (5 mg basis). 15 mg is stocked only at Shinjuku."},"consultFee":0,"consultNote":{"ko":"처방 시 진찰료 0엔 · 미처방 시 5,500엔","en":"¥0 consultation when a prescription is issued · ¥5,500 if no prescription"},"cancel":{"ko":"전날 20:00(JST) 이후 취소·변경, 15분 이상 지각 시 5,500엔","en":"Cancel or change after 20:00 JST the day before, or arrive more than 15 min late: ¥5,500"},"cert":{"ko":"영문 증명서 8,800엔(한국 등 추가 서류 국가) · 그 외 5,500엔","en":"English certificate ¥8,800 (for countries such as Korea that ask for extra paperwork) · ¥5,500 otherwise"},"certFee":8800,"lang":{"ko":{"level":"info","label":"한국어 안내 페이지","detail":"한국어 안내 페이지·LINE 한국어 문의 가능. 진료는 일본어/영어(번역 앱·통역 동반 가능)."},"en":{"level":"full","label":"English consultation available","detail":"The official page states consultations are available in Japanese and English. A Korean information page and Korean LINE inquiries also exist. The clinic does not arrange an interpreter for you."}},"notes":{"ko":["예약 필수(키레이패스) · 전화 예약 불가(공식 LINE 안내)","재고 부족 시 클리닉 부담으로 일본 내 추후 배송","1회 처방 기본 6개월분까지(7개월분 이상은 의사 판단)"],"en":["Booking required through KireiPass — phone booking is not accepted","If stock runs short, the clinic ships within Japan at its own cost","Up to 6 months per prescription by default (7+ months only at the doctor's discretion)"]}},{"id":"japannet_ginza","regionKey":"tokyo","name":{"ko":"재팬넷클리닉 (뷰티온클리닉 긴자)","en":"JapanNet Clinic (Beauty On Clinic Ginza)"},"nameJa":"ジャパンネットクリニック / ビューティーオンクリニック銀座","area":{"ko":"주오구 긴자·신바시","en":"Ginza / Shimbashi, Chuo-ku"},"station":{"ko":"JR·도쿄메트로 신바시역 도보 4분 · 긴자역 도보 8분 · 히가시긴자역 도보 6분","en":"4 min walk from JR / Tokyo Metro Shimbashi · 8 min from Ginza · 6 min from Higashi-Ginza"},"address":"〒104-0061 東京都中央区銀座8-9-7 HULIC & New GINZA 8 11F","hours":{"ko":"매일 10:00~20:40 (11/25·12/2 휴진, 12/9부터 수요일도 진료) · 예약 우선, 예약 없이 방문 가능","en":"Daily 10:00–20:40 (closed 25 Nov and 2 Dec; Wednesdays also open from 9 Dec) · booking first, walk-ins accepted"},"phone":"080-4300-8569","phoneNote":{"ko":"카카오톡 ID: japanclinic","en":"KakaoTalk ID: japanclinic"},"bookingUrl":"https://japannetclinic.com/","bookingLabel":{"ko":"공식 예약·문의","en":"Official booking / inquiry"},"officialUrl":"https://japannetclinic.com/ja/mounjaro/","localUrl":"https://japannetclinic.com/","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A78-9-7","tiers":{"2.5":{"m1":22000,"m3":34584},"5":{"m1":39600,"m3":66891},"7.5":{"m1":57200,"m3":99924},"10":{"m1":76264,"m3":133232},"12.5":{"m1":95336,"m3":166540}},"priceNote":{"ko":"1펜 단위 가격(2.5mg 5,500엔·5mg 9,900엔·7.5mg 14,300엔 등)의 4펜 환산과 3개월 플랜 월액 기준. 3개월 플랜이 1펜 단위보다 저렴합니다.","en":"Based on per-pen prices (2.5 mg ¥5,500, 5 mg ¥9,900, 7.5 mg ¥14,300 and so on) converted to 4 pens, and on the monthly rate of the 3-month plan. The 3-month plan costs less than buying pen by pen."},"consultFee":3630,"consultNote":{"ko":"초진료 3,630엔(세금 포함) · 재진 1,500엔","en":"First visit ¥3,630 (tax incl.) · follow-up ¥1,500"},"cancel":{"ko":"공식 페이지에 취소 수수료 별도 표기 확인되지 않음(예약 시 확인)","en":"No separate cancellation fee is stated on the official page (confirm when booking)"},"cert":{"ko":"영문 처방전 7,370엔(일본 내 주소 확인 불가 시 필수)","en":"English prescription ¥7,370 (required when a Japanese address cannot be verified)"},"certFee":7370,"lang":{"ko":{"level":"full","label":"한국어 진료","detail":"한국인 대표원장이 한국어로 진료·상담, 접수·안내도 한국어. 호텔 배송 3,300엔, 결제는 한국 발급 카드·카카오뱅크 계좌이체·카카오페이 가능."},"en":{"level":"full","label":"Korean / Japanese / English consultation","detail":"The official page states consultations are available in Korean, Japanese and English; the director is Korean-speaking and reception is in Korean. Hotel delivery ¥3,300. Payment by Korean-issued card, KakaoBank transfer or KakaoPay is possible."}},"notes":{"ko":["일본 주소가 확인되지 않으면 영문 처방전 발행료가 필수로 붙습니다","비거주자는 처방 시 초진료 + 영문 처방전 = 11,000엔(세금 포함, 약값 별도)","2.5mg은 재고 상황에 따라 입고 대기 안내가 붙을 수 있음"],"en":["If a Japanese address cannot be verified, the English prescription fee is mandatory","Non-residents: first-visit fee + English prescription = ¥11,000 (tax incl.; drug cost separate)","2.5 mg may be sold out and offered as a later delivery depending on stock"]}},{"id":"modena_tenjin","regionKey":"fukuoka","name":{"ko":"모데나클리닉 텐진본원","en":"Modena Clinic — Tenjin Main"},"nameJa":"モデナクリニック 天神本院","area":{"ko":"후쿠오카시 주오구 다이묘","en":"Daimyo, Chuo-ku, Fukuoka"},"station":{"ko":"덴진·다이묘 지역 (공식 페이지에 최근접 역 도보 표기 없음)","en":"Tenjin / Daimyo area (the official page gives no walking time from a station)"},"address":"〒810-0041 福岡県福岡市中央区大名2-1-7 FPG links DAIMYO 4F","hours":{"ko":"9:30~18:00 (부정기 휴일) · 당일 시술 최종 접수 17:00","en":"9:30–18:00 (irregular holidays) · last same-day reception 17:00"},"phone":"092-738-5785","phoneNote":{"ko":"일본어만","en":"Japanese only"},"bookingUrl":"https://line.me/R/ti/p/@883segwo","bookingLabel":{"ko":"공식 LINE 예약","en":"Book via official LINE"},"officialUrl":"https://modena-clinic.com/menu/4430/","localUrl":"https://modena-clinic.com/mounjaro-kr/","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%A4%A7%E5%90%8D2-1-7","tiers":{"2.5":{"m1":12500,"m3":37500},"5":{"m1":22800,"m3":68400},"7.5":{"m1":32300,"m3":96900},"10":{"m1":40500,"m3":121500}},"priceNote":{"ko":"1개월(4펜) 공개 가격 기준 · 세금 포함. 다개월 할인은 공식 페이지에 별도 표기 없어 월액 × 개월로 계산.","en":"Based on the published 1-month (4-pen) price, tax included. No multi-month discount is stated, so longer courses are calculated as the monthly price × months."},"consultFee":0,"consultNote":{"ko":"진찰료·카운셀링 무료(약값만) · 희망 시 채혈 4,950엔","en":"Consultation and counselling free (you pay for the drug only) · blood test ¥4,950 if requested"},"cancel":{"ko":"예약 3일 전까지 웹 마이페이지, 이후 전화·LINE (수수료 표기 확인 안 됨)","en":"Up to 3 days before through the web my-page, then by phone or LINE (no fee stated)"},"cert":{"ko":"처방내용서(영문) 무료(여권 지참, 진단서는 미발급)","en":"English 'prescription content' letter free (bring your passport; no medical certificate issued)"},"certFee":0,"lang":{"ko":{"level":"info","label":"한국어 문진표·페이지","detail":"한국어 문진표·한국어 안내 페이지·LINE 한국어 안내 있음. 진료·전화는 일본어로 진행되어 번역 앱이나 일본어 동반자가 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English page or English-speaking staff were confirmed on the official site (2026-11); the Korean page and Korean questionnaire exist, but the consultation and phone calls are in Japanese. Bring a translation app or a Japanese-speaking companion."}},"notes":{"ko":["마운자로 예약은 공식 LINE 전용 (WEB·전화·메일 예약 불가)","예약 없이 방문하면 마운자로 처방 불가","1회 진료당 원칙 3개월분까지 · 보냉백은 3펜 이상 무료, 1~2펜 220엔","국외 반출 통관 책임은 본인 · 클리닉은 보증하지 않음"],"en":["Mounjaro appointments only through the official LINE (no web, phone or email booking)","Without a booking, Mounjaro cannot be prescribed","As a rule up to 3 months per visit · cold bag free for 3+ pens, ¥220 for 1–2 pens","Clearing your own country's customs is your responsibility; the clinic does not guarantee it"]}},{"id":"fontana_tenjin","regionKey":"fukuoka","name":{"ko":"폰타나클리닉 텐진","en":"Fontana Clinic Tenjin"},"nameJa":"フォンタナクリニック天神 (FONTANA CLINIC)","area":{"ko":"후쿠오카시 주오구 이마이즈미","en":"Imaizumi, Chuo-ku, Fukuoka"},"station":{"ko":"니시테츠 후쿠오카(텐진)역 남쪽 출구 도보 7분 · 덴진미나미역 도보 7분 · 덴진역 도보 10분","en":"7 min walk from Nishitetsu Fukuoka (Tenjin) south exit · 7 min from Tenjin-minami · 10 min from Tenjin"},"address":"〒810-0021 福岡県福岡市中央区今泉1-18-23 CASA FONTANA 2F","hours":{"ko":"10:00~19:00 (평일·토·일·공휴일 동일) · 완전 예약제","en":"10:00–19:00 (same on weekdays, weekends and holidays) · appointment only"},"phone":"092-753-5205","phoneNote":{"ko":"카카오톡 ID: fontanaclinic","en":"KakaoTalk ID: fontanaclinic"},"bookingUrl":"https://fontana-clinic.jp/kr/","bookingLabel":{"ko":"공식 예약·상담(한국어)","en":"Official booking / Korean support"},"officialUrl":"https://fontana-clinic.jp/mounjaro-jp/","localUrl":"https://fontana-clinic.jp/kr/","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BB%8A%E6%B3%891-18-23","tiers":{"2.5":{"m1":15800,"m3":46200},"5":{"m1":25400,"m3":72000},"7.5":{"m1":40600,"m3":116100},"10":{"m1":48900,"m3":139500},"12.5":{"m1":60000,"m3":171000},"15":{"m1":68300,"m3":193500}},"priceNote":{"ko":"내원 수령 1개월(4펜) 기준 · 세금 포함 · 진찰료 0. 온라인 진료 후 배송은 약값 + 2,500엔(일본 국내 배송비 + 일·영 처방전 발급 포함).","en":"In-clinic pickup, 1 month (4 pens), tax included, consultation ¥0. Online consultation with delivery is drug cost + ¥2,500 (domestic shipping plus a Japanese/English prescription)."},"consultFee":0,"consultNote":{"ko":"초진·재진료 무료 · 온라인 진료는 배송+처방전 2,500엔","en":"First and follow-up consultation free · online consultation ¥2,500 incl. delivery and prescription"},"cancel":{"ko":"온라인 진료는 진료 전날 24시까지 문진표 미작성 시 예약 자동 취소(공식 안내)","en":"For online consultations the booking is cancelled automatically if the questionnaire is not completed by midnight the day before (official guidance)"},"cert":{"ko":"일·영 처방전이 온라인 진료 2,500엔에 포함","en":"Japanese/English prescription included in the ¥2,500 online consultation fee"},"certFee":0,"lang":{"ko":{"level":"staff","label":"한국어 상담 스태프","detail":"한국어 대응 스태프가 매일 근무하며 예약·수령·배송을 한국어로 상담합니다(카카오톡 fontanaclinic). 한국에 있을 때 예약·상담도 가능하다고 공식 페이지에 안내되어 있습니다."},"en":{"level":"ja","label":"Korean-speaking staff (no English confirmed)","detail":"Korean-speaking staff are on duty every day and the Korean page covers booking, pickup and delivery. No English page or English-speaking staff were confirmed on the official site (2026-11); the in-clinic consultation is in Japanese, so bring a translation app or a Japanese-speaking companion."}},"tsushima":true,"notes":{"ko":["대마도(쓰시마) 숙소·야마토 운수 영업소로 냉장 배송 안내(공식 한국어 페이지, 보통 2~3일)","대마도 방문 약 1주일 전까지 온라인 진료를 마치라고 안내","이동용 보냉백·아이스팩 무료 제공","숙소의 냉장 보관·대리 수령 가능 여부는 직접 확인 필요 · 클리닉은 수령·보관을 보증하지 않음"],"en":["Cold delivery to a Tsushima hotel or a Yamato Transport office, described on the official Korean page (usually 2–3 days)","The clinic advises finishing the online consultation about one week before you reach Tsushima","Travel cold bag and ice packs provided free","Check yourself whether your lodging can refrigerate and receive the parcel on your behalf; the clinic does not guarantee pickup or storage"]}},{"id":"daibikai_shinsaibashi","regionKey":"osaka","name":{"ko":"대미회클리닉 심사이바시본원","en":"Daibikai Clinic — Shinsaibashi Main"},"nameJa":"大美会クリニック 心斎橋本院","area":{"ko":"오사카시 주오구 히가시심사이바시","en":"Higashi-Shinsaibashi, Chuo-ku, Osaka"},"station":{"ko":"심사이바시역 도보 6분 · 난바역 도보 12분","en":"6 min walk from Shinsaibashi Station · 12 min from Namba Station"},"address":"大阪市中央区東心斎橋2-8-28 周防町GEOビル3F","hours":{"ko":"월~토 11:00~21:00 · 일·공휴일 11:00~20:00 (연말연시만 휴진)","en":"Mon–Sat 11:00–21:00 · Sun and holidays 11:00–20:00 (closed only around New Year)"},"phone":"0120-373-889","phoneNote":{"ko":"","en":""},"bookingUrl":"https://osaka-bc.com/reserve/","bookingLabel":{"ko":"공식 웹 예약(24시간)","en":"Web booking (24 h)"},"officialUrl":"https://osaka-bc.com/price/1941/","localUrl":"","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://maps.app.goo.gl/YfQVcurASB3FzRdG7","tiers":{"2.5":{"m1":17800,"m2":34800,"m3":51000},"5":{"m1":32000,"m2":62000,"m3":91200}},"priceNote":{"ko":"내원(클리닉) 구매 기준 · 세금 포함 · 예약 시점 가격 확인 필요. 7.5mg·10mg은 공식 가격표에 온라인 진료 기준 4개 54,000엔 / 66,000엔 표기(내원 취급은 문의).","en":"In-clinic purchase, tax included; confirm the price when booking. For 7.5 mg and 10 mg the official price list shows ¥54,000 / ¥66,000 for 4 pens under online consultation (ask about in-clinic availability)."},"consultFee":0,"consultNote":{"ko":"진찰료·재진료·송료 무료 · 채혈 2,000엔(내원 필요)","en":"Consultation, follow-up and shipping free · blood test ¥2,000 (in clinic)"},"cancel":{"ko":"공식 페이지에 취소 수수료 별도 표기 확인되지 않음(예약 시 확인)","en":"No separate cancellation fee is stated on the official page (confirm when booking)"},"cert":{"ko":"영문 증명서 발급·비용 공식 페이지에 표기 확인 안 됨","en":"English certificate: issue and fee not stated on the official page"},"certFee":0,"lang":{"ko":{"level":"none","label":"한국어 표기 확인 안 됨","detail":"공식 페이지에 한국어 안내 표기가 확인되지 않았습니다. 일본어 예약 폼·진료로, 번역 앱이 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English or Korean information was confirmed on the official page (2026-11). The booking form and the consultation are in Japanese; bring a translation app."}},"notes":{"ko":["일요일·공휴일도 진료(11:00~20:00)","1펜(1주) 단위 구매 가능 · 온라인 진료는 별도 앱 안내","20세 미만·BMI 18 미만은 처방 대상 아님"],"en":["Open on Sundays and holidays (11:00–20:00)","Pens can be bought one at a time (1 week) · online consultation runs through a separate app","Not prescribed under 20 years old or with a BMI below 18"]}},{"id":"tsuwabuki_suita","regionKey":"osaka","name":{"ko":"스이타역앞 츠와부키 내과·정형외과","en":"Tsuwabuki Internal Medicine & Orthopedics (Suita Station)"},"nameJa":"吹田駅前つわぶき内科・整形外科","area":{"ko":"스이타시 아사히초","en":"Asahi-cho, Suita, Osaka"},"station":{"ko":"JR 스이타역 앞 (스이타 산쿠스 1번관 1F)","en":"In front of JR Suita Station (Suita Sunkus Bldg 1, 1F)"},"address":"〒564-0027 大阪府吹田市朝日町1-1 吹田さんくす1番館 1F","hours":{"ko":"8:30~13:00 / 14:00~20:00 (화 14:00~18:00, 금 14:00~19:00) · 일·공휴일 휴진","en":"8:30–13:00 / 14:00–20:00 (Tue 14:00–18:00, Fri 14:00–19:00) · closed Sundays and holidays"},"phone":"—","phoneNote":{"ko":"","en":""},"bookingUrl":"https://www.tsuwabuki-clinic.com/obesity/","bookingLabel":{"ko":"공식 페이지(전화 예약)","en":"Official page (phone booking)"},"officialUrl":"https://www.tsuwabuki-clinic.com/obesity/","localUrl":"","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%90%B9%E7%94%B0%E5%B8%82%E6%9C%9D%E6%97%A5%E7%94%BA1-1","tiers":{"2.5":{"m1":12000,"m3":36000},"5":{"m1":18000,"m3":54000},"7.5":{"m1":24000,"m3":72000},"10":{"m1":30000,"m3":90000},"12.5":{"m1":35000,"m3":105000},"15":{"m1":41000,"m3":123000}},"priceNote":{"ko":"1개월(4펜) 가격에 진찰료 포함 · 4펜 단위 처방. 다개월 할인 표기 없음.","en":"The 1-month (4-pen) price includes the consultation fee; prescribed in 4-pen units. No multi-month discount stated."},"consultFee":0,"consultNote":{"ko":"진찰료 포함 · 처방이 없으면 초진료 3,500엔, 필요 검사 별도","en":"Consultation included · ¥3,500 first-visit fee if no prescription; any tests are extra"},"cancel":{"ko":"공식 페이지에 취소 수수료 표기 확인 안 됨","en":"No cancellation fee is stated on the official page"},"cert":{"ko":"영문 증명서 발급·비용 공식 페이지에 표기 확인 안 됨","en":"English certificate: issue and fee not stated on the official page"},"certFee":0,"lang":{"ko":{"level":"none","label":"한국어 표기 확인 안 됨","detail":"공식 페이지에 한국어 안내 표기가 확인되지 않았습니다. 일본어 진료로, 번역 앱이 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English or Korean information was confirmed on the official page (2026-11). The consultation is in Japanese; bring a translation app."}},"notes":{"ko":["대면 진료만 (온라인 진료 표기 없음)","마운자로는 BMI 23 미만 처방 불가 · 20세 미만 불가","오사카 중심가에서 떨어진 스이타 지역"],"en":["In-person consultation only (no online consultation)","Mounjaro is not prescribed below a BMI of 23 or under 20 years old","Suita is outside central Osaka"]}},{"id":"shinsen_shibuya","regionKey":"tokyo","name":{"ko":"시부야 신센 내과·외과 클리닉","en":"Shibuya Shinsen Internal Medicine & Surgery Clinic"},"nameJa":"渋谷神泉内科外科クリニック","area":{"ko":"메구로구 아오야마다이 (시부야 인근)","en":"Aobadai, Meguro-ku (near Shibuya)"},"station":{"ko":"게이오 이노카시라선 신센역 남쪽 출구 도보 7분 · JR 시부야역 하치코 출구 도보 11분","en":"7 min from Shinsen Station (Keio Inokashira line, south exit) · 11 min from JR Shibuya (Hachiko exit)"},"address":"〒153-0042 東京都目黒区青葉台4-4-12 S-LINKS渋谷 地下1階","hours":{"ko":"9:30~13:00 / 14:30~18:00 (토요일은 9:30~14:30, 목요일 오후·공휴일은 부정기 진료) · 일요일·공휴일 휴진 · 접수는 종료 15분 전까지","en":"9:30–13:00 / 14:30–18:00 (Saturday 9:30–14:30; Thursday afternoon and holidays irregular) · closed Sundays and most holidays · last reception 15 min before closing"},"phone":"03-3460-0111","phoneNote":{"ko":"","en":""},"bookingUrl":"https://shinsen-cl.com/cosmetic/medical-diet/","bookingLabel":{"ko":"공식 페이지(24시간 WEB 예약)","en":"Official page (24 h web booking)"},"officialUrl":"https://shinsen-cl.com/cosmetic/medical-diet/","localUrl":"","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E7%9B%AE%E9%BB%92%E5%8C%BA%E9%9D%92%E8%91%89%E5%8F%B04-4-12","tiers":{"2.5":{"m1":22000},"5":{"m1":41000,"m2":79600},"7.5":{"m1":55000}},"priceNote":{"ko":"내원 1개월(4펜) 공개 가격 · 세금 포함. 5mg 8펜은 2회차 이후 79,600엔(1개월당 39,800엔). 3개월 가격은 공식 페이지에 표기 없음.","en":"In-clinic 1-month (4-pen) published price, tax included. 5 mg 8 pens is ¥79,600 for returning patients (¥39,800 per month). No 3-month price is listed."},"consultFee":null,"consultNote":{"ko":"진찰료·카운셀링료 공식 페이지 표기 없음(초회 카운셀링 후 제안)","en":"Consultation/counselling fee not stated on the official page (a proposal follows the first counselling)"},"cancel":{"ko":"공식 페이지에 취소 규정 표기 확인 안 됨","en":"No cancellation rules stated on the official page"},"cert":{"ko":"영문 증명서 발급 표기 확인 안 됨","en":"English certificate: issue and fee not stated on the official page"},"certFee":0,"lang":{"ko":{"level":"none","label":"한국어 표기 확인 안 됨","detail":"공식 페이지에 한국어·영어 안내 표기가 확인되지 않았습니다. 일본어 진료·예약으로, 번역 앱이 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English or Korean information was confirmed on the official page (2026-11). Booking and the consultation are in Japanese; bring a translation app."}},"notes":{"ko":["내원 진료 기준(온라인 진료 표기 확인 안 됨)","2.5mg·5mg·7.5mg만 취급 표기(10mg 이상 표기 없음)","초회는 카운셀링 후 처방 제안","시부야역보다 신센역이 가깝습니다"],"en":["In-person treatment (no online consultation was confirmed)","Only 2.5 mg, 5 mg and 7.5 mg are listed (nothing above 7.5 mg)","A proposal follows the first counselling","Shinsen Station is closer than Shibuya Station"]}},{"id":"light_osaka","regionKey":"osaka","name":{"ko":"라이트클리닉 오사카(우메다)","en":"LIGHT CLINIC Osaka (Umeda)"},"nameJa":"LIGHT CLINIC 大阪","area":{"ko":"오사카시 기타구 우메다","en":"Umeda, Kita-ku, Osaka"},"station":{"ko":"JR 오사카역 도보 5분 · 한신 오사카우메다역 도보 3분 · 지하철 니시우메다역 도보 3분","en":"5 min from JR Osaka · 3 min from Hanshin Osaka-Umeda · 3 min from Nishi-Umeda subway"},"address":"〒530-0001 大阪府大阪市北区梅田1丁目3-1 大阪駅前第1ビル3階","hours":{"ko":"10:00~19:00 (19:00 최종 접수) · 토·일·공휴일도 진료","en":"10:00–19:00 (last reception 19:00) · open Saturdays, Sundays and holidays"},"phone":"06-6341-7878","phoneNote":{"ko":"","en":""},"bookingUrl":"https://light-clinic.co.jp/clinic/osaka/","bookingLabel":{"ko":"공식 페이지(예약·문의)","en":"Official page (booking / inquiry)"},"officialUrl":"https://light-clinic.co.jp/clinic/osaka/","localUrl":"","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E5%8C%97%E5%8C%BA%E6%A2%85%E7%94%B01%E4%B8%81%E7%9B%AE3-1","tiers":{"2.5":{"m1":14000},"5":{"m1":21000},"7.5":{"m1":29000},"10":{"m1":37000},"12.5":{"m1":44000},"15":{"m1":52000}},"priceNote":{"ko":"4주(4펜) 공개 가격 · 세금 포함 · 4주 단위 처방. 다개월 세트 가격은 공식 페이지에 표기 없음.","en":"Published price for 4 weeks (4 pens), tax included; prescribed in 4-week units. No multi-month set price is listed."},"consultFee":0,"consultNote":{"ko":"초진·재진료 무료 · 다만 ‘약제 처방만 받는 경우 복약 상담료 11,000엔(InBody 포함)’ 표기가 같은 페이지에 있습니다","en":"First and follow-up consultation free · the same page also lists a ¥11,000 medication consultation fee (InBody included) when only medicine is prescribed"},"cancel":{"ko":"공식 페이지에 취소 수수료 표기 확인 안 됨","en":"No cancellation fee stated on the official page"},"cert":{"ko":"영문 증명서 발급 표기 확인 안 됨","en":"English certificate: issue and fee not stated on the official page"},"certFee":0,"lang":{"ko":{"level":"none","label":"한국어 표기 확인 안 됨","detail":"공식 페이지에 한국어·영어 안내 표기가 확인되지 않았습니다. 일본어 예약·진료로, 번역 앱이 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English or Korean information was confirmed on the official page (2026-11). Booking and the consultation are in Japanese; bring a translation app."}},"notes":{"ko":["내원 진료 중심(온라인 진료 표기 확인 안 됨)","진료 항목이 많은 클리닉이라 예약 시 ‘마운자로 상담’임을 알리는 편이 빠릅니다","마운자로는 4주 단위 처방"],"en":["Primarily in-person (no online consultation confirmed)","The clinic offers many treatments, so say you are asking about Mounjaro when booking","Mounjaro is prescribed in 4-week units"]}},{"id":"terrasse_nagoya","regionKey":"nagoya","name":{"ko":"테라세 나야바시 패밀리 클리닉","en":"Terrasse Nayabashi Family Clinic"},"nameJa":"テラッセ納屋橋ファミリークリニック","area":{"ko":"나고야시 나카구 사카에","en":"Sakae, Naka-ku, Nagoya"},"station":{"ko":"지하철 히가시야마선·쓰루마이선 후시미역 6번 출구 도보 6분","en":"6 min from Fushimi Station (Higashiyama / Tsurumai line), exit 6"},"address":"〒460-0008 愛知県名古屋市中区栄1-2-3 プラウドタワー名古屋栄201","hours":{"ko":"월·화·수·금 9:00~12:00 / 16:00~19:00 · 토 9:00~12:00 / 16:00~18:00 · 목·일·공휴일 휴진","en":"Mon/Tue/Wed/Fri 9:00–12:00 and 16:00–19:00 · Sat 9:00–12:00 and 16:00–18:00 · closed Thursday, Sunday and holidays"},"phone":"052-222-0900","phoneNote":{"ko":"","en":""},"bookingUrl":"https://www.mssyoyaku.com/~tnfcl/rcvIndex.php","bookingLabel":{"ko":"공식 WEB 예약","en":"Official web booking"},"officialUrl":"https://tnf-clinic.com/diet-glp/","localUrl":"","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E6%84%9B%E7%9F%A5%E7%9C%8C%E5%90%8D%E5%8F%A4%E5%B1%8B%E5%B8%82%E4%B8%AD%E5%8C%BA%E6%A0%841-2-3","tiers":{"2.5":{"m1":16000},"5":{"m1":30000},"7.5":{"m1":40000},"10":{"m1":50000},"12.5":{"m1":60000},"15":{"m1":70000}},"priceNote":{"ko":"1개월(4펜) 공개 가격 · 세금 포함 · 진찰료·처방료 포함. 검사가 필요하면 시행 전에 설명한다고 안내되어 있습니다.","en":"Published 1-month (4-pen) price, tax included, consultation and dispensing included. The clinic says any tests are explained with their cost before they are done."},"consultFee":0,"consultNote":{"ko":"진찰료·처방료 포함(추가 없음) · 필요한 검사는 별도 안내","en":"Consultation and dispensing included (no extra fee) · any necessary tests are explained separately"},"cancel":{"ko":"공식 페이지에 취소 수수료 표기 확인 안 됨","en":"No cancellation fee stated on the official page"},"cert":{"ko":"영문 증명서 발급 표기 확인 안 됨","en":"English certificate: issue and fee not stated on the official page"},"certFee":0,"lang":{"ko":{"level":"none","label":"한국어 표기 확인 안 됨","detail":"공식 페이지에 한국어·영어 안내 표기가 확인되지 않았습니다. 일본어 예약·진료로, 번역 앱이 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English or Korean information was confirmed on the official page (2026-11). Booking, the questionnaire and the consultation are in Japanese; bring a translation app."}},"notes":{"ko":["초진은 대면, 재진은 의사 판단에 따라 온라인 진료 가능","예약 후 WEB 문진 입력이 필요합니다","체중 측정과 불필요한 채혈을 하지 않는 운영을 안내","예약 캘린더에서 ‘肥満外来（自由診療）’를 선택"],"en":["First visit in person; follow-ups may be online at the doctor's discretion","A web questionnaire must be completed after booking","The clinic states it does not weigh patients or do unnecessary blood tests","Choose the obesity/self-pay slot in the booking calendar"]}},{"id":"clara_sapporo","regionKey":"sapporo","name":{"ko":"클라라 뷰티 클리닉 삿포로","en":"Clara Beauty Clinic Sapporo"},"nameJa":"クララビューティクリニック札幌院","area":{"ko":"삿포로시 기타구 기타6조니시","en":"Kita 6-jo Nishi, Kita-ku, Sapporo"},"station":{"ko":"JR 삿포로역 북쪽 출구 도보 1분","en":"1 min from JR Sapporo Station north exit"},"address":"〒060-0806 北海道札幌市北区北6条西4丁目2-7 J1札幌北口ビル 2階","hours":{"ko":"11:00~20:00 · 연중무휴(연말연시 휴진)","en":"11:00–20:00 · open every day (closed over New Year)"},"phone":"—","phoneNote":{"ko":"","en":""},"bookingUrl":"https://clarabeautyclinic.jp/sapporo/menu/medicine/","bookingLabel":{"ko":"공식 페이지(예약)","en":"Official page (booking)"},"officialUrl":"https://clarabeautyclinic.jp/sapporo/menu/medicine/","localUrl":"","localLabel":{"ko":"한국어 안내","en":"Korean information page"},"mapsUrl":"https://www.google.com/maps/search/?api=1&query=%E5%8C%97%E6%B5%B7%E9%81%93%E6%9C%AD%E5%B9%8C%E5%B8%82%E5%8C%97%E5%8C%BA%E5%8C%976%E6%9D%A1%E8%A5%BF4%E4%B8%81%E7%9B%AE2-7","tiers":{"2.5":{"m1":12078,"m3":32978},"5":{"m1":23518,"m3":63778},"7.5":{"m1":34980,"m3":94578},"10":{"m1":45980},"12.5":{"m1":56980},"15":{"m1":67980}},"priceNote":{"ko":"2본 단위 판매 · 4펜(1개월) 및 12펜(3개월) 세금 포함 공개가. 2.5mg 12펜 32,978엔, 5mg 12펜 63,778엔. 7.5mg 이상과 24본 이상은 예약 후 주문.","en":"Sold in 2-pen units; prices for 4 pens (1 month) and 12 pens (3 months) include tax. 2.5 mg 12 pens ¥32,978, 5 mg 12 pens ¥63,778. 7.5 mg and above, and 24+ pens, are ordered after booking."},"consultFee":0,"consultNote":{"ko":"진찰료·처방료 무료 · 내원 수령이면 송료 없음","en":"Consultation and dispensing free · no shipping charge for in-clinic pickup"},"cancel":{"ko":"공식 페이지에 취소 수수료 표기 확인 안 됨","en":"No cancellation fee stated on the official page"},"cert":{"ko":"영문 증명서 발급 표기 확인 안 됨","en":"English certificate: issue and fee not stated on the official page"},"certFee":0,"lang":{"ko":{"level":"none","label":"한국어 표기 확인 안 됨","detail":"공식 페이지에 한국어·영어 안내 표기가 확인되지 않았습니다. 일본어 예약·진료로, 번역 앱이 필요합니다."},"en":{"level":"ja","label":"Japanese only","detail":"No English or Korean information was confirmed on the official page (2026-11). Booking and the consultation are in Japanese; bring a translation app."}},"notes":{"ko":["2본(2주) 단위로 구매 가능","7.5mg 이상·24본 이상은 예약 후 주문(수령까지 며칠 소요)","삿포로역 북쪽 출구에서 도보 1분"],"en":["Can be bought in 2-pen (2-week) units","7.5 mg and above, or 24+ pens, are ordered after booking and take a few days","One minute from JR Sapporo north exit"]}}]};
+  /* CLINICS_JSON_END */
+
+  var REGION_LABEL = {
+    tokyo: { ko: '도쿄', en: 'Tokyo' },
+    fukuoka: { ko: '후쿠오카', en: 'Fukuoka' },
+    osaka: { ko: '오사카', en: 'Osaka' },
+    nagoya: { ko: '나고야', en: 'Nagoya' },
+    sapporo: { ko: '삿포로', en: 'Sapporo' },
+    other: { ko: '기타', en: 'Other' }
+  };
+
+  var CLINICS = (CLINICS_DATA && CLINICS_DATA.clinics) ? CLINICS_DATA.clinics.slice() : [];
+  var DATA_SOURCE = 'embedded';
+
+  /* ---------------------------------------------------------------
+     1. 체크리스트 (언어별)
+     --------------------------------------------------------------- */
+  var CHECK_ITEMS = {
+    ko: [
+      { id: 'period', title: '본인 자가치료용 3개월분(12펜) 이내', desc: '2026-11-12 개정 기준. 해외에서 정식 처방받은 약도 자가치료 목적에 한해 최대 3개월 투여량(12펜)까지 본인 휴대 반입이 허용됩니다.' },
+      { id: 'no_mail', title: '우편·특송(직구) 구매는 불가', desc: '해외 직구·우편 구매는 허용되지 않습니다. 반드시 본인이 직접 처방받아 휴대해야 합니다.' },
+      { id: 'cabin', title: '기내 수하물로 반입', desc: '위탁 수하물은 화물칸에서 얼 수 있습니다. 반드시 기내에 들고 타세요.' },
+      { id: 'gel', title: '보냉제 개당 100g(100mL) 이하 + 1L 지퍼백', desc: '얼린 보냉제도 젤·액체류로 분류됩니다. 개당 100g 이하로 분리해 1L 투명 지퍼백(1인 1개)에 담으세요.' },
+      { id: 'papers', title: '처방전·약봉투·본인 이름 영수증 지참', desc: '6펜을 넘으면 세관에서 본인 명의 정식 처방인지 확인이 붙을 수 있습니다. 영문 증명서가 없어도 이 서류들과 원래 박스·라벨을 그대로 챙기세요.' },
+      { id: 'phrase', title: '보안검색대 제시용 일본어 문구 준비', desc: '「冷蔵が必要な処方薬（マンジャロ）の保冷剤です。」 — 보냉제를 꺼내며 문구와 처방 증빙을 함께 보여주세요.' },
+      { id: 'wrap', title: '보냉제가 펜에 직접 닿지 않게', desc: '얼린 팩에 직접 닿으면 동결될 수 있습니다. 수건·키친타월로 한 겹 감싸세요.' },
+      { id: 'fridge', title: '귀국 후 2~8°C 냉장 보관', desc: '사용 전 보관 온도를 지키고, 사용 직전에는 실온에 잠시 두어 차가운 상태로 주사하지 않도록 합니다.' },
+      { id: 'customs', title: '다른 구매와 합산해 800달러 확인', desc: '의약품이 자진신고 대상에서 빠져도, 다른 면세품·쇼핑과 합산해 미화 800달러를 넘으면 신고·과세 대상이 될 수 있습니다.' }
+    ],
+    en: [
+      { id: 'cold', title: 'Pens stay refrigerated (2–8 °C) until you fly', desc: 'Keep them in a fridge, never a freezer, and keep the original box so the label stays readable.' },
+      { id: 'cabin', title: 'Carry them in your cabin bag — never in checked luggage', desc: 'The cargo hold can fall below freezing and freeze the pens. They travel with you in the cabin.' },
+      { id: 'gel', title: 'Ice or gel packs: 100 g / 100 mL each or less', desc: 'Japanese airport security treats frozen packs as gel or liquid. Split them so each piece is 100 g or less and put them in one 1 L clear zip bag per person.' },
+      { id: 'wrap', title: 'No pack touches the pens directly', desc: 'A frozen pack can freeze a pen. Wrap the packs in a towel or kitchen paper and keep them away from the pen.' },
+      { id: 'papers', title: 'Original boxes, prescription and a receipt in your name', desc: 'Keep the pharmacy receipt with your name, the pen box and the prescription together; security and customs may ask for them.' },
+      { id: 'phrase', title: 'Have the Japanese security phrase ready', desc: '「冷蔵が必要な処方薬（マンジャロ）の保冷剤です。」 Take the packs out and show this line together with your documents.' },
+      { id: 'limit', title: 'Know your destination country’s import limit', desc: 'Prescription GLP-1 pens are usually allowed only for your own treatment and only when you carry them yourself. Limits and paperwork differ by country — check before you fly.' },
+      { id: 'home', title: 'Store at 2–8 °C once home', desc: 'Keep the fridge temperature, and take a pen out shortly before use so you are not injecting it ice-cold.' }
+    ]
+  };
+
+  /* ---------------------------------------------------------------
+     2. FAQ (언어별)
+     --------------------------------------------------------------- */
+  var FAQ_ITEMS = {
+    ko: [
+      {
+        q: '보냉제 100g 규격, 다이소 제품은 어떻게 챙기나요?',
+        body: '<p>나리타공항·일본 국토교통성 기준으로 <strong>보냉제는 얼린 상태여도 젤·액체류</strong>로 분류됩니다. 개당 <strong>100g(100mL) 이하</strong>만 1L 투명 지퍼백(1인 1개)에 담아 반입할 수 있습니다.</p>'
+          + '<p>일본 다이소 보냉제는 <strong>80g×3</strong>, <strong>50g×6</strong>처럼 절취선으로 붙은 제품이 많아, 그대로 넣으면 한 덩어리로 보입니다. <strong>가위로 낱개 분리</strong>해야 개당 100g 이하로 인정되기 쉽습니다. 처음부터 낱개로 분리된 <strong>70g×2</strong> 제품도 있습니다.</p>'
+          + '<p>냉장 의약품(마운자로)과 동봉한 보냉제는 용량 예외가 인정되지만, 보안검색대에서 꺼내 아래 문구와 영수증·처방 증빙을 함께 제시하면 수월합니다.</p>'
+          + '<span class="ja-quote">冷蔵が必要な処方薬（マンジャロ）の保冷剤です。</span>'
+          + '<p>펜이 얼린 보냉제에 직접 닿아 동결되지 않도록 <strong>수건·키친타월로 한 겹 감싸</strong> 기내 수하물로 반입하세요. 위탁 수하물은 화물칸 동결 위험이 있습니다.</p>'
       },
-      priceNote: '내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준)으로 계산. 15mg은 간다점 취급 없음(신주쿠점만).',
-      consultFee: 0,
-      consultNote: '처방 시 진찰료 0엔 · 미처방 시 5,500엔',
-      cancel: '전날 20:00(JST) 이후 취소·변경, 15분 이상 지각 시 5,500엔',
-      cert: '영문 증명서 8,800엔(한국 등 추가 서류 국가) · 그 외 5,500엔',
-      certFee: 8800,
-      korean: { level: 'info', label: '한국어 안내 페이지', detail: '한국어 안내 페이지·LINE 한국어 문의 가능. 진료는 일본어/영어(번역 앱·통역 동반 가능, 클리닉이 통역을 준비하지는 않음).' },
-      notes: [
-        '예약 필수(키레이패스) · 예약 없이 방문 시 진료 불가',
-        '재고 부족 시 클리닉 부담으로 일본 내 추후 배송',
-        '1회 처방 기본 6개월분까지(7개월분 이상은 의사 판단, 최대 12개월분)'
-      ]
-    },
-    {
-      id: 'silk_shinjuku',
-      region: '도쿄',
-      name: '도쿄실크클리닉 신주쿠점',
-      nameJa: '東京シルククリニック 新宿院',
-      area: '신주쿠구 신주쿠',
-      station: '신주쿠교엔마에역 도보 1분',
-      address: '〒160-0022 東京都新宿区新宿1-16-16 テェアカテリーナ 202',
-      hours: '11:00~14:00 / 15:00~20:00 (14~15시 휴진) · 부정기 휴진',
-      phone: '03-5315-0939',
-      bookingUrl: 'https://connect.kireipass.jp/clinics/tokyosilkclinic/menus/265548/confirm?large_category_id=0&page_id=1394&small_category_id=0',
-      bookingLabel: '공식 예약(키레이패스)',
-      officialUrl: 'https://tokyosilkclinic.com/menu/909/',
-      koreanUrl: 'https://silk-hp.pages.dev/mounjaro/ko',
-      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%B0%E5%AE%BF%E5%8C%BA%E6%96%B0%E5%AE%BF1-16-16',
-      tiers: {
-        '2.5': { m1: 8000, m3: 22500 },
-        '5': { m1: 14000, m3: 40500 },
-        '7.5': { m1: 22000, m3: 64500 },
-        '10': { m1: 28000, m3: 81000 },
-        '12.5': { m1: 34000, m3: 99000 },
-        '15': { m1: 42000, m3: 123000 }
+      {
+        q: '대마도(쓰시마)에서 받으려면 어떻게 하나요?',
+        body: '<p>대마도 <strong>섬 안에서 마운자로를 처방하는 방문형 병원은 2026-11 기준 확인된 곳이 0곳</strong>입니다. 그래서 실제로는 일본 본토 클리닉의 <strong>온라인 진료 → 대마도 배송 → 배편 픽업</strong> 순서로 받습니다.</p>'
+          + '<p>출발 약 1주일 전까지 온라인 진료를 마치고, 진료할 때 <strong>대마도 숙소나 야마토 운수 영업소</strong>를 수령지로 지정하세요. 냉장 택배는 보통 2~3일 걸립니다.</p>'
+          + '<p>영업소는 2곳입니다. 북부 히타카츠는 <strong>対馬比田勝営業所</strong>(〒817-1701 対馬市上対馬町比田勝488, 8:00~19:00, 코드 090953), 남부 이즈하라는 <strong>対馬営業所</strong>(〒817-0322 対馬市美津島町鶏知字陽樽ノ濱乙513-1, 8:00~20:00, 코드 090950)입니다. <strong>편의점·무인함 수령은 불가</strong>하고, 여권과 송장번호가 필요하며, 보관은 도착일 포함 <strong>최대 3일·연장 불가</strong>입니다.</p>'
+          + '<p>부산에서 히타카츠 약 1시간 20분, 이즈하라 약 2시간 20분입니다(선사·편별 상이). 결항에 대비해 하루 여유를 두고, 숙소의 냉장 보관·대리 수령 여부를 미리 확인하세요.</p>'
+          + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="clinics" data-region-set="tsushima">대마도 수령 가이드 열기</button></p>'
       },
-      priceNote: '내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준). 15mg은 신주쿠점만 취급.',
-      consultFee: 0,
-      consultNote: '처방 시 진찰료 0엔 · 미처방 시 5,500엔',
-      cancel: '전날 20:00(JST) 이후 취소·변경, 15분 이상 지각 시 5,500엔',
-      cert: '영문 증명서 8,800엔(한국 등 추가 서류 국가) · 그 외 5,500엔',
-      certFee: 8800,
-      korean: { level: 'info', label: '한국어 안내 페이지', detail: '한국어 안내 페이지·LINE 한국어 문의 가능. 진료는 일본어/영어(번역 앱·통역 동반 가능).' },
-      notes: [
-        '예약 필수(키레이패스) · 전화 예약 불가(공식 LINE 안내)',
-        '재고 부족 시 클리닉 부담으로 일본 내 추후 배송',
-        '1회 처방 기본 6개월분까지(7개월분 이상은 의사 판단)'
-      ]
-    },
-    {
-      id: 'japannet_ginza',
-      region: '도쿄',
-      name: '재팬넷클리닉 (뷰티온클리닉 긴자)',
-      nameJa: 'ジャパンネットクリニック / ビューティーオンクリニック銀座',
-      area: '주오구 긴자·신바시',
-      station: 'JR·도쿄메트로 신바시역 도보 4분 · 긴자역 도보 8분 · 히가시긴자역 도보 6분',
-      address: '〒104-0061 東京都中央区銀座8-9-7 HULIC & New GINZA 8 11F',
-      hours: '매일 10:00~20:40 (11/25·12/2 휴진, 12/9부터 수요일도 진료) · 예약 우선, 예약 없이 방문 가능',
-      phone: '080-4300-8569 (카카오톡 ID: japanclinic)',
-      bookingUrl: 'https://japannetclinic.com/',
-      bookingLabel: '공식 예약·문의',
-      officialUrl: 'https://japannetclinic.com/ja/mounjaro/',
-      koreanUrl: 'https://japannetclinic.com/',
-      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E4%B8%AD%E5%A4%AE%E5%8C%BA%E9%8A%80%E5%BA%A78-9-7',
-      tiers: {
-        '2.5': { m1: 22000, m3: 34584 },
-        '5': { m1: 39600, m3: 66891 },
-        '7.5': { m1: 57200, m3: 99924 },
-        '10': { m1: 76264, m3: 133232 },
-        '12.5': { m1: 95336, m3: 166540 }
+      {
+        q: '800달러 면세 한도, 마운자로는 어떻게 계산되나요?',
+        body: '<p>2026-11-12 개정 기준으로 자가치료용 마운자로 <strong>3개월분(12펜) 이내</strong>는 의약품 자진신고 대상에서 제외됩니다. 다만 이는 <strong>800달러 면세 한도가 별도로 면제된다는 뜻이 아닙니다</strong>.</p>'
+          + '<p>해외에서 다른 고가 쇼핑(예: 스마트안경·면세품 등)을 함께 하면 <strong>합산 금액이 미화 800달러를 넘어 입국 세관 신고 대상</strong>이 될 수 있습니다. ‘비용’ 탭의 합산 계산기에서 마운자로 비용과 다른 구매액을 넣어 바로 확인할 수 있습니다.</p>'
+          + '<p>또한 클리닉의 <strong>자유진료 처방약은 일본 소비세 면세(Tax-Free) 대상이 아닙니다</strong>. 면세점에서 산 물건과 성격이 다르니 영수증을 구분해 보관하세요.</p>'
+          + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="cost">합산 계산기 열기</button></p>'
       },
-      priceNote: '1펜 단위 가격(2.5mg 5,500엔·5mg 9,900엔·7.5mg 14,300엔 등)의 4펜 환산과 3개월 플랜 월액 기준. 3개월 플랜이 1펜 단위보다 저렴합니다.',
-      consultFee: 3630,
-      consultNote: '초진료 3,630엔(세금 포함) · 재진 1,500엔',
-      cancel: '공식 페이지에 취소 수수료 별도 표기 확인되지 않음(예약 시 확인)',
-      cert: '영문 처방전 7,370엔(일본 내 주소 확인 불가 시 필수)',
-      certFee: 7370,
-      korean: { level: 'full', label: '한국어 진료', detail: '한국인 대표원장이 한국어로 진료·상담, 접수·안내도 한국어. 호텔 배송 3,300엔, 결제는 한국 발급 카드·카카오뱅크 계좌이체·카카오페이 가능.' },
-      notes: [
-        '일본 주소가 확인되지 않으면 영문 처방전 발행료가 필수로 붙습니다',
-        '비거주자는 처방 시 초진료 + 영문 처방전 = 11,000엔(세금 포함, 약값 별도)',
-        '2.5mg은 재고 상황에 따라 입고 대기 안내가 붙을 수 있음'
-      ]
-    },
-    {
-      id: 'modena_tenjin',
-      region: '후쿠오카',
-      name: '모데나클리닉 텐진본원',
-      nameJa: 'モデナクリニック 天神本院',
-      area: '후쿠오카시 주오구 다이묘',
-      station: '덴진·다이묘 지역 (공식 페이지에 최근접 역 도보 표기 없음)',
-      address: '〒810-0041 福岡県福岡市中央区大名2-1-7 FPG links DAIMYO 4F',
-      hours: '9:30~18:00 (부정기 휴일) · 당일 시술 최종 접수 17:00',
-      phone: '092-738-5785 (일본어만)',
-      bookingUrl: 'https://line.me/R/ti/p/@883segwo',
-      bookingLabel: '공식 LINE 예약',
-      officialUrl: 'https://modena-clinic.com/menu/4430/',
-      koreanUrl: 'https://modena-clinic.com/mounjaro-kr/',
-      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E5%A4%A7%E5%90%8D2-1-7',
-      tiers: {
-        '2.5': { m1: 12500, m3: 37500 },
-        '5': { m1: 22800, m3: 68400 },
-        '7.5': { m1: 32300, m3: 96900 },
-        '10': { m1: 40500, m3: 121500 }
+      {
+        q: '예약 폼의 주소·우편번호는 어떻게 넣나요?',
+        body: '<p>원칙은 <strong>실제로 묵을 숙소 주소</strong>입니다. 숙소가 아직 확정되지 않았거나 시스템이 허용하는 경우에만 우편번호를 <strong>0000000</strong> 등으로 넘기고, 숙소가 정해지면 클리닉에 알려 주세요.</p>'
+          + '<p>재고가 부족하면 클리닉이 나중에 <strong>일본 내 주소로 배송</strong>하는 경우가 있습니다. 숙소 주소·체크인 날짜·숙박자 이름을 메모해 두면 수령이 수월합니다.</p>'
+          + '<p>전화번호는 한국 번호도 입력되는 경우가 많고(3-4-4 형식), フリガナ 칸에는 이름을 카타카나로 넣습니다. ‘예약’ 탭의 변환기를 쓰세요.</p>'
+          + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="booking">이름 변환기 열기</button></p>'
       },
-      priceNote: '1개월(4펜) 공개 가격 기준 · 세금 포함. 다개월 할인은 공식 페이지에 별도 표기 없어 월액 × 개월로 계산.',
-      consultFee: 0,
-      consultNote: '진찰료·카운셀링 무료(약값만) · 희망 시 채혈 4,950엔',
-      cancel: '예약 3일 전까지 웹 마이페이지, 이후 전화·LINE (수수료 표기 확인 안 됨)',
-      cert: '처방내용서(영문) 무료(여권 지참, 진단서는 미발급)',
-      certFee: 0,
-      korean: { level: 'info', label: '한국어 문진표·페이지', detail: '한국어 문진표·한국어 안내 페이지·LINE 한국어 안내 있음. 진료·전화는 일본어로 진행되어 번역 앱이나 일본어 동반자가 필요합니다.' },
-      notes: [
-        '마운자로 예약은 공식 LINE 전용 (WEB·전화·메일 예약 불가)',
-        '예약 없이 방문하면 마운자로 처방 불가',
-        '1회 진료당 원칙 3개월분까지 · 보냉백은 3펜 이상 무료, 1~2펜 220엔',
-        '국외 반출 통관 책임은 본인 · 클리닉은 보증하지 않음'
-      ]
-    },
-    {
-      id: 'fontana_tenjin',
-      region: '후쿠오카',
-      name: '폰타나클리닉 텐진',
-      nameJa: 'フォンタナクリニック天神 (FONTANA CLINIC)',
-      area: '후쿠오카시 주오구 이마이즈미',
-      station: '니시테츠 후쿠오카(텐진)역 남쪽 출구 도보 7분 · 덴진미나미역 도보 7분 · 덴진역 도보 10분',
-      address: '〒810-0021 福岡県福岡市中央区今泉1-18-23 CASA FONTANA 2F',
-      hours: '10:00~19:00 (평일·토·일·공휴일 동일) · 완전 예약제',
-      phone: '092-753-5205 (카카오톡 ID: fontanaclinic)',
-      bookingUrl: 'https://fontana-clinic.jp/kr/',
-      bookingLabel: '공식 예약·상담(한국어)',
-      officialUrl: 'https://fontana-clinic.jp/mounjaro-jp/',
-      koreanUrl: 'https://fontana-clinic.jp/kr/',
-      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E5%B2%A1%E5%B8%82%E4%B8%AD%E5%A4%AE%E5%8C%BA%E4%BB%8A%E6%B3%891-18-23',
-      tiers: {
-        '2.5': { m1: 15800, m3: 46200 },
-        '5': { m1: 25400, m3: 72000 },
-        '7.5': { m1: 40600, m3: 116100 },
-        '10': { m1: 48900, m3: 139500 },
-        '12.5': { m1: 60000, m3: 171000 },
-        '15': { m1: 68300, m3: 193500 }
+      {
+        q: '취소·변경 수수료와 예약 경로, 어떻게 확인하나요?',
+        body: '<p>취소 규정은 클리닉마다 다릅니다. 예를 들어 도쿄실크클리닉은 <strong>전날 20:00(JST) 이후 취소·변경이나 15분 이상 지각 시 5,500엔</strong>이 붙습니다. 일정이 흔들릴 수 있다면 <strong>마감 시각</strong>을 먼저 확인하세요.</p>'
+          + '<p>전화 예약이 되지 않고 <strong>키레이패스(KireiPass)·공식 LINE 전용</strong>인 곳이 많습니다. 특히 마운자로는 LINE 예약만 받는 클리닉도 있어, 예약 경로를 먼저 확인하는 편이 빠릅니다.</p>'
+          + '<p>빈자리는 갑자기 열리는 경우가 있습니다. 일정이 임박했다면 하루에 몇 번씩 예약 페이지를 확인하고, 취소표가 열리면 바로 잡으세요. 예약 완료 메일이 오지 않으면 예약이 안 된 것일 수 있으니 스팸함까지 확인합니다.</p>'
       },
-      priceNote: '내원 수령 1개월(4펜) 기준 · 세금 포함 · 진찰료 0. 온라인 진료 후 배송은 약값 + 2,500엔(일본 국내 배송비 + 일·영 처방전 발급 포함).',
-      consultFee: 0,
-      consultNote: '초진·재진료 무료 · 온라인 진료는 배송+처방전 2,500엔',
-      cancel: '온라인 진료는 진료 전날 24시까지 문진표 미작성 시 예약 자동 취소(공식 안내)',
-      cert: '일·영 처방전이 온라인 진료 2,500엔에 포함',
-      certFee: 0,
-      korean: { level: 'staff', label: '한국어 상담 스태프', detail: '한국어 대응 스태프가 매일 근무하며 예약·수령·배송을 한국어로 상담합니다(카카오톡 fontanaclinic). 한국에 있을 때 예약·상담도 가능하다고 공식 페이지에 안내되어 있습니다.' },
-      tsushima: true,
-      notes: [
-        '대마도(쓰시마) 숙소·야마토 운수 영업소로 냉장 배송 안내(공식 한국어 페이지, 보통 2~3일)',
-        '대마도 방문 약 1주일 전까지 온라인 진료를 마치라고 안내',
-        '이동용 보냉백·아이스팩 무료 제공',
-        '숙소의 냉장 보관·대리 수령 가능 여부는 직접 확인 필요 · 클리닉은 수령·보관을 보증하지 않음'
-      ]
-    },
-    {
-      id: 'daibikai_shinsaibashi',
-      region: '오사카',
-      name: '대미회클리닉 심사이바시본원',
-      nameJa: '大美会クリニック 心斎橋本院',
-      area: '오사카시 주오구 히가시심사이바시',
-      station: '심사이바시역 도보 6분 · 난바역 도보 12분',
-      address: '大阪市中央区東心斎橋2-8-28 周防町GEOビル3F',
-      hours: '월~토 11:00~21:00 · 일·공휴일 11:00~20:00 (연말연시만 휴진)',
-      phone: '0120-373-889',
-      bookingUrl: 'https://osaka-bc.com/reserve/',
-      bookingLabel: '공식 웹 예약(24시간)',
-      officialUrl: 'https://osaka-bc.com/price/1941/',
-      koreanUrl: '',
-      mapsUrl: 'https://maps.app.goo.gl/YfQVcurASB3FzRdG7',
-      tiers: {
-        '2.5': { m1: 17800, m2: 34800, m3: 51000 },
-        '5': { m1: 32000, m2: 62000, m3: 91200 }
+      {
+        q: '영문 증명서는 꼭 필요한가요? 없으면 어떻게 하나요?',
+        body: '<p>영문 증명서는 법적 필수 서류가 아니라 <strong>세관·보안검색용 보조 소명 자료</strong>입니다. 다만 <strong>6펜을 초과</strong>(예: 12펜)해 반입하면 세관에서 본인 명의 정식 처방인지 확인이 붙을 수 있습니다.</p>'
+          + '<p>증명서를 발급하지 않아도 <strong>본인 영문명·약품명·개수가 적힌 영수증</strong>과 <strong>원래 박스·라벨</strong>을 그대로 챙기면 소명에 도움이 됩니다. 클리닉에 따라 영문 처방전 발행이 필수인 곳(비거주자 기준)도 있으니 예약 시 확인하세요.</p>'
+          + '<p>투약 후 컨디션 관리는 개인차가 큽니다. 수분을 나눠 마시고 식사를 거르지 않는 정도의 일반적인 생활 참고만 기억하고, 불편이 지속되면 처방한 의사나 현지 의료기관에 상담하세요. 이 앱은 의료 조언을 제공하지 않습니다.</p>'
+      }
+    ],
+    en: [
+      {
+        q: 'How do the 100 g ice packs from a 100-yen shop work at security?',
+        body: '<p>Under Japanese (MLIT / Narita) security rules <strong>ice and gel packs count as gel or liquid even when frozen</strong>. Each piece must be <strong>100 g (100 mL) or less</strong>, carried in one 1 L clear zip bag per person.</p>'
+          + '<p>Japanese 100-yen-shop packs often come joined by cut-lines (<strong>80 g × 3</strong>, <strong>50 g × 6</strong>); left together they read as one large pack. <strong>Separate them with scissors</strong> so each piece is under 100 g. Some packs (<strong>70 g × 2</strong>) are already split.</p>'
+          + '<p>Packs packed with refrigerated medicine are usually given an allowance, but take them out at security and show the line below with the receipt and prescription.</p>'
+          + '<span class="ja-quote">冷蔵が必要な処方薬（マンジャロ）の保冷剤です。</span>'
+          + '<p>Wrap the packs in a towel so a frozen pack never touches the pen, and keep everything in your <strong>cabin bag</strong> — checked luggage can freeze in the hold.</p>'
       },
-      priceNote: '내원(클리닉) 구매 기준 · 세금 포함 · 예약 시점 가격 확인 필요. 7.5mg·10mg은 공식 가격표에 온라인 진료 기준 4개 54,000엔 / 66,000엔 표기(내원 취급은 문의).',
-      consultFee: 0,
-      consultNote: '진찰료·재진료·송료 무료 · 채혈 2,000엔(내원 필요)',
-      cancel: '공식 페이지에 취소 수수료 별도 표기 확인되지 않음(예약 시 확인)',
-      cert: '영문 증명서 발급·비용 공식 페이지에 표기 확인 안 됨',
-      certFee: 0,
-      korean: { level: 'none', label: '한국어 표기 확인 안 됨', detail: '공식 페이지에 한국어 안내 표기가 확인되지 않았습니다. 일본어 예약 폼·진료로, 번역 앱이 필요합니다.' },
-      notes: [
-        '일요일·공휴일도 진료(11:00~20:00)',
-        '1펜(1주) 단위 구매 가능 · 온라인 진료는 별도 앱 안내',
-        '20세 미만·BMI 18 미만은 처방 대상 아님'
-      ]
-    },
-    {
-      id: 'tsuwabuki_suita',
-      region: '오사카',
-      name: '스이타역앞 츠와부키 내과·정형외과',
-      nameJa: '吹田駅前つわぶき内科・整形外科',
-      area: '스이타시 아사히초',
-      station: 'JR 스이타역 앞 (스이타 산쿠스 1번관 1F)',
-      address: '〒564-0027 大阪府吹田市朝日町1-1 吹田さんくす1番館 1F',
-      hours: '8:30~13:00 / 14:00~20:00 (화 14:00~18:00, 금 14:00~19:00) · 일·공휴일 휴진',
-      phone: '—',
-      bookingUrl: 'https://www.tsuwabuki-clinic.com/obesity/',
-      bookingLabel: '공식 페이지(전화 예약)',
-      officialUrl: 'https://www.tsuwabuki-clinic.com/obesity/',
-      koreanUrl: '',
-      mapsUrl: 'https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%90%B9%E7%94%B0%E5%B8%82%E6%9C%9D%E6%97%A5%E7%94%BA1-1',
-      tiers: {
-        '2.5': { m1: 12000, m3: 36000 },
-        '5': { m1: 18000, m3: 54000 },
-        '7.5': { m1: 24000, m3: 72000 },
-        '10': { m1: 30000, m3: 90000 },
-        '12.5': { m1: 35000, m3: 105000 },
-        '15': { m1: 41000, m3: 123000 }
+      {
+        q: 'Can I get Mounjaro on Tsushima Island?',
+        body: '<p>As of 2026-11 <strong>no walk-in clinic on Tsushima itself is confirmed to prescribe Mounjaro</strong>. In practice you use a clinic on the mainland: <strong>online consultation → cold delivery to Tsushima → pick up after the ferry</strong>.</p>'
+          + '<p>Finish the online consultation about a week before you travel and give <strong>your Tsushima hotel or a Yamato Transport office</strong> as the delivery address. Refrigerated parcels usually take 2–3 days.</p>'
+          + '<p>There are two Yamato offices: <strong>対馬比田勝営業所</strong> in the north (〒817-1701, 8:00–19:00, office code 090953) and <strong>対馬営業所</strong> in Izuhara in the south (〒817-0322, 8:00–20:00, office code 090950). <strong>No convenience-store or locker pickup</strong>; bring your passport and the tracking number. Parcels are held for <strong>3 days including the arrival day, with no extension</strong>.</p>'
+          + '<p>The ferry takes about 1 h 20 min from Busan to Hitakatsu and about 2 h 20 min to Izuhara (varies by operator and sailing). Leave a buffer day for cancellations, and confirm that your lodging can refrigerate and receive the parcel.</p>'
+          + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="clinics" data-region-set="tsushima">Open the Tsushima pick-up guide</button></p>'
       },
-      priceNote: '1개월(4펜) 가격에 진찰료 포함 · 4펜 단위 처방. 다개월 할인 표기 없음.',
-      consultFee: 0,
-      consultNote: '진찰료 포함 · 처방이 없으면 초진료 3,500엔, 필요 검사 별도',
-      cancel: '공식 페이지에 취소 수수료 표기 확인 안 됨',
-      cert: '영문 증명서 발급·비용 공식 페이지에 표기 확인 안 됨',
-      certFee: 0,
-      korean: { level: 'none', label: '한국어 표기 확인 안 됨', detail: '공식 페이지에 한국어 안내 표기가 확인되지 않았습니다. 일본어 진료로, 번역 앱이 필요합니다.' },
-      notes: [
-        '대면 진료만 (온라인 진료 표기 없음)',
-        '마운자로는 BMI 23 미만 처방 불가 · 20세 미만 불가',
-        '오사카 중심가에서 떨어진 스이타 지역'
-      ]
-    }
+      {
+        q: 'Does Japan tax-free apply to a clinic prescription?',
+        body: '<p><strong>No.</strong> A prescription issued as self-pay treatment at a clinic is a medical service and a medicine purchase, not a tax-free-shop purchase, so the consumption tax cannot be refunded. The price you see already includes Japanese consumption tax.</p>'
+          + '<p>Tax-free counters in department stores and electronics shops are a different scheme. Keep those receipts separate from the clinic receipt.</p>'
+          + '<p><strong>Before you travel, check your own country’s rules</strong> for bringing prescription medicines, including GLP-1 pens, across the border: allowed quantities, whether you must carry them yourself, and what documents customs may ask for. Those rules are outside this app.</p>'
+          + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="cost">Open the cost calculator</button></p>'
+      },
+      {
+        q: 'What do I put in the address fields of the booking form?',
+        body: '<p>Use the <strong>hotel you will actually stay at</strong>. Only use a placeholder postcode such as <strong>0000000</strong> when the hotel is not booked yet and the form accepts it — then tell the clinic the real address once you have it.</p>'
+          + '<p>If stock runs short, a clinic may <strong>ship to a Japanese address later</strong>, so note the hotel address, check-in date and the name on the booking.</p>'
+          + '<p>Forms usually accept a foreign mobile number in 3-4-4 format. The フリガナ field wants a katakana reading; the alphabet spelling from your passport is what identifies you at reception.</p>'
+          + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="booking">Open the booking helper</button></p>'
+      },
+      {
+        q: 'How strict are cancellation fees, and how do I book?',
+        body: '<p>Cancellation rules differ by clinic. Tokyo Silk Clinic, for example, charges <strong>¥5,500</strong> for a cancellation or change after <strong>20:00 JST the day before</strong>, or for arriving more than 15 minutes late. If your plans may move, check the <strong>cut-off time</strong> first.</p>'
+          + '<p>Many clinics do not take phone bookings: they use <strong>KireiPass or official LINE</strong> only, and some accept Mounjaro bookings only through LINE. Check the booking channel before you plan around a clinic.</p>'
+          + '<p>Slots open up at short notice. If your dates are close, check the booking page a few times a day and take a cancellation when it appears. No confirmation email can mean no booking — check the spam folder.</p>'
+      },
+      {
+        q: 'Do I need an English prescription or certificate?',
+        body: '<p>An English certificate is not a legal requirement; it is a <strong>supporting document</strong> for security and customs. Carrying more than a few pens (for example 12) can prompt questions about whether the prescription is genuinely yours.</p>'
+          + '<p>Even without a certificate, a <strong>receipt showing your name, the medicine and the number of pens</strong>, the <strong>original boxes</strong> and the prescription help. Some clinics require an English prescription for non-residents — check when booking.</p>'
+          + '<p>What your own country’s customs accepts is your responsibility: check its prescription-medicine import rules and paperwork before you travel. This app offers no medical advice; if you feel unwell after a dose, speak to the prescribing doctor or a local medical institution.</p>'
+      }
+    ]
+  };
+
+  var PHRASES = [
+    { ja: '予約をお願いします。', en: 'I would like to book an appointment.' },
+    { ja: 'マンジャロの処方を希望します。', en: 'I would like a prescription for Mounjaro.' },
+    { ja: '英語は話せますか？', en: 'Do you speak English?' },
+    { ja: '外国人ですが、必要な書類はありますか？', en: 'I am a visitor from abroad — is there any paperwork I need?' },
+    { ja: 'パスポートはこちらです。', en: 'Here is my passport.' },
+    { ja: '領収書をください。', en: 'Could I have a receipt, please?' },
+    { ja: '冷蔵が必要な処方薬（マンジャロ）の保冷剤です。', en: 'These are ice packs for a prescription medicine that must stay refrigerated (Mounjaro).' },
+    { ja: 'カードで支払えますか？', en: 'Can I pay by card?' }
   ];
 
   /* ---------------------------------------------------------------
-     2. 체크리스트 / FAQ 데이터
+     3. 한글 → 카타카나
      --------------------------------------------------------------- */
-  var CHECK_ITEMS = [
-    { id: 'period', title: '본인 자가치료용 3개월분(12펜) 이내', desc: '2026-11-12 개정 기준. 해외에서 정식 처방받은 약도 자가치료 목적에 한해 최대 3개월 투여량(12펜)까지 본인 휴대 반입이 허용됩니다.' },
-    { id: 'no_mail', title: '우편·특송(직구) 구매는 불가', desc: '해외 직구·우편 구매는 허용되지 않습니다. 반드시 본인이 직접 처방받아 휴대해야 합니다.' },
-    { id: 'cabin', title: '기내 수하물로 반입', desc: '위탁 수하물은 화물칸에서 얼 수 있습니다. 반드시 기내에 들고 타세요.' },
-    { id: 'gel', title: '보냉제 개당 100g(100mL) 이하 + 1L 지퍼백', desc: '얼린 보냉제도 젤·액체류로 분류됩니다. 개당 100g 이하로 분리해 1L 투명 지퍼백(1인 1개)에 담으세요.' },
-    { id: 'papers', title: '처방전·약봉투·본인 이름 영수증 지참', desc: '6펜을 넘으면 세관에서 본인 명의 정식 처방인지 확인이 붙을 수 있습니다. 영문 증명서가 없어도 이 서류들과 원래 박스·라벨을 그대로 챙기세요.' },
-    { id: 'phrase', title: '보안검색대 제시용 일본어 문구 준비', desc: '「冷蔵が必要な処方薬（マンジャロ）の保冷剤です。」 — 보냉제를 꺼내며 문구와 처방 증빙을 함께 보여주세요.' },
-    { id: 'wrap', title: '보냉제가 펜에 직접 닿지 않게', desc: '얼린 팩에 직접 닿으면 동결될 수 있습니다. 수건·키친타월로 한 겹 감싸세요.' },
-    { id: 'fridge', title: '귀국 후 2~8°C 냉장 보관', desc: '사용 전 보관 온도를 지키고, 사용 직전에는 실온에 잠시 두어 차가운 상태로 주사하지 않도록 합니다.' },
-    { id: 'customs', title: '다른 구매와 합산해 800달러 확인', desc: '의약품이 자진신고 대상에서 빠져도, 다른 면세품·쇼핑과 합산해 미화 800달러를 넘으면 신고·과세 대상이 될 수 있습니다.' }
-  ];
-
-  var FAQ_ITEMS = [
-    {
-      q: '보냉제 100g 규격, 다이소 제품은 어떻게 챙기나요?',
-      body: '<p>나리타공항·일본 국토교통성 기준으로 <strong>보냉제는 얼린 상태여도 젤·액체류</strong>로 분류됩니다. 개당 <strong>100g(100mL) 이하</strong>만 1L 투명 지퍼백(1인 1개)에 담아 반입할 수 있습니다.</p>'
-        + '<p>일본 다이소 보냉제는 <strong>80g×3</strong>, <strong>50g×6</strong>처럼 절취선으로 붙은 제품이 많아, 그대로 넣으면 한 덩어리로 보입니다. <strong>가위로 낱개 분리</strong>해야 개당 100g 이하로 인정되기 쉽습니다. 처음부터 낱개로 분리된 <strong>70g×2</strong> 제품도 있습니다.</p>'
-        + '<p>냉장 의약품(마운자로)과 동봉한 보냉제는 용량 예외가 인정되지만, 보안검색대에서 꺼내 아래 문구와 영수증·처방 증빙을 함께 제시하면 수월합니다.</p>'
-        + '<span class="ja-quote">冷蔵が必要な処方薬（マンジャロ）の保冷剤です。</span>'
-        + '<p>펜이 얼린 보냉제에 직접 닿아 동결되지 않도록 <strong>수건·키친타월로 한 겹 감싸</strong> 기내 수하물로 반입하세요. 위탁 수하물은 화물칸 동결 위험이 있습니다.</p>'
-    },
-    {
-      q: '대마도(쓰시마)에서 받으려면 어떻게 하나요?',
-      body: '<p>대마도 <strong>섬 안에서 마운자로를 처방하는 방문형 병원은 2026-11 기준 확인된 곳이 0곳</strong>입니다. 그래서 실제로는 일본 본토 클리닉의 <strong>온라인 진료 → 대마도 배송 → 배편 픽업</strong> 순서로 받습니다.</p>'
-        + '<p>출발 약 1주일 전까지 온라인 진료를 마치고, 진료할 때 <strong>대마도 숙소나 야마토 운수 영업소</strong>를 수령지로 지정하세요. 냉장 택배는 보통 2~3일 걸립니다.</p>'
-        + '<p>영업소는 2곳입니다. 북부 히타카츠는 <strong>対馬比田勝営業所</strong>(〒817-1701 対馬市上対馬町比田勝488, 8:00~19:00, 코드 090953), 남부 이즈하라는 <strong>対馬営業所</strong>(〒817-0322 対馬市美津島町鶏知字陽樽ノ濱乙513-1, 8:00~20:00, 코드 090950)입니다. <strong>편의점·무인함 수령은 불가</strong>하고, 여권과 송장번호가 필요하며, 보관은 도착일 포함 <strong>최대 3일·연장 불가</strong>입니다.</p>'
-        + '<p>부산에서 히타카츠 약 1시간 20분, 이즈하라 약 2시간 20분입니다(선사·편별 상이). 결항에 대비해 하루 여유를 두고, 숙소의 냉장 보관·대리 수령 여부를 미리 확인하세요.</p>'
-        + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="clinics" data-region-set="대마도">대마도 수령 가이드 열기</button></p>'
-    },
-    {
-      q: '800달러 면세 한도, 마운자로는 어떻게 계산되나요?',
-      body: '<p>2026-11-12 개정 기준으로 자가치료용 마운자로 <strong>3개월분(12펜) 이내</strong>는 의약품 자진신고 대상에서 제외됩니다. 다만 이는 <strong>800달러 면세 한도가 별도로 면제된다는 뜻이 아닙니다</strong>.</p>'
-        + '<p>해외에서 다른 고가 쇼핑(예: 스마트안경·면세품 등)을 함께 하면 <strong>합산 금액이 미화 800달러를 넘어 입국 세관 신고 대상</strong>이 될 수 있습니다. ‘비용’ 탭의 합산 계산기에서 마운자로 비용과 다른 구매액을 넣어 바로 확인할 수 있습니다.</p>'
-        + '<p>또한 클리닉의 <strong>자유진료 처방약은 일본 소비세 면세(Tax-Free) 대상이 아닙니다</strong>. 면세점에서 산 물건과 성격이 다르니 영수증을 구분해 보관하세요.</p>'
-        + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="cost">합산 계산기 열기</button></p>'
-    },
-    {
-      q: '예약 폼의 주소·우편번호는 어떻게 넣나요?',
-      body: '<p>원칙은 <strong>실제로 묵을 숙소 주소</strong>입니다. 숙소가 아직 확정되지 않았거나 시스템이 허용하는 경우에만 우편번호를 <strong>0000000</strong> 등으로 넘기고, 숙소가 정해지면 클리닉에 알려 주세요.</p>'
-        + '<p>재고가 부족하면 클리닉이 나중에 <strong>일본 내 주소로 배송</strong>하는 경우가 있습니다. 숙소 주소·체크인 날짜·숙박자 이름을 메모해 두면 수령이 수월합니다.</p>'
-        + '<p>전화번호는 한국 번호도 입력되는 경우가 많고(3-4-4 형식), フリガナ 칸에는 이름을 카타카나로 넣습니다. ‘예약’ 탭의 변환기를 쓰세요.</p>'
-        + '<p class="inline-copy"><button class="btn small ghost" data-tab-jump="booking">이름 변환기 열기</button></p>'
-    },
-    {
-      q: '취소·변경 수수료와 예약 경로, 어떻게 확인하나요?',
-      body: '<p>취소 규정은 클리닉마다 다릅니다. 예를 들어 도쿄실크클리닉은 <strong>전날 20:00(JST) 이후 취소·변경이나 15분 이상 지각 시 5,500엔</strong>이 붙습니다. 일정이 흔들릴 수 있다면 <strong>마감 시각</strong>을 먼저 확인하세요.</p>'
-        + '<p>전화 예약이 되지 않고 <strong>키레이패스(KireiPass)·공식 LINE 전용</strong>인 곳이 많습니다. 특히 마운자로는 LINE 예약만 받는 클리닉도 있어, 예약 경로를 먼저 확인하는 편이 빠릅니다.</p>'
-        + '<p>빈자리는 갑자기 열리는 경우가 있습니다. 일정이 임박했다면 하루에 몇 번씩 예약 페이지를 확인하고, 취소표가 열리면 바로 잡으세요. 예약 완료 메일이 오지 않으면 예약이 안 된 것일 수 있으니 스팸함까지 확인합니다.</p>'
-    },
-    {
-      q: '영문 증명서는 꼭 필요한가요? 없으면 어떻게 하나요?',
-      body: '<p>영문 증명서는 법적 필수 서류가 아니라 <strong>세관·보안검색용 보조 소명 자료</strong>입니다. 다만 <strong>6펜을 초과</strong>(예: 12펜)해 반입하면 세관에서 본인 명의 정식 처방인지 확인이 붙을 수 있습니다.</p>'
-        + '<p>증명서를 발급하지 않아도 <strong>본인 영문명·약품명·개수가 적힌 영수증</strong>과 <strong>원래 박스·라벨</strong>을 그대로 챙기면 소명에 도움이 됩니다. 클리닉에 따라 영문 처방전 발행이 필수인 곳(비거주자 기준)도 있으니 예약 시 확인하세요.</p>'
-        + '<p>투약 후 컨디션 관리는 개인차가 큽니다. 수분을 나눠 마시고 식사를 거르지 않는 정도의 일반적인 생활 참고만 기억하고, 불편이 지속되면 처방한 의사나 현지 의료기관에 상담하세요. 이 앱은 의료 조언을 제공하지 않습니다.</p>'
-    }
-  ];
-
   var KATA_OVERRIDES = {
     '김': 'キム', '이': 'イ', '박': 'パク', '최': 'チェ', '정': 'チョン', '강': 'カン', '조': 'ジョ',
     '윤': 'ユン', '장': 'チャン', '임': 'イム', '한': 'ハン', '오': 'オ', '서': 'ソ', '신': 'シン',
@@ -1095,9 +1111,6 @@
   var MEDIAL_LIST = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ'];
   var FINAL_LIST = ['', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
 
-  /* ---------------------------------------------------------------
-     3. 한글 → 카타카나
-     --------------------------------------------------------------- */
   // 앞 음절이 모음·비음·유음으로 끝나면 평음 ㄱ·ㄷ·ㅂ·ㅈ이 유성음으로 들립니다(예: 홍길동 → ホンギルドン).
   var VOICE_MAP = {
     'カ': 'ガ', 'キ': 'ギ', 'ク': 'グ', 'ケ': 'ゲ', 'コ': 'ゴ',
@@ -1165,26 +1178,31 @@
   }
 
   /* ---------------------------------------------------------------
-     4. 예약 비고란 생성
+     4. 예약 비고란 생성 (ja / ko / en)
      --------------------------------------------------------------- */
   function buildNote(dose, months, opts) {
     opts = opts || {};
     var pens = months * 4;
     var ja = [];
     var ko = [];
+    var en = [];
     ja.push('マンジャロ ' + dose + 'mg を ' + months + 'ヶ月分（合計' + pens + '本）希望します。');
-    ko.push('마운자로 ' + dose + 'mg ' + months + '개월분(합계 ' + pens + '펜)을 희망합니다.');
+    ko.push('마운자로 ' + dose + 'mg ' + months + '개월분(합계 ' + pens + ' 펜)을 희망합니다.');
+    en.push('Mounjaro ' + dose + 'mg for ' + months + ' month(s) — ' + pens + ' pens in total, please.');
     if (opts.firstVisit) {
       ja.push('初診のため、対面での診療を希望します。');
       ko.push('초진이므로 대면 진료를 희망합니다.');
+      en.push('This is my first visit, so I would like an in-person consultation.');
     }
     if (opts.cert) {
       ja.push('帰国の際に必要な英字の処方証明書についても相談したいです。');
       ko.push('귀국 시 필요한 영문 처방 증명서에 대해서도 상담하고 싶습니다.');
+      en.push('I would also like to ask about an English-language prescription certificate for my trip home.');
     }
     ja.push('氏名（カタカナ）：＿＿＿＿　※当日は旅券を持参します。');
     ko.push('성명(카타카나): ____ ※당일 여권을 지참합니다.');
-    return { ja: ja.join('\n'), ko: ko.join('\n'), pens: pens };
+    en.push('Name (katakana): ____  *I will bring my passport on the day.');
+    return { ja: ja.join('\n'), ko: ko.join('\n'), en: en.join('\n'), pens: pens };
   }
 
   /* ---------------------------------------------------------------
@@ -1248,6 +1266,12 @@
     return { japan: japan, korea: korea, diff: japan - korea };
   }
 
+  // 엔 → 달러 (EN 비용 탭: 1달러 = 154엔 기준)
+  function jpyToUsd(jpy, usdRate) {
+    var rate = usdRate > 0 ? usdRate : 154;
+    return { jpy: jpy || 0, usd: (jpy || 0) / rate, rate: rate };
+  }
+
   /* ---------------------------------------------------------------
      6. 포맷 유틸
      --------------------------------------------------------------- */
@@ -1274,29 +1298,27 @@
   }
 
   /* ---------------------------------------------------------------
-     7. DOM
+     7. 상태 · 언어
      --------------------------------------------------------------- */
-  var state = { tab: 'clinics', region: '전체', months: 3, clinicId: 'silk_kanda', dose: '5' };
-  var STORE_KEY = 'jmh.checklist.v1';
+  var state = { tab: 'clinics', region: 'all', months: 3, clinicId: 'silk_kanda', dose: '5', sort: 'default' };
+  var STORE_KEY = 'jmh.checklist.v2';
   var CALC_KEY = 'jmh.calc.v1';
+  var LANG_KEY = 'jmh_lang';
+  var LANG = 'ko';
 
-  function loadCalc() {
-    try { var raw = localStorage.getItem(CALC_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
-  }
-  function saveCalc() {
-    try {
-      localStorage.setItem(CALC_KEY, JSON.stringify({
-        clinicId: $('calcClinic').value,
-        dose: $('calcDose').value,
-        months: state.months,
-        rate: $('calcRate').value,
-        usdJpy: $('usdJpy').value,
-        krMonthly: $('krMonthly').value,
-        transport: $('transportCost').value,
-        certFee: $('calcCertFee').value,
-        cert: $('calcCert').checked
-      }));
-    } catch (e) {}
+  function L(ko, en) { return LANG === 'en' ? en : ko; }
+  function txt(v) { return (v && typeof v === 'object') ? (v[LANG] || v.ko || '') : (v || ''); }
+
+  function detectLang() {
+    var saved = null;
+    try { saved = localStorage.getItem(LANG_KEY); } catch (e) { saved = null; }
+    if (saved === 'ko' || saved === 'en') return saved;
+    var nav = '';
+    try { nav = (typeof navigator !== 'undefined' && navigator && navigator.language) ? String(navigator.language).toLowerCase() : ''; } catch (e) { nav = ''; }
+    if (!nav) return 'ko';
+    if (nav.indexOf('ko') === 0) return 'ko';
+    if (nav.indexOf('en') === 0) return 'en';
+    return 'ko';
   }
 
   function $(id) { return document.getElementById(id); }
@@ -1321,8 +1343,8 @@
   }
 
   function copyText(text, label) {
-    if (!text) { showToast('복사할 내용이 없습니다'); return; }
-    var done = function () { showToast(label || '복사했습니다'); };
+    if (!text) { showToast(L('복사할 내용이 없습니다', 'Nothing to copy')); return; }
+    var done = function () { showToast(label || L('복사했습니다', 'Copied')); };
     var fallback = function () {
       try {
         var ta = document.createElement('textarea');
@@ -1336,7 +1358,7 @@
         document.body.removeChild(ta);
         done();
       } catch (e) {
-        showToast('복사가 지원되지 않습니다. 길게 눌러 선택하세요.');
+        showToast(L('복사가 지원되지 않습니다. 길게 눌러 선택하세요.', 'Copy is not available here — press and hold to select.'));
       }
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1346,11 +1368,87 @@
     }
   }
 
-  function koreanBadge(c) {
-    if (!c.korean) return '';
-    if (c.korean.level === 'full') return '<span class="badge ok">한국어 진료 확인</span>';
-    if (c.korean.level === 'staff') return '<span class="badge ok">한국어 상담 스태프</span>';
-    if (c.korean.level === 'info') return '<span class="badge ok">한국어 안내 페이지</span>';
+  /* ---------- 언어 적용 (정적 마크업) ---------- */
+  var KO_CACHE = [];
+
+  function cacheKoMarkup() {
+    var nodes = document.querySelectorAll('[data-en], [data-en-html]');
+    for (var i = 0; i < nodes.length; i++) {
+      KO_CACHE.push({ el: nodes[i], html: nodes[i].innerHTML });
+    }
+    var phs = document.querySelectorAll('[data-en-ph]');
+    for (var j = 0; j < phs.length; j++) {
+      KO_CACHE.push({ el: phs[j], attr: 'placeholder', html: phs[j].getAttribute('placeholder') || '' });
+    }
+  }
+
+  function applyStatic(lang) {
+    var i;
+    for (i = 0; i < KO_CACHE.length; i++) {
+      var rec = KO_CACHE[i];
+      var el = rec.el;
+      if (!el) continue;
+      if (rec.attr) {
+        el.setAttribute('placeholder', lang === 'en' ? (el.getAttribute('data-en-ph') || rec.html) : rec.html);
+      } else if (el.getAttribute('data-en-html') !== null) {
+        el.innerHTML = lang === 'en' ? el.getAttribute('data-en-html') : rec.html;
+      } else if (el.getAttribute('data-en') !== null) {
+        if (lang === 'en') {
+          el.textContent = el.getAttribute('data-en');
+        } else {
+          el.innerHTML = rec.html;
+        }
+      }
+    }
+    // 언어 전용 블록
+    var blocks = document.querySelectorAll('[data-lang-only]');
+    for (i = 0; i < blocks.length; i++) {
+      var want = blocks[i].getAttribute('data-lang-only');
+      blocks[i].hidden = (want !== lang);
+    }
+    // 상단 언어 버튼
+    var ko = $('langKo'), en = $('langEn');
+    if (ko && en) {
+      ko.classList.toggle('is-active', lang === 'ko');
+      en.classList.toggle('is-active', lang === 'en');
+      ko.setAttribute('aria-pressed', lang === 'ko' ? 'true' : 'false');
+      en.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+    }
+    // 문서 메타
+    try {
+      document.documentElement.lang = lang;
+      document.title = L('일본 마운자로 방문 도우미 — 준비 도구', 'Japan Mounjaro Visit Helper — preparation tool');
+    } catch (e) {}
+    // 언어 종속 라벨 (정적 속성으로 처리되지 않는 것)
+    var nh = $('noteHint');
+    if (nh) nh.textContent = L(
+      '‘12펜(3개월분)’이 한국 휴대 반입 상한입니다. 3개월을 넘겨 예약하면 반입 기준을 초과하므로, 예약 전에 반입 규정을 먼저 확인하세요.',
+      'Three months usually means 12 pens. Korea allows up to 3 months of personal-use pens carried by the traveller; other countries set their own limit, so check the rules for your destination before booking more.'
+    );
+    var usdRow = $('sumUsdRow'), krwRow = $('sumKrwRow');
+    if (usdRow) usdRow.hidden = (lang !== 'en');
+    if (krwRow) krwRow.hidden = (lang === 'en');
+  }
+
+  function setLang(lang) {
+    LANG = (lang === 'en') ? 'en' : 'ko';
+    try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {}
+    applyStatic(LANG);
+    renderDynamic();
+  }
+
+  /* ---------- 카드 조각 ---------- */
+  function langBadge(c) {
+    var info = c.lang && c.lang[LANG] ? c.lang[LANG] : null;
+    if (!info) return '';
+    if (LANG === 'en') {
+      if (info.level === 'full') return '<span class="badge ok">' + esc(info.label) + '</span>';
+      if (info.level === 'partial') return '<span class="badge ok">' + esc(info.label) + '</span>';
+      return '<span class="badge">' + esc(info.label) + '</span>';
+    }
+    if (info.level === 'full') return '<span class="badge ok">한국어 진료 확인</span>';
+    if (info.level === 'staff') return '<span class="badge ok">한국어 상담 스태프</span>';
+    if (info.level === 'info') return '<span class="badge ok">한국어 안내 페이지</span>';
     return '<span class="badge">한국어 표기 확인 안 됨</span>';
   }
 
@@ -1361,106 +1459,224 @@
       return '<tr><td>' + d + 'mg</td><td>' + yen(t.m1) + '</td><td>' + yen(monthTotal(t, 3)) + '</td></tr>';
     }).join('');
     return '<div class="price-block">'
-      + '<div class="price-head"><span>공개 가격 · 2026-11 확인</span><span>세금 포함</span></div>'
-      + '<table class="price"><thead><tr><th>용량</th><th>1개월(4펜)</th><th>3개월(12펜)</th></tr></thead><tbody>'
+      + '<div class="price-head"><span>' + L('공개 가격 · 2026-11 확인', 'Published prices · checked 2026-11') + '</span><span>' + L('세금 포함', 'Tax included') + '</span></div>'
+      + '<table class="price"><thead><tr><th>' + L('용량', 'Dose') + '</th><th>' + L('1개월(4펜)', '1 month (4 pens)') + '</th><th>' + L('3개월(12펜)', '3 months (12 pens)') + '</th></tr></thead><tbody>'
       + rows + '</tbody></table>'
-      + '<div class="price-foot">' + esc(c.priceNote) + '</div>'
+      + '<div class="price-foot">' + esc(txt(c.priceNote)) + '</div>'
       + '</div>';
   }
 
   function clinicCard(c) {
-    var notes = c.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
+    var notes = (c.notes && c.notes[LANG] ? c.notes[LANG] : (c.notes && c.notes.ko) || []).map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
+    var region = REGION_LABEL[c.regionKey] ? REGION_LABEL[c.regionKey][LANG] : '';
+    var phone = txt(c.phone) || '—';
+    var phoneNote = txt(c.phoneNote);
     return '<article class="card">'
-      + '<div class="card-top"><div><h3>' + esc(c.name) + '</h3><p class="ja-name">' + esc(c.nameJa) + '</p></div>'
-      + '<span class="badge region">' + esc(c.region) + '</span></div>'
-      + '<div class="badge-row">' + koreanBadge(c)
-      + (c.tsushima ? '<span class="badge warn">' + esc(c.region) + ' · 대마도 배송</span>' : '')
-      + '<span class="badge">' + esc(c.area) + '</span></div>'
+      + '<div class="card-top"><div><h3>' + esc(txt(c.name)) + '</h3><p class="ja-name">' + esc(c.nameJa) + '</p></div>'
+      + '<span class="badge region">' + esc(region) + '</span></div>'
+      + '<div class="badge-row">' + langBadge(c)
+      + (c.tsushima ? '<span class="badge warn">' + esc(region) + ' · ' + L('대마도 배송', 'Tsushima delivery') + '</span>' : '')
+      + '<span class="badge">' + esc(txt(c.area)) + '</span></div>'
       + '<dl class="meta">'
-      + '<div class="meta-row"><dt>주소</dt><dd>' + esc(c.address) + '</dd></div>'
-      + '<div class="meta-row"><dt>가는 길</dt><dd>' + esc(c.station) + '</dd></div>'
-      + '<div class="meta-row"><dt>진료시간</dt><dd>' + esc(c.hours) + '</dd></div>'
-      + '<div class="meta-row"><dt>연락처</dt><dd>' + esc(c.phone) + '</dd></div>'
-      + '<div class="meta-row"><dt>비용 규칙</dt><dd>' + esc(c.consultNote) + '<br>' + esc(c.cancel) + '<br>' + esc(c.cert) + '</dd></div>'
+      + '<div class="meta-row"><dt>' + L('주소', 'Address') + '</dt><dd>' + esc(c.address) + '</dd></div>'
+      + '<div class="meta-row"><dt>' + L('가는 길', 'Getting there') + '</dt><dd>' + esc(txt(c.station)) + '</dd></div>'
+      + '<div class="meta-row"><dt>' + L('진료시간', 'Hours') + '</dt><dd>' + esc(txt(c.hours)) + '</dd></div>'
+      + '<div class="meta-row"><dt>' + L('연락처', 'Phone') + '</dt><dd>' + esc(phone) + (phoneNote ? ' (' + esc(phoneNote) + ')' : '') + '</dd></div>'
+      + '<div class="meta-row"><dt>' + L('비용 규칙', 'Fee rules') + '</dt><dd>' + esc(txt(c.consultNote)) + '<br>' + esc(txt(c.cancel)) + '<br>' + esc(txt(c.cert)) + '</dd></div>'
       + '</dl>'
-      + '<div class="korean-note">' + esc(c.korean.detail) + '</div>'
+      + '<div class="korean-note">' + esc(txt(c.lang && c.lang[LANG] ? c.lang[LANG].detail : '')) + '</div>'
       + priceTable(c)
       + '<ul class="note-list">' + notes + '</ul>'
       + '<div class="actions">'
-      + '<a class="btn primary" href="' + esc(c.bookingUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(c.bookingLabel) + '</a>'
-      + '<a class="btn" href="' + esc(c.mapsUrl) + '" target="_blank" rel="noopener noreferrer">구글 지도</a>'
-      + '<button class="btn ghost" type="button" data-calc="' + esc(c.id) + '">계산기에 넣기</button>'
+      + '<a class="btn primary" href="' + esc(c.bookingUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(txt(c.bookingLabel)) + '</a>'
+      + '<a class="btn" href="' + esc(c.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + L('구글 지도', 'Google Maps') + '</a>'
+      + '<button class="btn ghost" type="button" data-calc="' + esc(c.id) + '">' + L('계산기에 넣기', 'Add to calculator') + '</button>'
       + '</div>'
       + '<div class="copy-row" style="margin-top:8px">'
-      + '<a class="btn small ghost" href="' + esc(c.officialUrl) + '" target="_blank" rel="noopener noreferrer">공식 페이지</a>'
-      + (c.koreanUrl ? '<a class="btn small ghost" href="' + esc(c.koreanUrl) + '" target="_blank" rel="noopener noreferrer">한국어 안내</a>' : '')
+      + '<a class="btn small ghost" href="' + esc(c.officialUrl) + '" target="_blank" rel="noopener noreferrer">' + L('공식 페이지', 'Official page') + '</a>'
+      + (c.localUrl ? '<a class="btn small ghost" href="' + esc(c.localUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(txt(c.localLabel)) + '</a>' : '')
       + '</div>'
       + '</article>';
   }
 
   function tsushimaGuide() {
-    function office(id, region, jp, addr, hours, code) {
+    function office(id, regionLabel, jp, addr, hours, code) {
       return '<div style="border:1px solid var(--line-2);border-radius:12px;padding:11px 12px;margin-top:8px;background:#fbfdfd">'
-        + '<div style="font-size:12.5px;font-weight:700">' + region + ' · ' + jp + '</div>'
-        + '<div style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:3px">' + addr + '<br>' + hours + ' · 영업소 코드 ' + code + '</div>'
-        + '<div class="copy-row" style="margin-top:8px"><button class="btn small ghost" type="button" data-copy-target="' + id + '">주소·코드 복사</button></div>'
+        + '<div style="font-size:12.5px;font-weight:700">' + regionLabel + ' · ' + jp + '</div>'
+        + '<div style="font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:3px">' + addr + '<br>' + hours + ' · ' + L('영업소 코드', 'office code') + ' ' + code + '</div>'
+        + '<div class="copy-row" style="margin-top:8px"><button class="btn small ghost" type="button" data-copy-target="' + id + '">' + L('주소·코드 복사', 'Copy address &amp; code') + '</button></div>'
         + '<span id="' + id + '" hidden>' + jp + ' / ' + addr + ' / ' + code + ' / ' + hours + '</span>'
         + '</div>';
     }
+    var regionNorth = L('북부 · 히타카츠항', 'North · Hitakatsu');
+    var regionSouth = L('남부 · 이즈하라항', 'South · Izuhara');
     return '<div class="card" style="border-color:#cfe6df">'
-      + '<div class="card-top"><div><h3>대마도(쓰시마) 수령 가이드</h3>'
-      + '<p class="ja-name">2026-11 확인 · 공개 안내 기준</p></div>'
-      + '<span class="badge warn">섬 내 처방 0곳</span></div>'
+      + '<div class="card-top"><div><h3>' + L('대마도(쓰시마) 수령 가이드', 'Tsushima Island pick-up guide') + '</h3>'
+      + '<p class="ja-name">' + L('2026-11 확인 · 공개 안내 기준', 'Checked 2026-11 · public guidance') + '</p></div>'
+      + '<span class="badge warn">' + L('섬 내 처방 0곳', '0 walk-in clinics') + '</span></div>'
       + '<p class="korean-note" style="background:var(--amber-soft);border:1px solid #f2dfbd;color:#6b521f;margin-top:10px">'
-      + '대마도 <strong>섬 안에서 마운자로를 처방하는 방문형 병원은 현재 확인된 곳이 0곳</strong>입니다(2026-11, 공개 안내 기준). '
-      + '실제로는 <strong>일본 본토 클리닉의 온라인 진료 → 대마도 배송 → 배편 픽업</strong> 순서를 씁니다.</p>'
+      + L(
+        '대마도 <strong>섬 안에서 마운자로를 처방하는 방문형 병원은 현재 확인된 곳이 0곳</strong>입니다(2026-11, 공개 안내 기준). 실제로는 <strong>일본 본토 클리닉의 온라인 진료 → 대마도 배송 → 배편 픽업</strong> 순서를 씁니다.',
+        'There are <strong>no walk-in clinics on Tsushima that prescribe Mounjaro</strong> (checked 2026-11 against public guidance). In practice the route is <strong>online consultation with a mainland clinic → cold delivery to Tsushima → pick up after the ferry</strong>.'
+      ) + '</p>'
       + '<ol class="note-list" style="padding-left:18px">'
-      + '<li><strong>출발 약 1주일 전</strong> 한국에서 클리닉 온라인 진료를 마칩니다. 폰타나클리닉은 한국에서 예약·상담이 가능하다고 공식 페이지에 안내하고 있습니다.</li>'
-      + '<li>진료 시 <strong>대마도 숙소 또는 야마토 운수 영업소</strong>를 수령지로 지정합니다. 냉장(쿨) 택배는 보통 2~3일 걸립니다.</li>'
-      + '<li>부산항 배편으로 입도해 수령 — <strong>히타카츠 약 1시간 20분, 이즈하라 약 2시간 20분</strong>(선사·편별 상이).</li>'
+      + '<li>' + L('<strong>출발 약 1주일 전</strong> 한국에서 클리닉 온라인 진료를 마칩니다. 폰타나클리닉은 한국에서 예약·상담이 가능하다고 공식 페이지에 안내하고 있습니다.', '<strong>About a week before you travel</strong>, finish the online consultation from home. Fontana Clinic states on its official page that booking and advice can be done while you are still abroad.') + '</li>'
+      + '<li>' + L('진료 시 <strong>대마도 숙소 또는 야마토 운수 영업소</strong>를 수령지로 지정합니다. 냉장(쿨) 택배는 보통 2~3일 걸립니다.', 'Give <strong>your Tsushima hotel or a Yamato Transport office</strong> as the delivery address. A refrigerated parcel usually takes 2–3 days.') + '</li>'
+      + '<li>' + L('부산항 배편으로 입도해 수령 — <strong>히타카츠 약 1시간 20분, 이즈하라 약 2시간 20분</strong>(선사·편별 상이).', 'Take the ferry from Busan — <strong>about 1 h 20 min to Hitakatsu, about 2 h 20 min to Izuhara</strong> (varies by operator and sailing).') + '</li>'
       + '</ol>'
-      + '<div class="out-label" style="margin-top:12px">야마토 운수 영업소 2곳 (편의점·무인함 수령 불가)</div>'
-      + office('offHita', '북부 · 히타카츠항', 'ヤマト運輸 対馬比田勝営業所', '〒817-1701 長崎県対馬市上対馬町比田勝488', '8:00~19:00', '090953')
-      + office('offIzu', '남부 · 이즈하라항', 'ヤマト運輸 対馬営業所（対馬美津島）', '〒817-0322 長崎県対馬市美津島町鶏知字陽樽ノ濱乙513-1', '8:00~20:00', '090950')
+      + '<div class="out-label" style="margin-top:12px">' + L('야마토 운수 영업소 2곳 (편의점·무인함 수령 불가)', 'Two Yamato Transport offices (no convenience-store or locker pickup)') + '</div>'
+      + office('offHita', regionNorth, 'ヤマト運輸 対馬比田勝営業所', '〒817-1701 長崎県対馬市上対馬町比田勝488', '8:00~19:00', '090953')
+      + office('offIzu', regionSouth, 'ヤマト運輸 対馬営業所（対馬美津島）', '〒817-0322 長崎県対馬市美津島町鶏知字陽樽ノ濱乙513-1', '8:00~20:00', '090950')
       + '<div class="tip-card" style="margin:12px 0 0">'
-      + '<h4>수령 전 꼭 확인</h4><ul>'
-      + '<li>보관은 <strong>도착일 포함 최대 3일</strong>, 연장 불가. 지나면 클리닉으로 반송됩니다. 수령 희망일은 여행 전날로 잡으세요.</li>'
-      + '<li>수령 시 <strong>여권 + 송장번호</strong>가 필요합니다. 송장번호는 클리닉·야마토 메일에서 확인합니다.</li>'
-      + '<li>기상 결항에 대비해 일정에 <strong>하루 여유</strong>를 두세요. 배가 결항해도 약은 이미 영업소에 도착해 있습니다.</li>'
-      + '<li>숙소가 냉장 택배를 받아 주고 냉장 보관해 주는지 <strong>예약 전에 직접 확인</strong>하세요. 민박·에어비앤비는 영업소 수령을 권합니다.</li>'
-      + '<li>쿨택배는 0~10℃, 마운자로 권장 보관은 2~8℃입니다. 도착 즉시 냉장하고 <strong>동결은 피하세요</strong>.</li>'
-      + '<li>한국 체류 중 비대면 진료로 받는 경우, 약은 일본 국내로만 배송됩니다. 한국 반입은 <strong>휴대 반입 원칙</strong>과 통관 요건을 사전에 확인하세요.</li>'
+      + '<h4>' + L('수령 전 꼭 확인', 'Before you collect') + '</h4><ul>'
+      + '<li>' + L('보관은 <strong>도착일 포함 최대 3일</strong>, 연장 불가. 지나면 클리닉으로 반송됩니다. 수령 희망일은 여행 전날로 잡으세요.', 'Parcels are held for <strong>3 days including the arrival day, with no extension</strong>; after that they go back to the clinic. Plan to be on the island before the hold ends.') + '</li>'
+      + '<li>' + L('수령 시 <strong>여권 + 송장번호</strong>가 필요합니다. 송장번호는 클리닉·야마토 메일에서 확인합니다.', 'Bring <strong>your passport and the tracking number</strong>; the number comes in the clinic or Yamato email.') + '</li>'
+      + '<li>' + L('기상 결항에 대비해 일정에 <strong>하루 여유</strong>를 두세요. 배가 결항해도 약은 이미 영업소에 도착해 있습니다.', 'Leave a <strong>buffer day</strong> for weather cancellations — the parcel reaches the office whether or not your ferry sails.') + '</li>'
+      + '<li>' + L('숙소가 냉장 택배를 받아 주고 냉장 보관해 주는지 <strong>예약 전에 직접 확인</strong>하세요. 민박·에어비앤비는 영업소 수령을 권합니다.', 'Check before booking whether your lodging <strong>accepts and refrigerates</strong> a cold parcel; for guesthouses and Airbnb, an office pickup is safer.') + '</li>'
+      + '<li>' + L('쿨택배는 0~10℃, 마운자로 권장 보관은 2~8℃입니다. 도착 즉시 냉장하고 <strong>동결은 피하세요</strong>.', 'A cool parcel travels at 0–10 °C while the recommended storage is 2–8 °C. Refrigerate as soon as you collect and <strong>never freeze</strong> it.') + '</li>'
+      + '<li>' + L('한국 체류 중 비대면 진료로 받는 경우, 약은 일본 국내로만 배송됩니다. 한국 반입은 <strong>휴대 반입 원칙</strong>과 통관 요건을 사전에 확인하세요.', 'Parcels are delivered inside Japan only, so the medicine has to be carried by you across the border — check your own country’s personal-import rules first.') + '</li>'
       + '</ul></div>'
       + '</div>';
+  }
+
+  function filterOn() {
+    var el = $('koreanOnly');
+    return !!(el && el.checked);
+  }
+
+  function regionMatches(c) {
+    if (state.region === 'tsushima') return !!c.tsushima;
+    if (state.region === 'all') return true;
+    if (state.region === 'other') {
+      return c.regionKey === 'nagoya' || c.regionKey === 'sapporo' || c.regionKey === 'other';
+    }
+    return c.regionKey === state.region;
+  }
+
+  function clinicMatches(c, q) {
+    if (!regionMatches(c)) return false;
+    if (filterOn()) {
+      var info = c.lang ? c.lang[LANG] : null;
+      if (!info) return false;
+      if (LANG === 'en') { if (info.level !== 'full' && info.level !== 'partial') return false; }
+      else if (info.level === 'none') return false;
+    }
+    if (!q) return true;
+    var hay = [txt(c.name), c.nameJa, txt(c.area), txt(c.station), txt(c.hours), REGION_LABEL[c.regionKey] ? REGION_LABEL[c.regionKey][LANG] : ''].join(' ').toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  // 공개된 1개월(4펜) 약값. 공개가가 없으면 null → 정렬 맨 뒤·'공식 확인'
+  function monthlyPrice(c, dose) {
+    var t = c.tiers ? c.tiers[dose] : null;
+    if (!t || typeof t.m1 !== 'number' || !(t.m1 > 0)) return null;
+    return t.m1;
+  }
+
+  function compareDose() { return state.sort === 'price5' ? '5' : '2.5'; }
+
+  function compareTotal(c, dose) {
+    var drug = monthlyPrice(c, dose);
+    if (drug === null) return null;
+    var consult = (typeof c.consultFee === 'number') ? c.consultFee : 0;
+    return drug + consult;
+  }
+
+  function byName(a, b) {
+    var na = txt(a.name), nb = txt(b.name);
+    return na < nb ? -1 : (na > nb ? 1 : 0);
+  }
+
+  // 단순 가격순 정렬 (공개가 없는 항목은 맨 뒤)
+  function sortByPrice(list, dose) {
+    return list.slice().sort(function (a, b) {
+      var pa = monthlyPrice(a, dose), pb = monthlyPrice(b, dose);
+      if (pa === null && pb === null) return byName(a, b);
+      if (pa === null) return 1;
+      if (pb === null) return -1;
+      if (pa !== pb) return pa - pb;
+      return byName(a, b);
+    });
+  }
+
+  function visibleClinics() {
+    var search = $('clinicSearch');
+    var q = search ? String(search.value || '').trim().toLowerCase() : '';
+    var items = CLINICS.filter(function (c) { return clinicMatches(c, q); });
+    if (state.sort === 'price25' || state.sort === 'price5') {
+      items = sortByPrice(items, compareDose());
+    }
+    return items;
+  }
+
+  function renderCompare() {
+    var box = $('compareBody');
+    if (!box) return;
+    var dose = compareDose();
+    var taken = monthlyPrice;
+    var rows = visibleClinics().map(function (c) {
+      return c;
+    });
+    rows.sort(function (a, b) {
+      var ta = compareTotal(a, dose), tb = compareTotal(b, dose);
+      if (ta === null && tb === null) return byName(a, b);
+      if (ta === null) return 1;
+      if (tb === null) return -1;
+      if (ta !== tb) return ta - tb;
+      return byName(a, b);
+    });
+    var head = L(dose + 'mg 기준 · 1개월(4펜)', dose + 'mg · 1 month (4 pens)');
+    var html = '<table class="cmp-price"><thead><tr>'
+      + '<th>' + L('클리닉', 'Clinic') + '<br><span style="font-weight:600">' + esc(head) + '</span></th>'
+      + '<th>' + L('약값', 'Drug') + '</th>'
+      + '<th>' + L('진찰료', 'Consult.') + '</th>'
+      + '<th>' + L('합계(추정)', 'Est. total') + '</th>'
+      + '</tr></thead><tbody>';
+    html += rows.map(function (c) {
+      var drug = taken(c, dose);
+      var consultKnown = (typeof c.consultFee === 'number');
+      var consult = consultKnown ? c.consultFee : null;
+      var total = compareTotal(c, dose);
+      var region = REGION_LABEL[c.regionKey] ? REGION_LABEL[c.regionKey][LANG] : '';
+      return '<tr' + (drug === null ? ' class="missing"' : '') + '>'
+        + '<td>' + esc(txt(c.name)) + '<small>' + esc(region) + '</small></td>'
+        + '<td>' + (drug === null ? L('공식 확인', 'Official check') : yen(drug)) + '</td>'
+        + '<td>' + (consultKnown ? (consult ? yen(consult) : L('0엔', '¥0')) : L('공식 확인', 'Official check')) + '</td>'
+        + '<td>' + (total === null ? L('공식 확인', 'Official check') : (yen(total) + (consultKnown ? '' : '*'))) + '</td>'
+        + '</tr>';
+    }).join('');
+    html += '</tbody></table>';
+    html += '<p class="compare-note">' + L(
+      '공개된 1개월(4펜) 금액 기준 단순 정렬이며, 의료기관 추천·품질 우열 순위가 아닙니다. 영문 증명서·배송·보냉 용품은 포함하지 않습니다. *진찰료가 공식 페이지에 없어 약값만 반영했습니다.',
+      'Ordered only by the published 1-month (4-pen) price. This is not a recommendation or a ranking of medical quality. English certificates, delivery and cold-chain items are excluded. *Consultation fee not published — drug price only.'
+    ) + '</p>';
+    html += '<p class="compare-note">' + L(
+      '가격은 각 기관 공식 페이지에서 2026-11 확인한 세금 포함 금액이며, 이후 변경될 수 있습니다. 예약 전 공식 페이지에서 다시 확인하세요.',
+      'Prices were checked on each clinic\u2019s official page in 2026-11, include tax and may change. Confirm on the official page before booking.'
+    ) + '</p>';
+    box.innerHTML = html;
   }
 
   function renderClinics() {
     var list = $('clinicList');
     if (!list) return;
-    var q = ($('clinicSearch').value || '').trim().toLowerCase();
-    var koreanOnly = $('koreanOnly').checked;
-    var items = CLINICS.filter(function (c) {
-      if (state.region === '대마도') { if (!c.tsushima) return false; }
-      else if (state.region !== '전체' && c.region !== state.region) return false;
-      if (koreanOnly && c.korean.level === 'none') return false;
-      if (!q) return true;
-      var hay = [c.name, c.nameJa, c.area, c.station, c.region].join(' ').toLowerCase();
-      return hay.indexOf(q) !== -1;
-    });
-    var guide = state.region === '대마도' ? tsushimaGuide() : '';
-    $('resultCount').textContent = items.length + '곳';
+    var items = visibleClinics();
+    var guide = state.region === 'tsushima' ? tsushimaGuide() : '';
+    if ($('resultCount')) $('resultCount').textContent = L(items.length + '곳', items.length + (items.length === 1 ? ' clinic' : ' clinics'));
     if (!items.length) {
-      list.innerHTML = guide + '<div class="empty">조건에 맞는 기관이 없습니다.<br>필터를 풀거나 다른 검색어를 입력해 보세요.</div>';
+      list.innerHTML = guide + '<div class="empty">' + L('조건에 맞는 기관이 없습니다.<br>필터를 풀거나 다른 검색어를 입력해 보세요.', 'No clinic matches these filters.<br>Clear the filters or try another search.') + '</div>';
+      renderCompare();
       return;
     }
     list.innerHTML = guide + items.map(clinicCard).join('');
+    renderCompare();
   }
 
-  function setRegion(region) {
-    state.region = region;
+  function setRegion(key) {
+    state.region = key;
     var chips = document.querySelectorAll('#regionChips .chip');
     for (var i = 0; i < chips.length; i++) {
-      var on = chips[i].getAttribute('data-region') === region;
+      var on = chips[i].getAttribute('data-region-key') === key;
       chips[i].classList.toggle('is-active', on);
       chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
     }
@@ -1479,18 +1695,21 @@
         btn.setAttribute('aria-selected', p === tab ? 'true' : 'false');
       }
     });
-    window.scrollTo(0, 0);
+    try { window.scrollTo(0, 0); } catch (e) {}
     if (tab === 'import') updateChecklistUI();
   }
 
-  /* ---------- 이름 변환 ---------- */
+  /* ---------- 이름 변환 (KO) ---------- */
   function updateKata() {
-    var sur = $('surName').value.trim();
-    var given = $('givenName').value.trim();
+    var surEl = $('surName'), givenEl = $('givenName');
+    if (!surEl || !givenEl) return;
+    var sur = surEl.value.trim();
+    var given = givenEl.value.trim();
     var out = $('kataOut');
     var flat = $('kataOutFlat');
+    if (!out || !flat) return;
     if (!sur && !given) {
-      out.innerHTML = '<span class="placeholder">한글을 입력하면 카타카나로 바뀝니다.</span>';
+      out.innerHTML = '<span class="placeholder">' + L('한글을 입력하면 카타카나로 바뀝니다.', 'Type a Korean name to get katakana.') + '</span>';
       flat.innerHTML = '<span class="placeholder">—</span>';
       if ($('kataWarn')) $('kataWarn').hidden = true;
       return;
@@ -1506,48 +1725,76 @@
 
   /* ---------- 비고란 ---------- */
   function updateNote() {
-    var r = buildNote($('noteDose').value, parseInt($('noteMonths').value, 10), {
-      cert: $('noteCert').checked,
-      firstVisit: $('noteFirst').checked
+    var doseEl = $('noteDose'), monthsEl = $('noteMonths');
+    if (!doseEl || !monthsEl) return;
+    var r = buildNote(doseEl.value, parseInt(monthsEl.value, 10), {
+      cert: $('noteCert') ? $('noteCert').checked : false,
+      firstVisit: $('noteFirst') ? $('noteFirst').checked : false
     });
-    $('noteJa').textContent = r.ja;
-    $('noteKo').textContent = r.ko;
+    if ($('noteJa')) $('noteJa').textContent = r.ja;
+    if ($('noteKo')) $('noteKo').textContent = r.ko;
+    if ($('noteEn')) $('noteEn').textContent = r.en;
+  }
+
+  /* ---------- 예약 문구 목록 (EN) ---------- */
+  function renderPhrases() {
+    var box = $('phraseList');
+    if (!box) return;
+    box.innerHTML = PHRASES.map(function (p, i) {
+      return '<div class="phrase">'
+        + '<div class="phrase-ja">' + esc(p.ja) + '</div>'
+        + '<div class="phrase-en">' + esc(p.en) + '</div>'
+        + '<span id="ph' + i + '" hidden>' + esc(p.ja) + '</span>'
+        + '<button class="btn small ghost" type="button" data-copy-target="ph' + i + '">Copy Japanese</button>'
+        + '</div>';
+    }).join('');
   }
 
   /* ---------- 비용 ---------- */
   function fillClinicSelect() {
     var sel = $('calcClinic');
+    if (!sel) return;
     var html = CLINICS.map(function (c) {
-      return '<option value="' + esc(c.id) + '">' + esc(c.region) + ' · ' + esc(c.name) + '</option>';
+      var region = REGION_LABEL[c.regionKey] ? REGION_LABEL[c.regionKey][LANG] : '';
+      return '<option value="' + esc(c.id) + '">' + esc(region) + ' · ' + esc(txt(c.name)) + '</option>';
     }).join('');
-    html += '<option value="custom">직접 입력(월 약값)</option>';
+    html += '<option value="custom">' + L('직접 입력(월 약값)', 'Enter your own (monthly drug cost)') + '</option>';
     sel.innerHTML = html;
     sel.value = state.clinicId;
   }
 
   function fillDoseSelect() {
     var sel = $('calcDose');
+    if (!sel) return;
     var c = CLINICS.filter(function (x) { return x.id === state.clinicId; })[0];
     if (!c) {
-      sel.innerHTML = '<option value="custom">직접 입력</option>';
+      sel.innerHTML = '<option value="custom">' + L('직접 입력', 'Enter your own') + '</option>';
       return;
     }
     var doses = Object.keys(c.tiers);
     sel.innerHTML = doses.map(function (d) {
       return '<option value="' + esc(d) + '">' + esc(d) + 'mg</option>';
-    }).join('') + '<option value="custom">직접 입력(월 약값)</option>';
+    }).join('') + '<option value="custom">' + L('직접 입력(월 약값)', 'Enter your own (monthly drug cost)') + '</option>';
     if (doses.indexOf(state.dose) === -1) state.dose = doses[0];
     sel.value = state.dose;
   }
 
+  function currentClinic() {
+    var sel = $('calcClinic');
+    if (!sel) return null;
+    return CLINICS.filter(function (x) { return x.id === sel.value; })[0] || null;
+  }
+
   function updateCost() {
-    var c = CLINICS.filter(function (x) { return x.id === $('calcClinic').value; })[0] || null;
-    var dose = $('calcDose').value;
+    var clinicSel = $('calcClinic'), doseSel = $('calcDose');
+    if (!clinicSel || !doseSel) return;
+    var c = currentClinic();
+    var dose = doseSel.value;
     var months = state.months;
-    var rate = num($('calcRate').value) || 9.3;
-    var certOn = $('calcCert').checked;
-    var certFee = num($('calcCertFee').value);
-    var extra = num($('calcExtra').value);
+    var rate = num($('calcRate') ? $('calcRate').value : 0) || 9.3;
+    var certOn = $('calcCert') ? $('calcCert').checked : false;
+    var certFee = num($('calcCertFee') ? $('calcCertFee').value : 0);
+    var extra = num($('calcExtra') ? $('calcExtra').value : 0);
     var customMonthly = 0;
 
     if (dose === 'custom') {
@@ -1555,17 +1802,18 @@
         var wrap = document.createElement('label');
         wrap.className = 'field';
         wrap.id = 'customWrap';
-        wrap.innerHTML = '<span class="lbl">월 약값(엔)</span><input type="number" id="customMonthly" inputmode="numeric" min="0" step="100" value="0">';
-        var host = $('calcDose').parentNode.parentNode;
-        host.insertBefore(wrap, $('calcDose').parentNode.nextSibling);
-        $('customMonthly').addEventListener('input', updateCost);
+        wrap.innerHTML = '<span class="lbl">' + L('월 약값(엔)', 'Monthly drug cost (JPY)') + '</span><input type="number" id="customMonthly" inputmode="numeric" min="0" step="100" value="0">';
+        var host = doseSel.parentNode.parentNode;
+        if (host && host.insertBefore) host.insertBefore(wrap, doseSel.parentNode.nextSibling);
+        var cm = $('customMonthly');
+        if (cm) cm.addEventListener('input', updateCost);
       }
-      $('customWrap').hidden = false;
-      customMonthly = num($('customMonthly').value);
-      $('calcDoseHint').textContent = '공개 가격표에 없는 조건은 직접 입력해 계산하세요.';
+      if ($('customWrap')) $('customWrap').hidden = false;
+      customMonthly = num($('customMonthly') ? $('customMonthly').value : 0);
+      if ($('calcDoseHint')) $('calcDoseHint').textContent = L('공개 가격표에 없는 조건은 직접 입력해 계산하세요.', 'Enter the figures yourself for a case the published price list does not cover.');
     } else if ($('customWrap')) {
       $('customWrap').hidden = true;
-      $('calcDoseHint').textContent = c ? c.priceNote : '—';
+      if ($('calcDoseHint')) $('calcDoseHint').textContent = c ? txt(c.priceNote) : '—';
     }
 
     var q = calcQuote({
@@ -1579,40 +1827,54 @@
       rate: rate
     });
 
-    $('calcClinicHint').textContent = c
-      ? (c.nameJa + ' · ' + c.consultNote)
-      : '직접 입력 모드';
-    if (dose !== 'custom') $('calcDoseHint').textContent = c ? c.priceNote : '—';
+    if ($('calcClinicHint')) $('calcClinicHint').textContent = c
+      ? (c.nameJa + ' · ' + txt(c.consultNote))
+      : L('직접 입력 모드', 'Custom entry');
+    if (dose !== 'custom' && $('calcDoseHint')) $('calcDoseHint').textContent = c ? txt(c.priceNote) : '—';
 
-    $('sumDrugLabel').textContent = '(' + months + '개월)';
-    $('sumDrug').textContent = yen(q.drug);
-    $('sumConsult').textContent = q.consult ? yen(q.consult) : '0엔';
-    $('sumCert').textContent = q.cert ? yen(q.cert) : '미포함';
-    $('sumExtra').textContent = q.extra ? yen(q.extra) : '0엔';
-    $('sumJpy').textContent = yen(q.jpy);
-    $('sumKrw').textContent = won(q.krw);
+    var monthLabel = months + L('개월', ' mo');
+    if ($('sumDrugLabel')) $('sumDrugLabel').textContent = '(' + monthLabel + ')';
+    if ($('sumDrug')) $('sumDrug').textContent = yen(q.drug);
+    if ($('sumConsult')) {
+      if (c && c.consultFee === null) $('sumConsult').textContent = L('공식 확인', 'Official check');
+      else $('sumConsult').textContent = q.consult ? yen(q.consult) : L('0엔', '¥0');
+    }
+    if ($('sumCert')) $('sumCert').textContent = q.cert ? yen(q.cert) : L('미포함', 'Not included');
+    if ($('sumExtra')) $('sumExtra').textContent = q.extra ? yen(q.extra) : L('0엔', '¥0');
+    if ($('sumJpy')) $('sumJpy').textContent = yen(q.jpy);
+    if ($('sumKrw')) $('sumKrw').textContent = won(q.krw);
+
+    var usdRateVal = num($('usdRate') ? $('usdRate').value : 0);
+    var conv = jpyToUsd(q.jpy, usdRateVal);
+    if ($('sumUsd')) $('sumUsd').textContent = usd(conv.usd);
 
     var notes = [];
-    if (c) notes.push('진찰료: ' + c.consultNote);
-    if (c && c.id === 'japannet_ginza') notes.push('일본 주소가 확인되지 않으면 영문 처방전 7,370엔이 필수입니다.');
-    if (c && c.id === 'tsuwabuki_suita') notes.push('표기 가격에 진찰료가 포함되어 있습니다.');
-    if (c && c.tsushima) notes.push('대마도 수령이면 배송+일·영 처방전 2,500엔을 ‘기타 비용’에 넣어 계산하세요.');
-    $('sumNote').textContent = notes.join(' · ');
+    if (c) notes.push(L('진찰료: ', 'Consultation: ') + txt(c.consultNote));
+    if (c && c.id === 'japannet_ginza') notes.push(L('일본 주소가 확인되지 않으면 영문 처방전 7,370엔이 필수입니다.', 'Without a verifiable Japanese address the ¥7,370 English prescription is mandatory.'));
+    if (c && c.id === 'tsuwabuki_suita') notes.push(L('표기 가격에 진찰료가 포함되어 있습니다.', 'The consultation fee is already included in the listed prices.'));
+    if (c && c.tsushima) notes.push(L('대마도 수령이면 배송+일·영 처방전 2,500엔을 ‘기타 비용’에 넣어 계산하세요.', 'For Tsushima delivery add the ¥2,500 shipping and prescription fee under Other.'));
+    if ($('sumNote')) $('sumNote').textContent = notes.join(' · ');
 
     var pens = q.pens;
-    $('sumPens').textContent = '총 ' + pens + '펜' + (pens > 12 ? ' — 한국 휴대 반입 상한(12펜)을 넘습니다.' : (pens === 12 ? ' — 한국 휴대 반입 상한(3개월분)과 같습니다.' : ' — 반입 상한(12펜) 이내입니다.'));
+    if ($('sumPens')) {
+      if (LANG === 'en') {
+        $('sumPens').textContent = 'Total ' + pens + ' pens (' + months + ' month' + (months > 1 ? 's' : '') + ') · reference rate 1 USD = ' + (usdRateVal > 0 ? usdRateVal : 154) + ' JPY, editable above';
+      } else {
+        $('sumPens').textContent = '총 ' + pens + '펜' + (pens > 12 ? ' — 한국 휴대 반입 상한(12펜)을 넘습니다.' : (pens === 12 ? ' — 한국 휴대 반입 상한(3개월분)과 같습니다.' : ' — 반입 상한(12펜) 이내입니다.'));
+      }
+    }
 
-    // 한국 비용 · 교통비 비교
-    var krMonth = num($('krMonthly').value);
-    var transport = num($('transportCost').value);
+    // KO: 한국 비용 비교
+    var krMonth = num($('krMonthly') ? $('krMonthly').value : 0);
+    var transport = num($('transportCost') ? $('transportCost').value : 0);
     var be = breakEven({ jpyKrw: q.krw, transport: transport, krMonthly: krMonth, months: months });
     var japanTotal = be.japan;
     var koreaTotal = be.korea;
-    $('beJapan').textContent = won(japanTotal);
-    $('beKorea').textContent = krMonth > 0 ? won(koreaTotal) : '—';
+    if ($('beJapan')) $('beJapan').textContent = won(japanTotal);
+    if ($('beKorea')) $('beKorea').textContent = krMonth > 0 ? won(koreaTotal) : '—';
     var beStatus = $('beStatus');
     var beDiff = $('beDiff');
-    if (krMonth > 0) {
+    if (krMonth > 0 && beStatus && beDiff) {
       var diff = japanTotal - koreaTotal;
       if (diff === 0) {
         beDiff.textContent = '±0원';
@@ -1630,7 +1892,7 @@
         beStatus.className = 'status ok';
         beStatus.textContent = '일본 쪽이 ' + won(Math.abs(diff)) + ' 적게 듭니다(입력하신 한국 비용·교통비 기준).';
       }
-    } else {
+    } else if (beDiff && beStatus) {
       beDiff.textContent = '—';
       beDiff.style.color = '';
       beStatus.className = 'status ok';
@@ -1639,42 +1901,77 @@
 
     saveCalc();
 
-    // 800달러
-    var d = dutyCheck({
-      clinicJpy: q.jpy,
-      otherAmount: num($('otherAmount').value),
-      otherUnit: $('otherUnit').value,
-      usdJpy: num($('usdJpy').value),
-      rate: rate
-    });
-    $('dutyClinic').textContent = usd(d.clinicUsd);
-    $('dutyOther').textContent = usd(d.otherUsd);
-    $('dutySum').textContent = usd(d.totalUsd);
-    var st = $('dutyStatus');
-    if (d.over) {
-      st.className = 'status over';
-      st.textContent = '한도 초과 약 ' + usd(d.excess) + ' — 자진신고·과세 대상이 될 수 있습니다. 영수증을 모아 두고 세관에 문의하세요.';
-    } else {
-      st.className = 'status ok';
-      st.textContent = '800달러 이내(여유 ' + usd(800 - d.totalUsd) + ') — 다만 최종 판단은 입국 세관의 안내를 따릅니다.';
+    // KO: 800달러 합산
+    if ($('dutyStatus')) {
+      var d = dutyCheck({
+        clinicJpy: q.jpy,
+        otherAmount: num($('otherAmount') ? $('otherAmount').value : 0),
+        otherUnit: $('otherUnit') ? $('otherUnit').value : 'JPY',
+        usdJpy: num($('usdJpy') ? $('usdJpy').value : 0),
+        rate: rate
+      });
+      if ($('dutyClinic')) $('dutyClinic').textContent = usd(d.clinicUsd);
+      if ($('dutyOther')) $('dutyOther').textContent = usd(d.otherUsd);
+      if ($('dutySum')) $('dutySum').textContent = usd(d.totalUsd);
+      var st = $('dutyStatus');
+      if (d.over) {
+        st.className = 'status over';
+        st.textContent = '한도 초과 약 ' + usd(d.excess) + ' — 자진신고·과세 대상이 될 수 있습니다. 영수증을 모아 두고 세관에 문의하세요.';
+      } else {
+        st.className = 'status ok';
+        st.textContent = '800달러 이내(여유 ' + usd(800 - d.totalUsd) + ') — 다만 최종 판단은 입국 세관의 안내를 따릅니다.';
+      }
     }
   }
 
+  function loadCalc() {
+    try { var raw = localStorage.getItem(CALC_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+
+  function saveCalc() {
+    try {
+      var payload = {
+        clinicId: $('calcClinic') ? $('calcClinic').value : state.clinicId,
+        dose: $('calcDose') ? $('calcDose').value : state.dose,
+        months: state.months,
+        rate: $('calcRate') ? $('calcRate').value : '',
+        usdRate: $('usdRate') ? $('usdRate').value : '',
+        usdJpy: $('usdJpy') ? $('usdJpy').value : '',
+        krMonthly: $('krMonthly') ? $('krMonthly').value : '',
+        transport: $('transportCost') ? $('transportCost').value : '',
+        certFee: $('calcCertFee') ? $('calcCertFee').value : '',
+        cert: $('calcCert') ? $('calcCert').checked : false
+      };
+      localStorage.setItem(CALC_KEY, JSON.stringify(payload));
+    } catch (e) {}
+  }
+
   /* ---------- 체크리스트 ---------- */
+  function checkKey() { return STORE_KEY + '.' + LANG; }
+
   function loadChecklist() {
     try {
-      var raw = localStorage.getItem(STORE_KEY);
-      return raw ? JSON.parse(raw) : {};
+      var raw = localStorage.getItem(checkKey());
+      if (raw) return JSON.parse(raw);
+      if (LANG === 'ko') {
+        var legacy = localStorage.getItem('jmh.checklist.v1');
+        if (legacy) return JSON.parse(legacy);
+      }
+      return {};
     } catch (e) { return {}; }
   }
+
   function saveChecklist(obj) {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(obj)); } catch (e) {}
+    try { localStorage.setItem(checkKey(), JSON.stringify(obj)); } catch (e) {}
   }
+
+  function currentItems() { return CHECK_ITEMS[LANG] || CHECK_ITEMS.ko; }
+
   function renderChecklist() {
     var box = $('checkList');
     if (!box) return;
     var saved = loadChecklist();
-    box.innerHTML = CHECK_ITEMS.map(function (it) {
+    box.innerHTML = currentItems().map(function (it) {
       var on = !!saved[it.id];
       return '<label class="check-item' + (on ? ' done' : '') + '">'
         + '<input type="checkbox" data-check="' + esc(it.id) + '"' + (on ? ' checked' : '') + '>'
@@ -1683,15 +1980,17 @@
     }).join('');
     updateChecklistUI();
   }
+
   function updateChecklistUI() {
     var saved = loadChecklist();
-    var total = CHECK_ITEMS.length;
+    var items = currentItems();
+    var total = items.length;
     var done = 0;
-    for (var i = 0; i < CHECK_ITEMS.length; i++) if (saved[CHECK_ITEMS[i].id]) done++;
+    for (var i = 0; i < items.length; i++) if (saved[items[i].id]) done++;
     var pct = total ? Math.round(done / total * 100) : 0;
     if ($('clPct')) $('clPct').textContent = pct + '%';
     if ($('clBar')) $('clBar').style.width = pct + '%';
-    if ($('clCount')) $('clCount').textContent = done + ' / ' + total + ' 항목';
+    if ($('clCount')) $('clCount').textContent = L(done + ' / ' + total + ' 항목', done + ' / ' + total + ' items');
     var boxes = document.querySelectorAll('[data-check]');
     for (var j = 0; j < boxes.length; j++) {
       var b = boxes[j];
@@ -1704,7 +2003,8 @@
   function renderFaq() {
     var box = $('faqList');
     if (!box) return;
-    box.innerHTML = FAQ_ITEMS.map(function (f, i) {
+    var items = FAQ_ITEMS[LANG] || FAQ_ITEMS.ko;
+    box.innerHTML = items.map(function (f, i) {
       return '<details class="faq">'
         + '<summary><span class="idx">' + (i + 1) + '</span><span>' + esc(f.q) + '</span>'
         + '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></summary>'
@@ -1713,18 +2013,59 @@
     }).join('');
   }
 
+  /* ---------- 언어 전환 시 다시 그리기 ---------- */
+  function renderDynamic() {
+    renderClinics();
+    renderChecklist();
+    renderFaq();
+    renderPhrases();
+    fillClinicSelect();
+    fillDoseSelect();
+    updateKata();
+    updateNote();
+    updateCost();
+  }
+
+  /* ---------- clinics.json 로드 (실패하면 내장 데이터 유지) ---------- */
+  function setClinics(list) {
+    CLINICS.length = 0;
+    for (var i = 0; i < list.length; i++) CLINICS.push(list[i]);
+  }
+
+  function loadClinicsJson() {
+    try {
+      if (typeof fetch !== 'function') return;
+      if (typeof location !== 'undefined' && location.protocol === 'file:') return;
+      fetch('./clinics.json', { cache: 'no-cache' })
+        .then(function (res) { return (res && res.ok) ? res.json() : null; })
+        .then(function (data) {
+          var list = data && data.clinics ? data.clinics : (Array.isArray(data) ? data : null);
+          if (!list || !list.length) return;
+          setClinics(list);
+          DATA_SOURCE = 'clinics.json';
+          renderDynamic();
+        })
+        .catch(function () { /* 내장 데이터로 계속 동작 */ });
+    } catch (e) { /* file:// 또는 fetch 미지원 환경 */ }
+  }
+
   /* ---------- init ---------- */
   function init() {
+    LANG = detectLang();
+
     var savedCalc = loadCalc();
     if (savedCalc) {
       if (savedCalc.months) state.months = parseInt(savedCalc.months, 10) || 3;
       if (savedCalc.clinicId) state.clinicId = savedCalc.clinicId;
       if (savedCalc.dose) state.dose = savedCalc.dose;
-      ['calcRate', 'usdJpy', 'krMonthly', 'transportCost', 'calcCertFee'].forEach(function (k) {
-        if (savedCalc[k] !== undefined && savedCalc[k] !== null) $(k).value = savedCalc[k];
+      ['calcRate', 'usdJpy', 'krMonthly', 'transportCost', 'calcCertFee', 'usdRate'].forEach(function (k) {
+        if (savedCalc[k] !== undefined && savedCalc[k] !== null && $(k)) $(k).value = savedCalc[k];
       });
-      if (savedCalc.cert) $('calcCert').checked = true;
+      if (savedCalc.cert && $('calcCert')) $('calcCert').checked = true;
     }
+
+    cacheKoMarkup();
+    applyStatic(LANG);
 
     // tabs
     var tabs = document.querySelectorAll('.tab');
@@ -1734,25 +2075,36 @@
       });
     }
 
+    // language buttons
+    var koBtn = $('langKo'), enBtn = $('langEn');
+    if (koBtn) koBtn.addEventListener('click', function () { setLang('ko'); });
+    if (enBtn) enBtn.addEventListener('click', function () { setLang('en'); });
+
     // compliance modal
     var modal = $('complianceModal');
-    $('complianceBtn').addEventListener('click', function () { modal.hidden = false; });
-    $('complianceClose').addEventListener('click', function () { modal.hidden = true; });
-    modal.addEventListener('click', function (e) { if (e.target === modal) modal.hidden = true; });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
-    });
+    if (modal && $('complianceBtn')) {
+      $('complianceBtn').addEventListener('click', function () { modal.hidden = false; });
+      if ($('complianceClose')) $('complianceClose').addEventListener('click', function () { modal.hidden = true; });
+      modal.addEventListener('click', function (e) { if (e.target === modal) modal.hidden = true; });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) modal.hidden = true;
+      });
+    }
 
     // clinics
     var chips = document.querySelectorAll('#regionChips .chip');
     for (var k = 0; k < chips.length; k++) {
       chips[k].addEventListener('click', function () {
-        setRegion(this.getAttribute('data-region'));
+        setRegion(this.getAttribute('data-region-key'));
       });
     }
-    $('koreanOnly').addEventListener('change', renderClinics);
-    $('clinicSearch').addEventListener('input', renderClinics);
-    $('clinicList').addEventListener('click', function (e) {
+    if ($('koreanOnly')) $('koreanOnly').addEventListener('change', renderClinics);
+    if ($('sortMode')) $('sortMode').addEventListener('change', function () {
+      state.sort = this.value || 'default';
+      renderClinics();
+    });
+    if ($('clinicSearch')) $('clinicSearch').addEventListener('input', renderClinics);
+    if ($('clinicList')) $('clinicList').addEventListener('click', function (e) {
       var btn = e.target.closest ? e.target.closest('[data-calc]') : null;
       if (!btn) return;
       var id = btn.getAttribute('data-calc');
@@ -1765,31 +2117,31 @@
       $('calcCertFee').value = c.certFee || 0;
       updateCost();
       switchTab('cost');
-      showToast(c.name + ' 기준으로 계산기에 넣었습니다');
+      showToast(L(txt(c.name) + ' 기준으로 계산기에 넣었습니다', txt(c.name) + ' added to the calculator'));
     });
 
     // booking
     ['surName', 'givenName'].forEach(function (id) {
-      $(id).addEventListener('input', updateKata);
+      if ($(id)) $(id).addEventListener('input', updateKata);
     });
     ['noteDose', 'noteMonths', 'noteCert', 'noteFirst'].forEach(function (id) {
-      $(id).addEventListener('change', updateNote);
+      if ($(id)) $(id).addEventListener('change', updateNote);
     });
 
     // cost
     fillClinicSelect();
     fillDoseSelect();
-    $('calcClinic').addEventListener('change', function () {
+    if ($('calcClinic')) $('calcClinic').addEventListener('change', function () {
       state.clinicId = this.value;
       var c = CLINICS.filter(function (x) { return x.id === state.clinicId; })[0];
       if (c) {
         state.dose = Object.keys(c.tiers)[0];
-        $('calcCertFee').value = c.certFee || 0;
+        if ($('calcCertFee')) $('calcCertFee').value = c.certFee || 0;
       }
       fillDoseSelect();
       updateCost();
     });
-    $('calcDose').addEventListener('change', function () {
+    if ($('calcDose')) $('calcDose').addEventListener('change', function () {
       state.dose = this.value;
       updateCost();
     });
@@ -1801,7 +2153,8 @@
         updateCost();
       });
     }
-    ['calcCert', 'calcCertFee', 'calcExtra', 'calcRate', 'krMonthly', 'transportCost', 'otherAmount', 'otherUnit', 'usdJpy'].forEach(function (id) {
+    ['calcCert', 'calcCertFee', 'calcExtra', 'calcRate', 'usdRate', 'krMonthly', 'transportCost', 'otherAmount', 'otherUnit', 'usdJpy'].forEach(function (id) {
+      if (!$(id)) return;
       $(id).addEventListener('input', updateCost);
       $(id).addEventListener('change', updateCost);
     });
@@ -1820,7 +2173,7 @@
 
     // checklist
     renderChecklist();
-    $('checkList').addEventListener('change', function (e) {
+    if ($('checkList')) $('checkList').addEventListener('change', function (e) {
       var cb = e.target;
       if (!cb || !cb.getAttribute || !cb.getAttribute('data-check')) return;
       var obj = loadChecklist();
@@ -1828,17 +2181,17 @@
       else delete obj[cb.getAttribute('data-check')];
       saveChecklist(obj);
       updateChecklistUI();
-      if (cb.checked && Object.keys(obj).length === CHECK_ITEMS.length) showToast('준비 항목을 모두 확인했습니다');
+      if (cb.checked && Object.keys(obj).length === currentItems().length) showToast(L('준비 항목을 모두 확인했습니다', 'All preparation items checked'));
     });
-    $('clReset').addEventListener('click', function () {
+    if ($('clReset')) $('clReset').addEventListener('click', function () {
       saveChecklist({});
       renderChecklist();
-      showToast('체크리스트를 초기화했습니다');
+      showToast(L('체크리스트를 초기화했습니다', 'Checklist reset'));
     });
 
     // faq
     renderFaq();
-    $('faqList').addEventListener('click', function (e) {
+    if ($('faqList')) $('faqList').addEventListener('click', function (e) {
       var jump = e.target.closest ? e.target.closest('[data-tab-jump]') : null;
       if (jump) {
         var rg = jump.getAttribute('data-region-set');
@@ -1854,7 +2207,7 @@
       var target = $(btn.getAttribute('data-copy-target'));
       if (!target) return;
       var text = (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') ? target.value : target.textContent;
-      copyText(text.trim(), '복사했습니다');
+      copyText(text.trim(), L('복사했습니다', 'Copied'));
     });
 
     // PWA: 서비스 워커 등록 (https·localhost 에서만. file:// 로 열면 조용히 건너뜁니다)
@@ -1870,9 +2223,13 @@
 
     // initial renders
     renderClinics();
+    renderPhrases();
     updateKata();
     updateNote();
     updateCost();
+
+    // 최신 기관 데이터(clinics.json) 시도 — 실패하면 내장 데이터 유지
+    loadClinicsJson();
   }
 
   // 테스트용 노출 (브라우저 동작에는 영향 없음)
@@ -1883,9 +2240,20 @@
     dutyCheck: dutyCheck,
     breakEven: breakEven,
     monthTotal: monthTotal,
+    jpyToUsd: jpyToUsd,
+    monthlyPrice: monthlyPrice,
+    compareTotal: compareTotal,
+    sortByPrice: sortByPrice,
     CLINICS: CLINICS,
+    CLINICS_DATA: CLINICS_DATA,
     CHECK_ITEMS: CHECK_ITEMS,
-    FAQ_ITEMS: FAQ_ITEMS
+    FAQ_ITEMS: FAQ_ITEMS,
+    PHRASES: PHRASES,
+    REGION_LABEL: REGION_LABEL,
+    getLang: function () { return LANG; },
+    setLang: setLang,
+    getDataSource: function () { return DATA_SOURCE; },
+    setClinics: setClinics
   };
 
   if (typeof document !== 'undefined') {
