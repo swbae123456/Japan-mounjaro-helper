@@ -5,7 +5,7 @@
  * v3: 7.5mg·10mg 가격순 정렬 · 비교표 용량 전환 추가.
  * v4: 예약 탭 이름 입력 예시를 일반 이름으로 교체(개인정보 흔적 제거).
  * v5: GoatCounter 방문자 통계 스크립트 추가.
- * v6: 푸터 방문자 수 배지(GoatCounter 공개 카운터) 추가.
+ * v6: 상단 헤더 방문자 수 배지(GoatCounter 공개 카운터) 추가.
  */
 const VERSION = 'v6';
 const CACHE = 'jmh-' + VERSION;

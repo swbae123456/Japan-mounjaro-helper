@@ -1517,7 +1517,7 @@
     var usdRow = $('sumUsdRow'), krwRow = $('sumKrwRow');
     if (usdRow) usdRow.hidden = (lang !== 'en');
     if (krwRow) krwRow.hidden = (lang === 'en');
-    // 푸터 방문자 수 배지 라벨(숫자는 캐시된 값 재사용 · 재조회 없음)
+    // 상단 방문자 수 배지 라벨(숫자는 캐시된 값 재사용 · 재조회 없음)
     renderVisit();
   }
 
@@ -2359,7 +2359,7 @@
     // 최신 기관 데이터(clinics.json) 시도 — 실패하면 내장 데이터 유지
     loadClinicsJson();
 
-    // 푸터 방문자 수 배지(비동기 · 실패해도 앱 동작에 영향 없음)
+    // 상단 방문자 수 배지(비동기 · 실패해도 앱 동작에 영향 없음)
     loadVisitCount();
   }
 
