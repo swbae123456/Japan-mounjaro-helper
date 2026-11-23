@@ -556,11 +556,6 @@
   <main>
     <!-- ============ TAB 1: 클리닉 / Clinics ============ -->
     <section class="panel" id="panel-clinics" role="tabpanel" aria-labelledby="tab-clinics">
-      <button type="button" class="import-cta" id="importSuppliesCta" data-lang-only="ko">
-        <span class="import-cta-title">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기</span>
-        <span class="import-cta-sub">(보냉팩·아이스팩·보냉파우치) →</span>
-      </button>
-
       <div class="hero" id="heroSummary">
         <span class="hero-pill" data-en="Verified Nov 2026">2026-11 최신 확인</span>
         <h2 class="hero-title"><span id="heroCount">11</span><span data-en=" Japanese clinics compared">곳 한눈에 비교</span></h2>
@@ -622,6 +617,12 @@
         </svg>
         <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" data-en-ph="Search by clinic or station" aria-label="클리닉 또는 역 이름 검색" data-en-aria="Search by clinic or station name" autocomplete="off">
       </div>
+
+      <button type="button" class="import-cta" id="importSuppliesCta" data-lang-only="ko">
+        <span class="import-cta-title">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기</span>
+        <span class="import-cta-sub">(보냉팩·아이스팩·보냉파우치) →</span>
+      </button>
+
       <div id="clinicList" class="clinic-list"></div>
 
       <p class="hint" id="clinicHint" style="padding:0 2px 6px" data-en="The language toggle above filters clinics where the official page confirms Korean support; in English mode it shows clinics whose official page confirms English (or Korean/Japanese/English) consultation. Language support differs by clinic — read the language line on each card first. Prices are self-pay (outside Japanese health insurance); whether a prescription is issued and at what dose is decided by the doctor who sees you.">‘한국어 안내 확인됨’은 해당 기관 공식 페이지에 한국어 안내(페이지·문진표·진료)가 표기된 경우만 포함합니다. 진료 언어는 기관마다 다르니 카드의 ‘한국어 안내’ 줄을 먼저 확인하세요. 가격은 자유진료(보험 적용 외) 기준이며, 처방 여부·용량은 진료한 의사가 판단합니다.</p>
