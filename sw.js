@@ -8,8 +8,9 @@
  * v6: 상단 헤더 방문자 수 배지(GoatCounter 공개 카운터) 추가.
  * v7: ?lang=en·ko 공유 링크 + 비한국어 브라우저 자동 영어 전환, 클리닉 데이터 3건 정정.
  * v8: 12.5mg 가격순 정렬 · 비교표·계산기 용량 추가, 클라라 3개월 공개가 보강.
+ * v9: 상단 방문자 배지를 hits.sh 실시간(오늘·누적) 배지로 교체(GoatCounter 집계 스크립트는 유지).
  */
-const VERSION = 'v8';
+const VERSION = 'v9';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
@@ -42,6 +43,7 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
+  // 외부(hits.sh 방문자 배지 등)는 캐시하지 않고 네트워크로 그대로 보낸다 — 실시간 카운트가 캐시에 가려지지 않도록
   if (url.origin !== self.location.origin) return;
 
   // 페이지 이동 요청은 항상 index.html(또는 './')로 응답

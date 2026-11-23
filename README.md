@@ -155,14 +155,14 @@ git push -u origin main
 ### 배포 후 체크
 
 - 모바일에서 실제 기기로 열어 폰트·줄바꿈·하단 탭 가림 확인
-- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v8` 생성 확인
+- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v9` 생성 확인
 - 홈 화면에 추가한 뒤 비행기 모드에서 재실행 → 화면이 뜨는지 확인(오프라인 캐시)
 - `index.html`을 수정해 다시 배포하면, 서비스 워커 캐시는 버전(`sw.js`의 `VERSION`)을 올려야 확실히 갱신됩니다
 - 도메인 연결 시 HTTPS 강제
 - 데이터 갱신: **`clinics.json`만 수정**하고 `python3 tools/embed_clinics.py`로 `index.html` 내장 폴백을 다시 생성한 뒤 `2026-11 확인` 표기를 갱신 (두 데이터가 같은지 `python3 tools/embed_clinics.py --check`, `test_app.py`가 검사)
-- 서비스 워커 캐시 이름은 `jmh-v8`(`clinics.json` 프리캐시 포함)
+- 서비스 워커 캐시 이름은 `jmh-v9`(`clinics.json` 프리캐시 포함). 외부 리소스(hits.sh 배지)는 서비스 워커가 가로채지 않아 캐시되지 않습니다.
 - 방문자 통계: `index.html` 끝에 GoatCounter 스크립트(`https://swbae12345.goatcounter.com/count`, `https://gc.zgo.at/count.js`)가 삽입되어 있고, 집계는 그 주소의 대시보드에서 확인합니다. 입력값은 전송되지 않으며 쿠키도 쓰지 않습니다.
-- 상단 헤더 방문자 수 배지: 페이지를 열면 헤더의 `가격·시간 2026-11 확인` 태그 옆에 표시됩니다. 로드 후 `https://swbae12345.goatcounter.com/counter/TOTAL.json`을 한 번 조회해 `총 방문자수 · N` / `Total visitors · N`을 보여줍니다. GoatCounter 사이트 설정에서 공개 카운터(Allow adding visitor counts on your website)를 켜지 않았거나 오프라인이면 403·실패로 끝나고 **배지는 그대로 숨겨집니다**(오류 표시 없음).
+- 상단 헤더 방문자 수 배지(실시간): 헤더의 `가격·시간 2026-11 확인` 태그 옆에 `hits.sh` 실시간 배지가 표시됩니다. 주소는 `https://hits.sh/swbae123456.github.io/Japan-mounjaro-helper/live.svg?view=today-total&style=flat&label=Visits&extraCount=121&color=0f766e&labelColor=e6f4f1`이고, 배지에는 **오늘 방문수 · 누적 방문수**가 함께 나옵니다. 누적은 기존 GoatCounter 공개 집계(121)와 이어지도록 `extraCount=121`로 시작하며, 페이지를 열 때마다 실시간으로 1씩 늘어납니다. 오프라인이거나 이미지를 못 불러오면 **배지는 조용히 숨겨집니다**(오류 표시 없음). 언어(KO/EN)에 따라 배지의 제목·대체 텍스트만 바뀝니다.
 
 ---
 

@@ -394,15 +394,10 @@
 
   footer.app-foot{padding:8px 16px 18px;color:var(--muted);font-size:10.5px;line-height:1.6;text-align:center}
   footer.app-foot a{color:var(--brand-2)}
-  /* 방문자 수 배지 — 통계가 없거나 조회에 실패하면 숨김 유지 */
+  /* 방문자 수 배지 — hits.sh 실시간 이미지, 로드 전·실패 시 숨김 */
   .visit-badge[hidden]{display:none}
-  .visit-badge{
-    display:inline-flex;align-items:center;gap:4px;
-    font-size:10.5px;font-weight:700;line-height:1;letter-spacing:-.01em;
-    color:var(--brand-2);background:var(--brand-soft);border:1px solid #cfe6df;
-    border-radius:999px;padding:4px 9px;
-  }
-  .visit-badge svg{width:11px;height:11px;flex:0 0 auto;opacity:.8}
+  .visit-badge{display:inline-flex;align-items:center;line-height:0;flex:0 0 auto}
+  .visit-badge img{display:block;height:20px;width:auto;max-width:100%;border-radius:4px}
   .divider{height:1px;background:var(--line);margin:14px 0}
 </style>
 </head>
@@ -433,8 +428,11 @@
       </button>
       <span class="top-meta">
         <span class="visit-badge" id="visitBadge" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.6 12S6.2 5.8 12 5.8 21.4 12 21.4 12 17.8 18.2 12 18.2 2.6 12 2.6 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          <span id="visitText"></span>
+          <img id="visitImg"
+               src="https://hits.sh/swbae123456.github.io/Japan-mounjaro-helper/live.svg?view=today-total&amp;style=flat&amp;label=Visits&amp;extraCount=121&amp;color=0f766e&amp;labelColor=e6f4f1"
+               alt="오늘·누적 방문수(실시간)" title="오늘·누적 방문수(실시간)" aria-label="오늘·누적 방문수(실시간)"
+               height="20" decoding="async" referrerpolicy="no-referrer"
+               onload="this.parentElement.hidden=false" onerror="this.parentElement.hidden=true">
         </span>
         <span class="verified-tag" data-en="Prices &amp; hours checked 2026-11">가격·시간 2026-11 확인</span>
       </span>
@@ -1453,58 +1451,25 @@
   }
 
   /* ---------------------------------------------------------------
-     방문자 수 배지 — GoatCounter 공개 카운터(/counter/TOTAL.json)
-     · 언어 전환 시에는 다시 조회하지 않고 캐시된 숫자만 다시 씁니다.
-     · 403(공개 카운터 미설정)·오프라인·타임아웃이면 배지를 숨긴 채 조용히 끝냅니다.
+     방문자 수 배지 — hits.sh 실시간 오늘/누적 카운터(live.svg)
+     · 배지 이미지가 페이지를 열 때마다 hits.sh에 1회를 기록합니다(실시간).
+     · GoatCounter 스크립트는 대시보드 집계용으로 그대로 둡니다.
+     · 오프라인·차단으로 이미지가 실패하면 onerror가 배지를 숨깁니다(오류 표시 없음).
+     · 언어 전환 시에는 제목·대체 텍스트만 바꿉니다(이미지 재요청 없음).
      --------------------------------------------------------------- */
-  var VISIT_URL = 'https://swbae12345.goatcounter.com/counter/TOTAL.json';
-  var VISIT_COUNT = null;          // GoatCounter가 돌려준 표시용 문자열(예: '1,234')
+  var VISIT_URL = 'https://hits.sh/swbae123456.github.io/Japan-mounjaro-helper/live.svg?view=today-total&style=flat&label=Visits&extraCount=121&color=0f766e&labelColor=e6f4f1';
 
-  function visitLabel(count) {
-    return L('총 방문자수 · ', 'Total visitors · ') + count;
+  function visitTitle() {
+    return L('오늘·누적 방문수(실시간)', 'Today / total visits (live)');
   }
 
-  function renderVisit() {
-    var badge = $('visitBadge'), label = $('visitText');
-    if (!badge || !label) return;
-    if (!VISIT_COUNT) { badge.hidden = true; label.textContent = ''; return; }
-    label.textContent = visitLabel(VISIT_COUNT);
-    badge.hidden = false;
-  }
-
-  function setVisitCount(count) {
-    var v = (count === null || count === undefined) ? '' : String(count).trim();
-    VISIT_COUNT = v ? v : null;
-    renderVisit();
-  }
-
-  function loadVisitCount() {
-    try {
-      if (typeof fetch !== 'function') return;
-      var done = false;
-      var finish = function (value) {
-        if (done) return;
-        done = true;
-        setVisitCount(value);
-      };
-      var ctrl = null;
-      try { ctrl = (typeof AbortController === 'function') ? new AbortController() : null; } catch (e) { ctrl = null; }
-      if (ctrl) {
-        setTimeout(function () { if (done) return; try { ctrl.abort(); } catch (e) {} }, 6000);
-      }
-      fetch(VISIT_URL, ctrl ? { cache: 'no-store', signal: ctrl.signal } : { cache: 'no-store' })
-        .then(function (res) {
-          if (!res || !res.ok || typeof res.json !== 'function') return null;  // 403·404·5xx → 배지 없음
-          return res.json();
-        })
-        .then(function (data) {
-          if (done) return;
-          var c = data && data.count;
-          var v = (typeof c === 'number' && isFinite(c)) ? String(c) : (typeof c === 'string' ? c.trim() : '');
-          finish(v);
-        })
-        .catch(function () { finish(null); });  // 오프라인·JSON 아님·중단 → 조용히 숨김 유지
-    } catch (e) { /* fetch 미지원 · file:// · 그 외 환경 오류는 무시 */ }
+  function applyVisitText() {
+    var img = $('visitImg');
+    if (!img) return;
+    var t = visitTitle();
+    img.setAttribute('alt', t);
+    img.setAttribute('title', t);
+    img.setAttribute('aria-label', t);
   }
 
   function applyStatic(lang) {
@@ -1555,8 +1520,8 @@
     var usdRow = $('sumUsdRow'), krwRow = $('sumKrwRow');
     if (usdRow) usdRow.hidden = (lang !== 'en');
     if (krwRow) krwRow.hidden = (lang === 'en');
-    // 상단 방문자 수 배지 라벨(숫자는 캐시된 값 재사용 · 재조회 없음)
-    renderVisit();
+    // 상단 방문자 수 배지 제목(이미지는 그대로 · 재요청 없음)
+    applyVisitText();
   }
 
   function setLang(lang) {
@@ -2406,8 +2371,8 @@
     // 최신 기관 데이터(clinics.json) 시도 — 실패하면 내장 데이터 유지
     loadClinicsJson();
 
-    // 상단 방문자 수 배지(비동기 · 실패해도 앱 동작에 영향 없음)
-    loadVisitCount();
+    // 상단 방문자 수 배지 제목(이미지는 HTML에서 바로 로드 · 실패해도 앱 동작 무관)
+    applyVisitText();
   }
 
   // 테스트용 노출 (브라우저 동작에는 영향 없음)
@@ -2425,8 +2390,8 @@
     compareDose: compareDose,
     setCompareDose: setCompareDose,
     getState: function () { return { sort: state.sort, compareDose: state.compareDose }; },
-    visitLabel: visitLabel,
-    setVisitCount: setVisitCount,
+    visitTitle: visitTitle,
+    applyVisitText: applyVisitText,
     VISIT_URL: VISIT_URL,
     SORT_DOSE: SORT_DOSE,
     CLINICS: CLINICS,
