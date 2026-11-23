@@ -15,8 +15,10 @@
  * v12: 클리닉 탭 맨 위로 '출국 전 기내 반입 체크리스트·준비물' 배너 이동(히어로 위, KO 전용).
  * v13: 그 배너 문구를 두 줄(제목 + (보냉팩·아이스팩·보냉파우치) →)로 정리, 영어 헤더 제목 크기 보정.
  * v14: 그 배너 위치를 히어로 위 → 검색창 아래·기관 카드 위로 이동.
+ * v15: 상단 방문자 배지를 hits.sh(새로고침마다 +1) → GoatCounter 순 방문자 수 JSON 알약으로 교체
+ *      (중복 제거 · 새로고침으로 카운트가 늘지 않음). GoatCounter 집계 스크립트는 유지.
  */
-const VERSION = 'v14';
+const VERSION = 'v15';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
@@ -49,7 +51,8 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  // 외부(hits.sh 방문자 배지 등)는 캐시하지 않고 네트워크로 그대로 보낸다 — 실시간 카운트가 캐시에 가려지지 않도록
+  // 외부 요청(GoatCounter 카운터 JSON·count.js·쿠팡 링크 등)은 캐시하지 않고 네트워크로 그대로 보낸다
+  // — 순 방문자 수가 캐시에 가려지지 않도록
   if (url.origin !== self.location.origin) return;
 
   // 페이지 이동 요청은 항상 index.html(또는 './')로 응답

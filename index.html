@@ -507,10 +507,16 @@
 
   footer.app-foot{padding:10px 16px 18px;color:var(--muted);font-size:10.5px;line-height:1.6;text-align:center}
   footer.app-foot a{color:var(--brand-2)}
-  /* 방문자 수 배지 — hits.sh 실시간 이미지, 로드 전·실패 시 숨김 */
+  /* 방문자 수 배지 — GoatCounter 순 방문자 수 알약(데이터 로드 전·실패 시 숨김) */
   .visit-badge[hidden]{display:none}
-  .visit-badge{display:inline-flex;align-items:center;line-height:0;flex:0 0 auto}
-  .visit-badge img{display:block;height:18px;width:auto;max-width:100%;border-radius:4px}
+  .visit-badge{
+    display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;
+    border:1px solid #d8e4ee;background:#f2f7fb;color:#3f5568;
+    font-size:10px;font-weight:700;line-height:1;
+    padding:6px 9px;border-radius:999px;white-space:nowrap;
+    font-family:var(--font);letter-spacing:-.01em;
+  }
+  .visit-badge svg{width:11px;height:11px;flex:0 0 auto;opacity:.75}
   .divider{height:1px;background:var(--line);margin:14px 0}
 </style>
 </head>
@@ -542,11 +548,10 @@
       </button>
       <span class="top-meta">
         <span class="visit-badge" id="visitBadge" hidden>
-          <img id="visitImg"
-               src="https://hits.sh/swbae123456.github.io/Japan-mounjaro-helper/live.svg?view=today-total&amp;style=flat&amp;label=Visits&amp;extraCount=121&amp;color=0f766e&amp;labelColor=e6f4f1"
-               alt="오늘·누적 방문수(실시간)" title="오늘·누적 방문수(실시간)" aria-label="오늘·누적 방문수(실시간)"
-               height="20" decoding="async" referrerpolicy="no-referrer"
-               onload="this.parentElement.hidden=false" onerror="this.parentElement.hidden=true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.4"></circle><path d="M5.2 20c0-3.5 3-5.6 6.8-5.6s6.8 2.1 6.8 5.6"></path>
+          </svg>
+          <span id="visitText"></span>
         </span>
         <span class="verified-tag" data-en="Prices &amp; hours checked 2026-11">가격·시간 2026-11 확인</span>
       </span>
@@ -1621,25 +1626,70 @@
   }
 
   /* ---------------------------------------------------------------
-     방문자 수 배지 — hits.sh 실시간 오늘/누적 카운터(live.svg)
-     · 배지 이미지가 페이지를 열 때마다 hits.sh에 1회를 기록합니다(실시간).
-     · GoatCounter 스크립트는 대시보드 집계용으로 그대로 둡니다.
-     · 오프라인·차단으로 이미지가 실패하면 onerror가 배지를 숨깁니다(오류 표시 없음).
-     · 언어 전환 시에는 제목·대체 텍스트만 바꿉니다(이미지 재요청 없음).
+     방문자 수 배지 — GoatCounter 공개 카운터 JSON(순 방문자 = 중복 제거)
+     · /Japan-mounjaro-helper/ 경로의 순 방문자 수(count_unique)를 읽어
+       헤더 메타 알약에 "방문자 N명"(KO) / "N visitors"(EN)으로 표시합니다.
+     · 페이지를 새로 열어도 배지가 카운터를 올리지 않습니다. 집계는 GoatCounter
+       스크립트(중복 제거)가 담당하고, 배지는 표시만 합니다.
+     · 5분마다 다시 읽어 최신 값을 반영합니다.
+     · 첫 조회 전·네트워크 실패·오프라인이면 배지는 조용히 숨겨집니다(오류 표시 없음).
      --------------------------------------------------------------- */
-  var VISIT_URL = 'https://hits.sh/swbae123456.github.io/Japan-mounjaro-helper/live.svg?view=today-total&style=flat&label=Visits&extraCount=121&color=0f766e&labelColor=e6f4f1';
+  var VISIT_URL = 'https://swbae12345.goatcounter.com/counter/%2FJapan-mounjaro-helper%2F.json';
+  var VISIT_REFRESH_MS = 300000;
+  var visitCount = null;
 
   function visitTitle() {
-    return L('오늘·누적 방문수(실시간)', 'Today / total visits (live)');
+    return L('중복 제거 순 방문자 수 · 5분마다 갱신', 'Unique visitors (duplicates removed) · refreshed every 5 min');
   }
 
-  function applyVisitText() {
-    var img = $('visitImg');
-    if (!img) return;
+  function visitNumText(n) {
+    return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function visitLabel() {
+    if (visitCount === null) return '';
+    return L('방문자 ' + visitNumText(visitCount) + '명', visitNumText(visitCount) + ' visitors');
+  }
+
+  function renderVisitBadge() {
+    var badge = $('visitBadge');
+    if (!badge) return;
+    if (visitCount === null) {
+      badge.hidden = true;
+      return;
+    }
+    var label = $('visitText');
+    if (label) label.textContent = visitLabel();
     var t = visitTitle();
-    img.setAttribute('alt', t);
-    img.setAttribute('title', t);
-    img.setAttribute('aria-label', t);
+    badge.setAttribute('title', t);
+    badge.setAttribute('aria-label', t);
+    badge.hidden = false;
+  }
+
+  function loadVisitCount() {
+    var badge = $('visitBadge');
+    if (typeof fetch !== 'function') { if (badge) badge.hidden = true; return; }
+    try {
+      fetch(VISIT_URL, { cache: 'no-store' })
+        .then(function (res) {
+          if (!res || !res.ok) throw new Error('visit http');
+          return res.json();
+        })
+        .then(function (data) {
+          var raw = (data && data.count_unique !== undefined && data.count_unique !== null && data.count_unique !== '')
+            ? data.count_unique : (data ? data.count : null);
+          var n = parseInt(raw, 10);
+          if (!isFinite(n) || n <= 0) throw new Error('visit parse');
+          visitCount = n;
+          renderVisitBadge();
+        })
+        .catch(function () {
+          // 첫 조회 실패만 숨김 — 이미 받은 값은 마지막 성공 값을 그대로 둔다
+          if (visitCount === null && badge) badge.hidden = true;
+        });
+    } catch (e) {
+      if (badge) badge.hidden = true;
+    }
   }
 
   function applyStatic(lang) {
@@ -1690,8 +1740,8 @@
     var usdRow = $('sumUsdRow'), krwRow = $('sumKrwRow');
     if (usdRow) usdRow.hidden = (lang !== 'en');
     if (krwRow) krwRow.hidden = (lang === 'en');
-    // 상단 방문자 수 배지 제목(이미지는 그대로 · 재요청 없음)
-    applyVisitText();
+    // 상단 방문자 수 배지 문구(N명·visitors)와 제목을 현재 언어로 다시 그린다
+    renderVisitBadge();
   }
 
   function setLang(lang) {
@@ -2644,8 +2694,12 @@
     // 최신 기관 데이터(clinics.json) 시도 — 실패하면 내장 데이터 유지
     loadClinicsJson();
 
-    // 상단 방문자 수 배지 제목(이미지는 HTML에서 바로 로드 · 실패해도 앱 동작 무관)
-    applyVisitText();
+    // 상단 방문자 수 배지 — GoatCounter 순 방문자 수 조회(실패해도 앱 동작 무관)
+    renderVisitBadge();
+    loadVisitCount();
+    if (typeof setInterval === 'function') {
+      try { setInterval(loadVisitCount, VISIT_REFRESH_MS); } catch (e) {}
+    }
   }
 
   // 테스트용 노출 (브라우저 동작에는 영향 없음)
@@ -2664,7 +2718,12 @@
     setCompareDose: setCompareDose,
     getState: function () { return { sort: state.sort, compareDose: state.compareDose }; },
     visitTitle: visitTitle,
-    applyVisitText: applyVisitText,
+    visitLabel: visitLabel,
+    visitNumText: visitNumText,
+    renderVisitBadge: renderVisitBadge,
+    loadVisitCount: loadVisitCount,
+    getVisitCount: function () { return visitCount; },
+    setVisitCount: function (n) { visitCount = (typeof n === 'number' && isFinite(n)) ? n : null; renderVisitBadge(); },
     VISIT_URL: VISIT_URL,
     SORT_DOSE: SORT_DOSE,
     CLINICS: CLINICS,
