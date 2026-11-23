@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0e7c66">
+<meta name="theme-color" content="#0f766e">
 <meta name="color-scheme" content="light">
 <meta name="description" content="일본 마운자로 처방·수령·반입 준비를 위한 공개 정보 정리와 방문 도우미(한국어·영어). 알선·예약 대행이 아닙니다. Informational directory and preparation tool for visitors to Japan — not medical brokerage, booking agency or prescription drug advertising.">
 <meta name="mobile-web-app-capable" content="yes">
@@ -17,24 +17,31 @@
 <title>일본 마운자로 방문 도우미 — 준비 도구</title>
 <style>
   :root{
-    --bg:#f3f5f7;
+    --bg:#f4f7f6;
     --card:#ffffff;
-    --ink:#151a21;
-    --ink-2:#3d4753;
-    --muted:#6b7684;
-    --line:#e4e8ed;
-    --line-2:#eef1f4;
-    --brand:#0e7c66;
-    --brand-2:#0a5f4f;
-    --brand-soft:#e7f4f0;
-    --amber:#a86400;
-    --amber-soft:#fdf3e2;
+    --ink:#0f172a;
+    --ink-2:#334155;
+    --muted:#64748b;
+    --line:#dce5e2;
+    --line-2:#edf2f0;
+    --brand:#0f766e;
+    --brand-2:#0b5d56;
+    --brand-soft:#e6f4f1;
+    --mint:#ecfdf5;
+    --amber:#94620f;
+    --amber-bg:#fdf0d2;
     --red:#b02525;
     --red-soft:#fdecec;
-    --radius:16px;
-    --radius-sm:11px;
-    --shadow:0 1px 2px rgba(16,24,40,.04),0 6px 18px rgba(16,24,40,.05);
-    --font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,"Segoe UI",Roboto,sans-serif;
+    --indigo:#4338ca;
+    --indigo-bg:#eef2ff;
+    --slate-bg:#f1f5f9;
+    --slate-ink:#475569;
+    --tile:#f8fafc;
+    --tile-line:#e2e8f0;
+    --radius:20px;
+    --radius-sm:12px;
+    --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 22px rgba(15,23,42,.05);
+    --font:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,'Segoe UI',Roboto,sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
@@ -43,7 +50,8 @@
     background:var(--bg);
     color:var(--ink);
     font-size:16px;
-    line-height:1.5;
+    line-height:1.55;
+    letter-spacing:-.01em;
     -webkit-font-smoothing:antialiased;
   }
   [hidden]{display:none!important}
@@ -53,79 +61,111 @@
     min-height:100vh;
     background:var(--bg);
     position:relative;
-    padding-bottom:calc(76px + env(safe-area-inset-bottom));
+    padding-bottom:calc(104px + env(safe-area-inset-bottom));
   }
   @media (min-width:560px){
-    body{background:#e7ebef}
-    .shell{box-shadow:0 0 0 1px rgba(16,24,40,.06),0 14px 50px rgba(16,24,40,.14);min-height:100vh}
+    body{background:#e8eeec}
+    .shell{box-shadow:0 0 0 1px rgba(15,23,42,.05),0 18px 60px rgba(15,23,42,.12)}
   }
 
-  /* header */
+  /* ---------- header ---------- */
   .app-header{
     position:sticky;top:0;z-index:30;
-    background:rgba(255,255,255,.92);
+    background:rgba(255,255,255,.97);
     backdrop-filter:saturate(160%) blur(12px);
     -webkit-backdrop-filter:saturate(160%) blur(12px);
     border-bottom:1px solid var(--line);
-    padding:14px 16px 11px;
+    padding:13px 16px 10px;
   }
-  .brand{display:flex;align-items:center;gap:10px}
+  .brand{display:flex;align-items:center;gap:11px}
   .logo{
-    width:34px;height:34px;border-radius:10px;flex:0 0 auto;
-    background:linear-gradient(145deg,#128e75,#0a5f4f);
+    width:40px;height:40px;border-radius:13px;flex:0 0 auto;
+    background:var(--brand);
     display:flex;align-items:center;justify-content:center;color:#fff;
+    box-shadow:0 3px 10px rgba(15,118,110,.22);
   }
   .brand-text{flex:1 1 auto;min-width:0}
-  .brand h1{font-size:16.5px;line-height:1.25;margin:0;letter-spacing:-.02em}
-  .brand p{margin:1px 0 0;font-size:11px;color:var(--muted);letter-spacing:-.01em}
+  .brand h1{font-size:17px;line-height:1.24;margin:0;letter-spacing:-.03em;font-weight:800}
+  .brand p{margin:2px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:-.015em}
 
   /* language switch */
   .lang-switch{
-    flex:0 0 auto;display:flex;gap:2px;background:#eef1f4;border:1px solid var(--line);
-    padding:2px;border-radius:10px;
+    flex:0 0 auto;display:flex;gap:2px;background:#f1f5f4;border:1px solid var(--line);
+    padding:3px;border-radius:999px;
   }
   .lang-btn{
     border:0;background:transparent;font-family:var(--font);
     font-size:11.5px;font-weight:700;letter-spacing:-.01em;
-    color:var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;line-height:1.1;
+    color:var(--muted);padding:6px 10px;border-radius:999px;cursor:pointer;line-height:1.1;
     min-width:38px;
   }
-  .lang-btn.is-active{background:#fff;color:var(--brand-2);box-shadow:0 1px 3px rgba(16,24,40,.14)}
+  .lang-btn.is-active{background:#fff;color:var(--brand-2);box-shadow:0 1px 4px rgba(15,23,42,.14)}
   .lang-btn:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
 
-  .top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;flex-wrap:wrap;row-gap:7px}
+  .top-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;flex-wrap:wrap;row-gap:7px}
   .top-meta{display:flex;align-items:center;gap:7px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
   .compliance-pill{
     display:inline-flex;align-items:center;gap:6px;
     border:1px solid #cfe6df;background:var(--brand-soft);color:var(--brand-2);
-    font-size:11.5px;font-weight:600;line-height:1;
+    font-size:11px;font-weight:700;line-height:1;
     padding:7px 10px;border-radius:999px;cursor:pointer;
-    font-family:var(--font);text-align:left;
+    font-family:var(--font);text-align:left;letter-spacing:-.01em;
   }
   .compliance-pill:active{transform:scale(.98)}
-  .verified-tag{font-size:10.5px;color:var(--muted)}
+  .verified-tag{font-size:10.5px;color:var(--muted);font-weight:600}
 
-  /* panels */
+  /* ---------- panels ---------- */
   main{padding:14px 14px 4px}
-  .panel-title{font-size:19px;margin:2px 0 4px;letter-spacing:-.02em}
+  .panel-title{font-size:19px;margin:2px 0 4px;letter-spacing:-.03em}
   .panel-sub{margin:0 0 12px;color:var(--muted);font-size:12.5px;line-height:1.55}
   .section-head{margin-bottom:10px}
 
-  /* chips */
-  .chips{display:flex;gap:7px;overflow-x:auto;padding:1px 1px 9px;scrollbar-width:none}
+  /* ---------- hero summary ---------- */
+  .hero{
+    background:linear-gradient(158deg,#10837a 0%,#0f766e 46%,#0b5d56 100%);
+    border-radius:var(--radius);
+    padding:17px 16px 15px;
+    color:#fff;
+    box-shadow:0 10px 26px rgba(11,93,86,.22);
+    margin-bottom:12px;
+  }
+  .hero-pill{
+    display:inline-flex;align-items:center;
+    background:rgba(255,255,255,.17);
+    border:1px solid rgba(255,255,255,.22);
+    color:#eafaf6;font-size:11px;font-weight:700;letter-spacing:-.01em;
+    padding:5px 11px;border-radius:999px;line-height:1.1;
+  }
+  .hero-title{
+    margin:10px 0 0;font-size:21px;line-height:1.28;letter-spacing:-.045em;font-weight:800;
+    color:#fff;
+  }
+  .hero-sub{margin:5px 0 0;font-size:12.5px;line-height:1.5;color:rgba(236,253,245,.86);letter-spacing:-.015em}
+  .hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:13px}
+  .stat-tile{
+    background:#0b5d56;border:1px solid rgba(255,255,255,.09);
+    border-radius:13px;padding:9px 9px 10px;min-width:0;
+  }
+  .stat-label{display:block;font-size:10.5px;font-weight:600;color:rgba(209,250,229,.78);line-height:1.3;letter-spacing:-.01em}
+  .stat-value{display:block;margin-top:3px;font-size:15px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1.2}
+  .panel-note{margin:0 0 12px;color:var(--muted);font-size:11.5px;line-height:1.6;padding:0 2px}
+
+  /* ---------- chips ---------- */
+  .chips{display:flex;gap:7px;overflow-x:auto;padding:1px 1px 10px;scrollbar-width:none}
   .chips::-webkit-scrollbar{display:none}
   .chip{
     flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink-2);
-    border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;
-    font-family:var(--font);transition:background .15s,color .15s,border-color .15s;
+    border-radius:999px;padding:8px 15px;font-size:12.5px;font-weight:700;cursor:pointer;
+    font-family:var(--font);letter-spacing:-.02em;
+    transition:background .15s,color .15s,border-color .15s;
   }
-  .chip.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .chip.is-active{background:#0f172a;border-color:#0f172a;color:#fff}
 
   .filter-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-  .switch{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);cursor:pointer;user-select:none}
+  .switch{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);cursor:pointer;user-select:none}
   .switch input{position:absolute;opacity:0;width:0;height:0}
   .switch span{
-    width:38px;height:22px;border-radius:999px;background:#d7dde3;position:relative;transition:background .18s;flex:0 0 auto;
+    width:38px;height:22px;border-radius:999px;background:#d7e0dd;position:relative;transition:background .18s;flex:0 0 auto;
   }
   .switch span::after{
     content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;
@@ -134,33 +174,34 @@
   .switch input:checked + span{background:var(--brand)}
   .switch input:checked + span::after{transform:translateX(16px)}
   .switch input:focus-visible + span{outline:2px solid var(--brand);outline-offset:2px}
-  .switch i{font-style:normal}
+  .switch i{font-style:normal;font-weight:600}
 
   .sort-row{display:flex;align-items:center;gap:8px;margin:0 0 10px}
-  .sort-label{font-size:11.5px;font-weight:700;color:var(--muted);flex:0 0 auto}
+  .sort-label{font-size:11.5px;font-weight:700;color:var(--muted);flex:0 0 auto;letter-spacing:-.02em}
   .sort-select{
-    flex:1 1 auto;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:10px;
-    background:#fff;color:var(--ink);font-family:var(--font);font-size:12.5px;font-weight:600;
+    flex:1 1 auto;min-width:0;padding:10px 11px;border:1px solid var(--line);border-radius:12px;
+    background:#fff;color:var(--ink);font-family:var(--font);font-size:12.5px;font-weight:700;
+    letter-spacing:-.02em;
   }
   details.compare{
     background:#fff;border:1px solid var(--line);border-radius:14px;margin:0 0 12px;box-shadow:var(--shadow);overflow:hidden;
   }
   details.compare > summary{
-    list-style:none;cursor:pointer;padding:12px 13px;font-size:12.5px;font-weight:700;line-height:1.45;
-    display:flex;gap:8px;align-items:center;color:var(--ink-2);
+    list-style:none;cursor:pointer;padding:11px 12px;font-size:12.5px;font-weight:700;line-height:1.45;
+    display:flex;gap:8px;align-items:center;color:var(--brand-2);background:var(--mint);
   }
   details.compare > summary::-webkit-details-marker{display:none}
-  details.compare > summary .chev{margin-left:auto;flex:0 0 auto;color:var(--muted);transition:transform .18s}
+  details.compare > summary .chev{margin-left:auto;flex:0 0 auto;color:var(--brand);transition:transform .18s}
   details.compare[open] > summary .chev{transform:rotate(45deg)}
   .compare-body{padding:0 12px 12px}
-  .compare-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px;padding-top:2px;flex-wrap:wrap}
+  .compare-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px;padding-top:10px;flex-wrap:wrap}
   .compare-head .cmp-label{font-size:10.5px;font-weight:700;color:var(--muted)}
-  .dose-seg{display:flex;flex-wrap:wrap;gap:4px;background:#f1f4f6;padding:3px;border-radius:10px}
+  .dose-seg{display:flex;flex-wrap:wrap;gap:4px;background:#f1f5f4;padding:3px;border-radius:10px}
   .dose-seg button{
     border:0;background:transparent;padding:6px 9px;border-radius:8px;white-space:nowrap;
     font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--font);
   }
-  .dose-seg button.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.10)}
+  .dose-seg button.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(15,23,42,.10)}
   .compare-note{font-size:10.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
   table.cmp-price{width:100%;border-collapse:collapse;font-size:11.5px}
   table.cmp-price th,table.cmp-price td{padding:7px 6px;border-top:1px solid var(--line-2);text-align:right;font-variant-numeric:tabular-nums}
@@ -170,43 +211,59 @@
   table.cmp-price tr.missing td{color:var(--muted)}
 
   .search-wrap{position:relative;margin-bottom:12px}
-  .search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
   .search-wrap input{
-    width:100%;padding:11px 12px 11px 36px;border-radius:12px;border:1px solid var(--line);
+    width:100%;padding:12px 12px 12px 38px;border-radius:12px;border:1px solid var(--line);
     background:#fff;font-size:14px;font-family:var(--font);color:var(--ink);
   }
-  .search-wrap input:focus{outline:2px solid rgba(14,124,102,.25);border-color:var(--brand)}
+  .search-wrap input:focus{outline:2px solid rgba(15,118,110,.22);border-color:var(--brand)}
 
-  /* cards */
+  /* ---------- clinic cards ---------- */
   .card{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
     box-shadow:var(--shadow);padding:15px;margin-bottom:12px;
   }
-  .card h3{margin:0;font-size:15.5px;letter-spacing:-.02em;line-height:1.3}
-  .ja-name{margin:2px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:0;line-height:1.55}
-  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .card h3{margin:0;font-size:16px;letter-spacing:-.03em;line-height:1.3;font-weight:800}
+  .card-head{display:flex;flex-direction:column;min-width:0}
+  .card-badges{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 9px;order:-1}
+  .card-head .clinic-name{order:0}
+  .ja-name{margin:3px 0 0;font-size:11.5px;color:var(--muted);letter-spacing:0;line-height:1.5;order:1}
+  .clinic-sub{
+    margin:5px 0 0;font-size:11.5px;color:var(--ink-2);line-height:1.5;letter-spacing:-.015em;order:2;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
   .badge{
     display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;
-    font-size:10.5px;font-weight:700;line-height:1;padding:5px 8px;border-radius:6px;
-    background:#f1f3f6;color:var(--ink-2);border:1px solid var(--line);
+    font-size:10.5px;font-weight:700;line-height:1;padding:6px 9px;border-radius:999px;
+    background:var(--slate-bg);color:var(--slate-ink);border:1px solid transparent;letter-spacing:-.02em;
   }
-  .badge.region{background:#eef3ff;color:#2a4b8d;border-color:#dde7fb}
-  .badge.ok{background:var(--brand-soft);color:var(--brand-2);border-color:#cfe6df}
-  .badge.warn{background:var(--amber-soft);color:var(--amber);border-color:#f2dfbd}
+  .badge.region{background:var(--brand-soft);color:var(--brand-2)}
+  .badge.ok,.badge.lang-ok{background:var(--indigo-bg);color:var(--indigo)}
+  .badge.lang-ja{background:var(--slate-bg);color:var(--slate-ink)}
+  .badge.warn,.badge.amber{background:var(--amber-bg);color:var(--amber)}
+  .badge.warn{border-color:#f2dfb4}
 
-  .meta{margin:11px 0 0;display:grid;gap:6px}
-  .meta-row{display:grid;grid-template-columns:64px 1fr;gap:8px;font-size:12.5px;line-height:1.5}
+  .meta{margin:11px 0 0;display:grid;gap:7px}
+  .meta-row{display:grid;grid-template-columns:66px 1fr;gap:8px;font-size:12.5px;line-height:1.5}
   .meta-row dt{color:var(--muted);font-weight:600;font-size:11.5px;padding-top:1px}
   .meta-row dd{margin:0;color:var(--ink-2)}
   .meta-row dd a{color:var(--brand-2);text-decoration:none;word-break:break-all}
+  .korean-note{font-size:11.5px;color:var(--ink-2);background:#f6faf9;border-radius:10px;padding:9px 11px;margin-top:10px;line-height:1.55}
 
-  .badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
-  .korean-note{font-size:11.5px;color:var(--ink-2);background:#f7f9fa;border-radius:9px;padding:8px 10px;margin-top:8px;line-height:1.5}
+  /* 3-column price tiles */
+  .price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(84px,1fr));gap:7px;margin-top:12px}
+  .price-tile{
+    background:var(--tile);border:1px solid var(--tile-line);border-radius:12px;
+    padding:9px 9px 10px;min-width:0;
+  }
+  .pt-label{display:block;font-size:10.5px;font-weight:600;color:var(--muted);line-height:1.3;letter-spacing:-.02em}
+  .pt-value{display:block;margin-top:2px;font-size:16px;font-weight:800;letter-spacing:-.035em;color:var(--ink);line-height:1.2;font-variant-numeric:tabular-nums}
+  .pt-sub{display:block;margin-top:2px;font-size:10px;color:var(--muted);line-height:1.35;letter-spacing:-.01em}
 
   .price-block{margin-top:12px;border:1px solid var(--line-2);border-radius:12px;overflow:hidden}
   .price-head{
-    display:flex;justify-content:space-between;align-items:center;
-    background:#f8fafb;padding:7px 10px;font-size:11px;color:var(--muted);font-weight:700;
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    background:#f8fafb;padding:8px 10px;font-size:10.5px;color:var(--muted);font-weight:700;line-height:1.4;
   }
   table.price{width:100%;border-collapse:collapse;font-size:12.5px}
   table.price th,table.price td{padding:6px 10px;text-align:right;border-top:1px solid var(--line-2)}
@@ -215,47 +272,63 @@
   table.price td{font-variant-numeric:tabular-nums;color:var(--ink-2)}
   table.price.cmp th,table.price.cmp td{font-size:11.5px;padding:8px 8px;vertical-align:top;line-height:1.55;text-align:left}
   table.price.cmp th:first-child,table.price.cmp td:first-child{white-space:nowrap;font-size:11px}
-  .price-foot{padding:7px 10px;font-size:11px;color:var(--muted);border-top:1px solid var(--line-2);background:#fcfdfd;line-height:1.5}
+  .price-foot{padding:7px 10px;font-size:11px;color:var(--muted);border-top:1px solid var(--line-2);background:#fcfdfd;line-height:1.55}
 
   .note-list{margin:11px 0 0;padding:0 0 0 15px;font-size:12px;color:var(--ink-2);line-height:1.6}
   .note-list li{margin-bottom:3px}
   .note-list li::marker{color:#b9c2cc}
 
+  /* actions */
+  .card-actions{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:8px;margin-top:12px}
   .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
   .btn{
     display:inline-flex;align-items:center;justify-content:center;gap:6px;
-    min-height:42px;padding:0 13px;border-radius:11px;border:1px solid var(--line);
-    background:#fff;color:var(--ink);font-size:13.5px;font-weight:700;
-    font-family:var(--font);text-decoration:none;cursor:pointer;line-height:1.2;
+    min-height:44px;padding:0 13px;border-radius:12px;border:1px solid var(--line);
+    background:#fff;color:var(--ink);font-size:13px;font-weight:700;
+    font-family:var(--font);text-decoration:none;cursor:pointer;line-height:1.25;
+    letter-spacing:-.02em;
     transition:background .14s,transform .06s;text-align:center;
   }
   .btn:active{transform:scale(.985)}
-  .btn.primary{grid-column:1 / -1;background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
   .btn.primary:active{background:var(--brand-2)}
-  .btn.ghost{background:#f7f9fa;color:var(--ink-2)}
-  .btn.small{min-height:34px;font-size:12px;padding:0 10px;border-radius:9px}
+  .card-actions .btn.primary{grid-column:auto}
+  .btn.ghost{background:#f2f7f5;color:var(--ink-2);border-color:#e4ebe8}
+  .btn.small{min-height:36px;font-size:12px;padding:0 11px;border-radius:10px}
   .btn[disabled]{opacity:.5;pointer-events:none}
+  .actions .btn.primary{grid-column:1 / -1}
+
+  /* expandable details inside a card */
+  details.clinic-more{margin-top:11px;border-top:1px solid var(--line-2);padding-top:2px}
+  details.clinic-more > summary{
+    list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;
+    padding:9px 0 3px;font-size:11.5px;font-weight:700;color:var(--brand-2);letter-spacing:-.02em;
+  }
+  details.clinic-more > summary::-webkit-details-marker{display:none}
+  details.clinic-more > summary .chev{margin-left:auto;flex:0 0 auto;color:var(--muted);transition:transform .18s}
+  details.clinic-more[open] > summary .chev{transform:rotate(45deg)}
+  .clinic-more-body{padding:2px 0 0}
 
   .empty{background:#fff;border:1px dashed var(--line);border-radius:var(--radius);padding:24px 16px;text-align:center;color:var(--muted);font-size:13px}
 
-  /* forms */
+  /* ---------- forms ---------- */
   .field{display:block;margin-bottom:12px}
   .field > span.lbl{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:5px}
   .field input[type=text],.field input[type=number],.field select,.field input[type=search]{
     width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:11px;
     font-size:14px;font-family:var(--font);background:#fff;color:var(--ink);
   }
-  .field input:focus,.field select:focus{outline:2px solid rgba(14,124,102,.22);border-color:var(--brand)}
-  .hint{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}
+  .field input:focus,.field select:focus{outline:2px solid rgba(15,118,110,.2);border-color:var(--brand)}
+  .hint{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .check{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink-2);margin-bottom:10px;cursor:pointer}
   .check input{width:18px;height:18px;margin:1px 0 0;accent-color:var(--brand);flex:0 0 auto}
-  .seg{display:flex;gap:6px;background:#f1f4f6;padding:4px;border-radius:12px;margin-bottom:12px}
+  .seg{display:flex;gap:6px;background:#f1f5f4;padding:4px;border-radius:12px;margin-bottom:12px}
   .seg button{
     flex:1;border:0;background:transparent;padding:9px 4px;border-radius:9px;
     font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;font-family:var(--font);
   }
-  .seg button.is-active{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.10)}
+  .seg button.is-active{background:#fff;color:var(--brand-2);box-shadow:0 1px 3px rgba(15,23,42,.10)}
 
   .output{
     background:#f8fafb;border:1px solid var(--line-2);border-radius:12px;
@@ -270,17 +343,17 @@
 
   /* phrases */
   .phrase{
-    border:1px solid var(--line-2);border-radius:12px;padding:11px 12px;margin-top:9px;background:#fbfcfd;
+    border:1px solid var(--line-2);border-radius:12px;padding:11px 12px;margin-top:9px;background:#fbfdfd;
   }
   .phrase-ja{font-size:14px;color:var(--ink);line-height:1.55;letter-spacing:.01em}
   .phrase-en{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:3px}
   .phrase .btn{margin-top:8px}
 
-  .tip-card{background:var(--amber-soft);border:1px solid #f0dcba;border-radius:var(--radius);padding:13px 14px;margin-bottom:12px}
-  .tip-card h4{margin:0 0 6px;font-size:12.5px;color:var(--amber);letter-spacing:-.01em}
+  .tip-card{background:#fdf6e8;border:1px solid #f0dcb4;border-radius:16px;padding:13px 14px;margin-bottom:12px}
+  .tip-card h4{margin:0 0 6px;font-size:12.5px;color:var(--amber);letter-spacing:-.02em}
   .tip-card ul{margin:0;padding-left:16px;font-size:12px;color:#6b521f;line-height:1.65}
   .tip-card li::marker{color:#d3ac62}
-  .info-card{background:#f4f7fa;border:1px solid #e1e7ee;border-radius:var(--radius);padding:13px 14px;margin-bottom:12px}
+  .info-card{background:#f5f8fa;border:1px solid #e1e8ee;border-radius:16px;padding:13px 14px;margin-bottom:12px}
   .info-card h4{margin:0 0 6px;font-size:12.5px;color:#33475e}
   .info-card p,.info-card ul{margin:0;font-size:12px;color:#4a5c70;line-height:1.65}
   .info-card ul{padding-left:16px}
@@ -291,102 +364,102 @@
   .sum-row:last-of-type{border-bottom:0}
   .sum-row strong{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
   .sum-row.grand{border-top:2px solid var(--ink);border-bottom:0;margin-top:6px;padding-top:10px;font-size:14px}
-  .sum-row.grand strong{font-size:20px;letter-spacing:-.02em}
+  .sum-row.grand strong{font-size:20px;letter-spacing:-.03em}
   .sum-row.krw strong{color:var(--brand-2);font-size:16px}
   .sum-note{font-size:11px;color:var(--muted);margin:8px 0 0;line-height:1.5}
 
   .status{
-    margin-top:10px;padding:11px 12px;border-radius:11px;font-size:12.5px;line-height:1.55;font-weight:600;
+    margin-top:10px;padding:11px 12px;border-radius:12px;font-size:12.5px;line-height:1.55;font-weight:600;
   }
   .status.ok{background:var(--brand-soft);color:var(--brand-2);border:1px solid #cfe6df}
   .status.over{background:var(--red-soft);color:var(--red);border:1px solid #f4cdcd}
 
   /* checklist */
-  .progress-wrap{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .progress-wrap{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:12px;box-shadow:var(--shadow)}
   .progress-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--ink-2);font-weight:700}
   .progress-top span.pct{color:var(--brand-2);font-size:15px}
-  .bar{height:7px;border-radius:999px;background:#eef1f4;margin-top:8px;overflow:hidden}
-  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#159a80,#0a5f4f);border-radius:999px;transition:width .25s}
+  .bar{height:7px;border-radius:999px;background:#eaf0ee;margin-top:8px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#159a80,#0b5d56);border-radius:999px;transition:width .25s}
   .check-item{
     display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--line-2);cursor:pointer;align-items:flex-start;
   }
   .check-item:last-child{border-bottom:0}
   .check-item input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--brand);flex:0 0 auto}
-  .check-item .ct{display:block;font-size:13.5px;font-weight:700;line-height:1.4;letter-spacing:-.01em}
+  .check-item .ct{display:block;font-size:13.5px;font-weight:700;line-height:1.4;letter-spacing:-.02em}
   .check-item .cd{display:block;font-size:11.5px;color:var(--muted);line-height:1.55;margin-top:3px}
   .check-item.done .ct{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
   .check-item.done .cd{opacity:.6}
 
   /* faq */
   details.faq{
-    background:#fff;border:1px solid var(--line);border-radius:14px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;
+    background:#fff;border:1px solid var(--line);border-radius:16px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;
   }
   details.faq > summary{
     list-style:none;cursor:pointer;padding:13px 14px;font-size:13.5px;font-weight:700;line-height:1.45;
-    display:flex;gap:10px;align-items:flex-start;letter-spacing:-.01em;
+    display:flex;gap:10px;align-items:flex-start;letter-spacing:-.02em;
   }
   details.faq > summary::-webkit-details-marker{display:none}
   details.faq > summary .idx{
-    flex:0 0 auto;width:20px;height:20px;border-radius:6px;background:var(--brand-soft);color:var(--brand-2);
-    font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px;
+    flex:0 0 auto;width:21px;height:21px;border-radius:7px;background:var(--brand-soft);color:var(--brand-2);
+    font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px;font-weight:700;
   }
   details.faq > summary .chev{margin-left:auto;flex:0 0 auto;color:var(--muted);transition:transform .18s}
   details.faq[open] > summary .chev{transform:rotate(45deg)}
-  details.faq .faq-body{padding:0 14px 14px 44px;font-size:12.5px;color:var(--ink-2);line-height:1.68}
+  details.faq .faq-body{padding:0 14px 14px 45px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
   details.faq .faq-body p{margin:0 0 8px}
   details.faq .faq-body ul{margin:0 0 8px;padding-left:16px}
   details.faq .faq-body li{margin-bottom:4px}
   details.faq .faq-body strong{color:var(--ink)}
   .ja-quote{
-    display:block;background:#f6f8fa;border:1px solid var(--line-2);border-radius:9px;
+    display:block;background:#f6f8fa;border:1px solid var(--line-2);border-radius:10px;
     padding:9px 10px;font-size:13px;color:var(--ink);margin:8px 0;
   }
   .inline-copy{margin-top:2px}
 
-  /* tab bar */
+  /* ---------- bottom navigation ---------- */
   .tabbar{
     position:fixed;bottom:0;left:50%;transform:translateX(-50%);
     width:100%;max-width:480px;z-index:40;
-    background:rgba(255,255,255,.96);
+    background:rgba(255,255,255,.98);
     backdrop-filter:saturate(160%) blur(14px);
     -webkit-backdrop-filter:saturate(160%) blur(14px);
     border-top:1px solid var(--line);
     display:grid;grid-template-columns:repeat(5,1fr);
-    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
-  }
-  @media (min-width:560px){
-    .shell{padding-bottom:92px}
+    gap:2px;
+    padding:7px 6px calc(7px + env(safe-area-inset-bottom));
+    box-shadow:0 -6px 22px rgba(15,23,42,.05);
   }
   .tab{
-    border:0;background:transparent;padding:6px 2px 5px;border-radius:11px;
+    border:0;background:transparent;padding:7px 2px 6px;border-radius:14px;
     display:flex;flex-direction:column;align-items:center;gap:3px;
-    font-size:10px;font-weight:600;color:#8b95a1;cursor:pointer;font-family:var(--font);letter-spacing:-.02em;
+    font-size:10px;font-weight:700;color:#8b98a5;cursor:pointer;font-family:var(--font);letter-spacing:-.02em;
+    transition:background .16s,color .16s;
   }
-  .tab svg{width:21px;height:21px}
-  .tab.is-active{color:var(--brand-2)}
-  .tab.is-active svg{stroke-width:2.1}
+  .tab svg{width:22px;height:22px}
+  .tab.is-active{background:var(--mint);color:var(--brand-2)}
+  .tab.is-active svg{stroke-width:2}
   .tab:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
 
   /* modal */
   .modal{
-    position:fixed;inset:0;z-index:60;background:rgba(15,20,26,.45);
+    position:fixed;inset:0;z-index:60;background:rgba(15,23,42,.45);
     display:flex;align-items:flex-end;justify-content:center;padding:0;
   }
   @media (min-width:560px){.modal{align-items:center;padding:20px}}
   .modal-card{
-    background:#fff;width:100%;max-width:480px;border-radius:20px 20px 0 0;
+    background:#fff;width:100%;max-width:480px;border-radius:22px 22px 0 0;
     padding:18px 18px calc(18px + env(safe-area-inset-bottom));max-height:86vh;overflow:auto;
   }
-  @media (min-width:560px){.modal-card{border-radius:20px}}
-  .modal-card h2{margin:0 0 10px;font-size:16px;letter-spacing:-.02em}
+  @media (min-width:560px){.modal-card{border-radius:22px}}
+  .modal-card h2{margin:0 0 10px;font-size:16px;letter-spacing:-.03em}
   .modal-card p{font-size:12.5px;color:var(--ink-2);line-height:1.7;margin:0 0 9px}
   .modal-card ul{margin:0 0 12px;padding-left:17px;font-size:12.5px;color:var(--ink-2);line-height:1.7}
   .modal-card li{margin-bottom:4px}
 
   /* toast */
-  .toast-wrap{position:fixed;left:0;right:0;bottom:calc(88px + env(safe-area-inset-bottom));z-index:70;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
+  .toast-wrap{position:fixed;left:0;right:0;bottom:calc(100px + env(safe-area-inset-bottom));z-index:70;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none}
   .toast{
-    background:rgba(21,26,33,.94);color:#fff;font-size:12.5px;font-weight:600;
+    background:rgba(15,23,42,.94);color:#fff;font-size:12.5px;font-weight:600;
     padding:10px 15px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.24);
     opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;max-width:88vw;text-align:center;
   }
@@ -419,20 +492,20 @@
 
   /* 클리닉 첫 화면 → 반입 준비물 CTA (KO 전용) */
   .import-cta{
-    display:block;width:100%;margin:2px 0 12px;padding:12px 13px;
-    border-radius:13px;border:1px solid #cfe6df;background:var(--brand-soft);color:var(--brand-2);
-    font-family:var(--font);font-size:12.5px;font-weight:700;line-height:1.45;letter-spacing:-.01em;
+    display:block;width:100%;margin:4px 0 12px;padding:14px 14px;
+    border-radius:16px;border:1px solid #cfe9e2;background:var(--mint);color:var(--brand-2);
+    font-family:var(--font);font-size:12.5px;font-weight:700;line-height:1.5;letter-spacing:-.02em;
     text-align:left;cursor:pointer;transition:transform .06s;
   }
   .import-cta:active{transform:scale(.995)}
   .import-cta:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
 
-  footer.app-foot{padding:8px 16px 18px;color:var(--muted);font-size:10.5px;line-height:1.6;text-align:center}
+  footer.app-foot{padding:10px 16px 18px;color:var(--muted);font-size:10.5px;line-height:1.6;text-align:center}
   footer.app-foot a{color:var(--brand-2)}
   /* 방문자 수 배지 — hits.sh 실시간 이미지, 로드 전·실패 시 숨김 */
   .visit-badge[hidden]{display:none}
   .visit-badge{display:inline-flex;align-items:center;line-height:0;flex:0 0 auto}
-  .visit-badge img{display:block;height:20px;width:auto;max-width:100%;border-radius:4px}
+  .visit-badge img{display:block;height:20px;width:auto;max-width:100%;border-radius:5px}
   .divider{height:1px;background:var(--line);margin:14px 0}
 </style>
 </head>
@@ -441,13 +514,14 @@
   <header class="app-header">
     <div class="brand">
       <div class="logo valid" aria-hidden="true">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.6-7 10-7 10z"></path>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3.4" y="3.4" width="17.2" height="17.2" rx="5"></rect>
+          <path d="M12 8.2v7.6M8.2 12h7.6"></path>
         </svg>
       </div>
       <div class="brand-text">
         <h1 id="brandTitle" data-en="Japan Mounjaro Visit Helper">일본 마운자로 방문 도우미</h1>
-        <p id="brandSub" data-en="Public information · book on the clinic's official page">공개 정보 정리 · 예약은 각 기관 공식 페이지에서</p>
+        <p id="brandSub" data-en="Official prices · booking · packing check">공식 공개가 비교 · 예약 · 반입 체크</p>
       </div>
       <div class="lang-switch" role="group" aria-label="언어 / Language">
         <button type="button" class="lang-btn is-active" id="langKo" data-lang="ko" aria-pressed="true">한국어</button>
@@ -477,16 +551,33 @@
   <main>
     <!-- ============ TAB 1: 클리닉 / Clinics ============ -->
     <section class="panel" id="panel-clinics" role="tabpanel" aria-labelledby="tab-clinics">
-      <div class="section-head">
-        <h2 class="panel-title" data-en="Clinics">클리닉 정보</h2>
-        <p class="panel-sub" data-en-html="Only the address, hours and prices each clinic publishes on its own official page. Prices reflect a &lt;strong&gt;2026-11 check&lt;/strong&gt;; confirm current terms on the official page before booking.">각 기관이 공식 페이지에 공개한 주소·진료시간·가격만 정리했습니다. 표기 가격은 <strong>2026-11 확인 기준</strong>이며, 최신 조건은 예약 전 공식 페이지에서 확인하세요.</p>
+      <div class="hero" id="heroSummary">
+        <span class="hero-pill" data-en="Verified Nov 2026">2026-11 최신 확인</span>
+        <h2 class="hero-title"><span id="heroCount">11</span><span data-en=" Japanese clinics compared">곳 한눈에 비교</span></h2>
+        <p class="hero-sub" data-en="Official published prices only — no ads or brokerage">의료 알선·광고 없이 공식 홈페이지 공개가만 모았어요</p>
+        <div class="hero-stats">
+          <div class="stat-tile">
+            <span class="stat-label" data-en="2.5mg from">2.5mg 최저</span>
+            <strong class="stat-value" id="statMin25">¥8,000~</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label" data-en="5mg from">5mg 최저</span>
+            <strong class="stat-value" id="statMin5">¥14,000~</strong>
+          </div>
+          <div class="stat-tile">
+            <span class="stat-label" data-en="English support">한국어 안내</span>
+            <strong class="stat-value" id="statLang">5곳 지원</strong>
+          </div>
+        </div>
       </div>
+
+      <p class="panel-note" data-en-html="Only the address, hours and prices each clinic publishes on its own official page. Prices reflect a &lt;strong&gt;2026-11 check&lt;/strong&gt;; confirm current terms on the official page before booking.">각 기관이 공식 페이지에 공개한 주소·진료시간·가격만 정리했습니다. 표기 가격은 <strong>2026-11 확인 기준</strong>이며, 최신 조건은 예약 전 공식 페이지에서 확인하세요.</p>
 
       <div class="chips" id="regionChips" role="group" aria-label="지역 필터" data-en-aria="Region filter">
         <button class="chip is-active" data-region-key="all" data-en="All" aria-pressed="true">전체</button>
         <button class="chip" data-region-key="tokyo" data-en="Tokyo" aria-pressed="false">도쿄</button>
-        <button class="chip" data-region-key="fukuoka" data-en="Fukuoka" aria-pressed="false">후쿠오카</button>
         <button class="chip" data-region-key="osaka" data-en="Osaka" aria-pressed="false">오사카</button>
+        <button class="chip" data-region-key="fukuoka" data-en="Fukuoka" aria-pressed="false">후쿠오카</button>
         <button class="chip" data-region-key="other" data-en="Other (Nagoya · Sapporo)" aria-pressed="false">기타(나고야·삿포로)</button>
         <button class="chip" data-region-key="tsushima" data-en="Tsushima (delivery)" aria-pressed="false">대마도 수령</button>
       </div>
@@ -509,7 +600,7 @@
       </div>
 
       <details class="compare" id="compareBox">
-        <summary><span data-en="Published price comparison (simple price order — not a recommendation)">공개가 비교표 (단순 가격순 · 추천 아님)</span>
+        <summary><span data-en="Published price comparison · by dose (simple price order — not a recommendation)">공개가 비교표 · 용량별 (단순 가격순 · 추천 아님)</span>
           <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
         </summary>
         <div class="compare-body" id="compareBody"></div>
@@ -521,7 +612,6 @@
         </svg>
         <input type="search" id="clinicSearch" placeholder="클리닉 이름 · 역 이름으로 검색" data-en-ph="Search by clinic or station" aria-label="클리닉 또는 역 이름 검색" data-en-aria="Search by clinic or station name" autocomplete="off">
       </div>
-
       <div id="clinicList" class="clinic-list"></div>
 
       <button type="button" class="import-cta" id="importSuppliesCta" data-lang-only="ko">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기 (보냉팩·아이스팩·보냉파우치) →</button>
@@ -936,24 +1026,24 @@
 
   <nav class="tabbar" role="tablist" aria-label="주요 메뉴" data-en-aria="Main menu">
     <button class="tab is-active" role="tab" id="tab-clinics" data-tab="clinics" aria-selected="true" aria-controls="panel-clinics">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9.5L12 4l8 5.5V20"></path><path d="M9.5 20v-5.5h5V20"></path><path d="M12 8.2v2.6M10.7 9.5h2.6"></path></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect><path d="M12 8.2v7.6M8.2 12h7.6"></path></svg>
       <span data-en="Clinics">클리닉</span>
     </button>
     <button class="tab" role="tab" id="tab-booking" data-tab="booking" aria-selected="false" aria-controls="panel-booking">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h16v13H4z"></path><path d="M4 10.5h16M8.5 4v4M15.5 4v4"></path><path d="M8.5 14h3M8.5 17h6"></path></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.3 3.6h8.2l3.4 3.4v13.4H6.3z"></path><path d="M14.5 3.6V7h3.4"></path><path d="M9 11.6h6.2M9 15h6.2M9 18.4h3.8"></path></svg>
       <span data-en="Booking">예약</span>
     </button>
     <button class="tab" role="tab" id="tab-cost" data-tab="cost" aria-selected="false" aria-controls="panel-cost">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="3" width="15" height="18" rx="2.5"></rect><path d="M8.5 7.5h7M8.5 12h2.5M13 12h2.5M8.5 16h2.5M13 16h2.5"></path></svg>
-      <span data-en="Cost">비용</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="2.8" width="14.8" height="18.4" rx="2.8"></rect><rect x="7.6" y="6" width="8.8" height="3.4" rx="1.2"></rect><path d="M8.4 13.2h.01M12 13.2h.01M15.6 13.2h.01M8.4 17h.01M12 17h.01M15.6 17h.01"></path></svg>
+      <span data-en="Cost">계산기</span>
     </button>
     <button class="tab" role="tab" id="tab-import" data-tab="import" aria-selected="false" aria-controls="panel-import">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5h6v3.2H9z"></path><path d="M7 7.7h10l1.4 3.3V19a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6.4 19v-8z"></path><path d="M9.5 12.5h5M12 15v3.5"></path></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8v18.4M4.1 7.5l15.8 9M19.9 7.5l-15.8 9"></path><path d="M12 6.6l-1.9 1.9M12 6.6l1.9 1.9M12 17.4l-1.9-1.9M12 17.4l1.9-1.9"></path></svg>
       <span data-en="Packing">반입</span>
     </button>
     <button class="tab" role="tab" id="tab-faq" data-tab="faq" aria-selected="false" aria-controls="panel-faq">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M9.6 9.6a2.5 2.5 0 1 1 3.6 2.2c-.8.5-1.2 1-1.2 1.9"></path><path d="M12 17h.01"></path></svg>
-      <span data-en="Tips">팁</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"></circle><path d="M12 11v5.4M12 7.9h.01"></path></svg>
+      <span data-en="FAQ">실전팁</span>
     </button>
   </nav>
 </div>
@@ -1611,19 +1701,51 @@
     renderDynamic();
   }
 
+  /* ---------- 첫 화면 요약(히어로) ---------- */
+  function minMonthlyPrice(dose) {
+    var best = null;
+    CLINICS.forEach(function (c) {
+      var p = monthlyPrice(c, dose);
+      if (p === null) return;
+      if (best === null || p < best) best = p;
+    });
+    return best;
+  }
+
+  function supportCount() {
+    return CLINICS.filter(function (c) {
+      var info = (c.lang && c.lang[LANG]) ? c.lang[LANG] : null;
+      if (!info) return false;
+      if (LANG === 'en') return info.level === 'full' || info.level === 'partial';
+      return info.level !== 'none';
+    }).length;
+  }
+
+  function renderHero() {
+    if ($('heroCount')) $('heroCount').textContent = String(CLINICS.length);
+    var p25 = minMonthlyPrice('2.5');
+    var p5 = minMonthlyPrice('5');
+    if ($('statMin25')) $('statMin25').textContent = p25 === null ? '—' : yen(p25) + '~';
+    if ($('statMin5')) $('statMin5').textContent = p5 === null ? '—' : yen(p5) + '~';
+    if ($('statLang')) {
+      var n = supportCount();
+      $('statLang').textContent = L(n + '곳 지원', n + (n === 1 ? ' clinic' : ' clinics'));
+    }
+  }
+
   /* ---------- 카드 조각 ---------- */
   function langBadge(c) {
     var info = c.lang && c.lang[LANG] ? c.lang[LANG] : null;
-    if (!info) return '';
+    var lv = info ? info.level : null;
     if (LANG === 'en') {
-      if (info.level === 'full') return '<span class="badge ok">' + esc(info.label) + '</span>';
-      if (info.level === 'partial') return '<span class="badge ok">' + esc(info.label) + '</span>';
-      return '<span class="badge">' + esc(info.label) + '</span>';
+      if (lv === 'full' || lv === 'partial') return '<span class="badge lang-ok">' + L('영어 안내 OK', 'English support OK') + '</span>';
+      if (lv === 'staff') return '<span class="badge lang-ja">' + L('한국어 스태프', 'Korean-speaking staff') + '</span>';
+      return '<span class="badge lang-ja">' + L('일본어 진료', 'Japanese only') + '</span>';
     }
-    if (info.level === 'full') return '<span class="badge ok">한국어 진료 확인</span>';
-    if (info.level === 'staff') return '<span class="badge ok">한국어 상담 스태프</span>';
-    if (info.level === 'info') return '<span class="badge ok">한국어 안내 페이지</span>';
-    return '<span class="badge">한국어 표기 확인 안 됨</span>';
+    if (lv === 'full') return '<span class="badge lang-ok">한국어 진료 OK</span>';
+    if (lv === 'staff') return '<span class="badge lang-ok">한국어 상담 스태프</span>';
+    if (lv === 'info') return '<span class="badge lang-ok">한국어 안내 OK</span>';
+    return '<span class="badge lang-ja">일본어 진료</span>';
   }
 
   function doseKeys(tiers) {
@@ -1637,24 +1759,62 @@
       return '<tr><td>' + d + 'mg</td><td>' + yen(t.m1) + '</td><td>' + yen(monthTotal(t, 3)) + '</td></tr>';
     }).join('');
     return '<div class="price-block">'
-      + '<div class="price-head"><span>' + L('공개 가격 · 2026-11 확인', 'Published prices · checked 2026-11') + '</span><span>' + L('세금 포함', 'Tax included') + '</span></div>'
+      + '<div class="price-head"><span>' + L('공개 가격 · 2026-11 확인 · 1개월(4펜) 기준', 'Published prices · checked 2026-11 · 1 month (4 pens)') + '</span><span>' + L('세금 포함', 'Tax included') + '</span></div>'
       + '<table class="price"><thead><tr><th>' + L('용량', 'Dose') + '</th><th>' + L('1개월(4펜)', '1 month (4 pens)') + '</th><th>' + L('3개월(12펜)', '3 months (12 pens)') + '</th></tr></thead><tbody>'
       + rows + '</tbody></table>'
       + '<div class="price-foot">' + esc(txt(c.priceNote)) + '</div>'
       + '</div>';
   }
 
-  function clinicCard(c) {
+  // 카드 상단 3칸 가격 타일: 2.5mg · 5mg · (정렬 중인 용량 또는 가장 위 용량)
+  function keyTiles(c) {
+    var keys = doseKeys(c.tiers);
+    if (!keys.length) return [];
+    var picks = [];
+    ['2.5', '5'].forEach(function (d) { if (keys.indexOf(d) !== -1) picks.push(d); });
+    var third = null;
+    var active = SORT_DOSE[state.sort];
+    if (active && keys.indexOf(active) !== -1 && picks.indexOf(active) === -1) third = active;
+    if (!third) {
+      var rest = keys.filter(function (d) { return picks.indexOf(d) === -1; });
+      if (rest.length) third = rest[rest.length - 1];
+    }
+    if (third && picks.indexOf(third) === -1) picks.push(third);
+    return picks;
+  }
+
+  function priceTiles(c) {
+    return keyTiles(c).map(function (d) {
+      var t = c.tiers[d];
+      var sub;
+      if (d === '2.5') {
+        if (typeof c.consultFee !== 'number') sub = L('진찰료 공식 확인', 'consult: official check');
+        else if (c.consultFee > 0) sub = L('진찰료 ', 'consult ') + yen(c.consultFee);
+        else sub = L('진찰료 무료', 'no consult fee');
+      } else if (t && typeof t.m3 === 'number') {
+        sub = L('3개월 ', '3 mo ') + yen(t.m3);
+      } else {
+        sub = L('공개가', 'listed price');
+      }
+      return '<div class="price-tile">'
+        + '<span class="pt-label">' + esc(d) + 'mg' + L(' (1개월)', ' (1 mo)') + '</span>'
+        + '<strong class="pt-value">' + yen(t ? t.m1 : null) + '</strong>'
+        + '<span class="pt-sub">' + esc(sub) + '</span>'
+        + '</div>';
+    }).join('');
+  }
+
+  // 펼치면 나오는 전체 정보(주소·시간·연락처·비용 규칙·언어 안내·전체 가격표·메모)
+  function clinicMore(c) {
     var notes = (c.notes && c.notes[LANG] ? c.notes[LANG] : (c.notes && c.notes.ko) || []).map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('');
-    var region = REGION_LABEL[c.regionKey] ? REGION_LABEL[c.regionKey][LANG] : '';
     var phone = txt(c.phone) || '—';
     var phoneNote = txt(c.phoneNote);
-    return '<article class="card">'
-      + '<div class="card-top"><div><h3>' + esc(txt(c.name)) + '</h3><p class="ja-name">' + esc(c.nameJa) + '</p></div>'
-      + '<span class="badge region">' + esc(region) + '</span></div>'
-      + '<div class="badge-row">' + langBadge(c)
-      + (c.tsushima ? '<span class="badge warn">' + esc(region) + ' · ' + L('대마도 배송', 'Tsushima delivery') + '</span>' : '')
-      + '<span class="badge">' + esc(txt(c.area)) + '</span></div>'
+    var langInfo = c.lang && c.lang[LANG] ? c.lang[LANG] : null;
+    return '<details class="clinic-more">'
+      + '<summary><span>' + L('주소·진료시간·비용 규칙 · 전체 가격표', 'Address, hours, fee rules · full price list') + '</span>'
+      + '<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>'
+      + '</summary>'
+      + '<div class="clinic-more-body">'
       + '<dl class="meta">'
       + '<div class="meta-row"><dt>' + L('주소', 'Address') + '</dt><dd>' + esc(c.address) + '</dd></div>'
       + '<div class="meta-row"><dt>' + L('가는 길', 'Getting there') + '</dt><dd>' + esc(txt(c.station)) + '</dd></div>'
@@ -1662,21 +1822,42 @@
       + '<div class="meta-row"><dt>' + L('연락처', 'Phone') + '</dt><dd>' + esc(phone) + (phoneNote ? ' (' + esc(phoneNote) + ')' : '') + '</dd></div>'
       + '<div class="meta-row"><dt>' + L('비용 규칙', 'Fee rules') + '</dt><dd>' + esc(txt(c.consultNote)) + '<br>' + esc(txt(c.cancel)) + '<br>' + esc(txt(c.cert)) + '</dd></div>'
       + '</dl>'
-      + '<div class="korean-note">' + esc(txt(c.lang && c.lang[LANG] ? c.lang[LANG].detail : '')) + '</div>'
+      + '<div class="korean-note">' + esc(langInfo ? langInfo.detail : '') + '</div>'
       + priceTable(c)
       + '<ul class="note-list">' + notes + '</ul>'
-      + '<div class="actions">'
-      + '<a class="btn primary" href="' + esc(c.bookingUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(txt(c.bookingLabel)) + '</a>'
-      + '<a class="btn" href="' + esc(c.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + L('구글 지도', 'Google Maps') + '</a>'
-      + '<button class="btn ghost" type="button" data-calc="' + esc(c.id) + '">' + L('계산기에 넣기', 'Add to calculator') + '</button>'
-      + '</div>'
-      + '<div class="copy-row" style="margin-top:8px">'
+      + '<div class="copy-row">'
       + '<a class="btn small ghost" href="' + esc(c.officialUrl) + '" target="_blank" rel="noopener noreferrer">' + L('공식 페이지', 'Official page') + '</a>'
       + (c.localUrl ? '<a class="btn small ghost" href="' + esc(c.localUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(txt(c.localLabel)) + '</a>' : '')
+      + '<button class="btn small ghost" type="button" data-calc="' + esc(c.id) + '">' + L('계산기에 넣기', 'Add to calculator') + '</button>'
       + '</div>'
-      + '</article>';
+      + '</div></details>';
   }
 
+  function clinicCard(c) {
+    var region = REGION_LABEL[c.regionKey] ? REGION_LABEL[c.regionKey][LANG] : '';
+    var min25 = minMonthlyPrice('2.5');
+    var own25 = monthlyPrice(c, '2.5');
+    var isLowest = (own25 !== null && min25 !== null && own25 === min25);
+    return '<article class="card">'
+      + '<div class="card-head">'
+      + '<h3 class="clinic-name">' + esc(txt(c.name)) + '</h3>'
+      + '<p class="ja-name">' + esc(c.nameJa) + '</p>'
+      + '<p class="clinic-sub">' + esc(txt(c.station)) + ' · ' + esc(txt(c.hours)) + '</p>'
+      + '<div class="card-badges">'
+      + '<span class="badge region">' + esc(region) + '</span>'
+      + langBadge(c)
+      + (c.tsushima ? '<span class="badge warn">' + L('대마도 배송', 'Tsushima delivery') + '</span>' : '')
+      + (isLowest ? '<span class="badge amber">' + L('2.5mg 공개 최소', 'Lowest listed 2.5mg') + '</span>' : '')
+      + '</div>'
+      + '</div>'
+      + '<div class="price-grid">' + priceTiles(c) + '</div>'
+      + '<div class="card-actions">'
+      + '<a class="btn primary" href="' + esc(c.bookingUrl) + '" target="_blank" rel="noopener noreferrer">' + esc(txt(c.bookingLabel)) + ' →</a>'
+      + '<a class="btn ghost" href="' + esc(c.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + L('구글 지도 열기', 'Open in Maps') + '</a>'
+      + '</div>'
+      + clinicMore(c)
+      + '</article>';
+  }
   function tsushimaGuide() {
     function office(id, regionLabel, jp, addr, hours, code) {
       return '<div style="border:1px solid var(--line-2);border-radius:12px;padding:11px 12px;margin-top:8px;background:#fbfdfd">'
@@ -1863,6 +2044,7 @@
   }
 
   function renderClinics() {
+    renderHero();
     var list = $('clinicList');
     if (!list) return;
     var items = visibleClinics();
