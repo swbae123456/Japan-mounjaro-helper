@@ -7,8 +7,9 @@
  * v5: GoatCounter 방문자 통계 스크립트 추가.
  * v6: 상단 헤더 방문자 수 배지(GoatCounter 공개 카운터) 추가.
  * v7: ?lang=en·ko 공유 링크 + 비한국어 브라우저 자동 영어 전환, 클리닉 데이터 3건 정정.
+ * v8: 12.5mg 가격순 정렬 · 비교표·계산기 용량 추가, 클라라 3개월 공개가 보강.
  */
-const VERSION = 'v7';
+const VERSION = 'v8';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
