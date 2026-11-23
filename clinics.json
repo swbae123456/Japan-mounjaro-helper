@@ -64,8 +64,8 @@
         }
       },
       "priceNote": {
-        "ko": "내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준)으로 계산. 15mg은 간다점 취급 없음(신주쿠점만).",
-        "en": "In-clinic prescription, tax included. 1 month = 4 pens; 2–5 month courses are charged at ¥7,500 per month (5 mg basis). 15 mg is not stocked at Kanda (Shinjuku only)."
+        "ko": "내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(2.5mg 기준)으로 계산. 15mg은 간다점 취급 없음(신주쿠점만).",
+        "en": "In-clinic prescription, tax included. 1 month = 4 pens; 2–5 month courses are charged at ¥7,500 per month (2.5 mg basis). 15 mg is not stocked at Kanda (Shinjuku only)."
       },
       "consultFee": 0,
       "consultNote": {
@@ -171,8 +171,8 @@
         }
       },
       "priceNote": {
-        "ko": "내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(5mg 기준). 15mg은 신주쿠점만 취급.",
-        "en": "In-clinic prescription, tax included. 1 month = 4 pens; 2–5 month courses are charged at ¥7,500 per month (5 mg basis). 15 mg is stocked only at Shinjuku."
+        "ko": "내원(클리닉) 처방 기준 · 세금 포함. 1개월=4펜, 2~5개월분은 1개월당 7,500엔(2.5mg 기준). 15mg은 신주쿠점만 취급.",
+        "en": "In-clinic prescription, tax included. 1 month = 4 pens; 2–5 month courses are charged at ¥7,500 per month (2.5 mg basis). 15 mg is stocked only at Shinjuku."
       },
       "consultFee": 0,
       "consultNote": {
@@ -638,8 +638,8 @@
       },
       "address": "〒564-0027 大阪府吹田市朝日町1-1 吹田さんくす1番館 1F",
       "hours": {
-        "ko": "8:30~13:00 / 14:00~20:00 (화 14:00~18:00, 금 14:00~19:00) · 일·공휴일 휴진",
-        "en": "8:30–13:00 / 14:00–20:00 (Tue 14:00–18:00, Fri 14:00–19:00) · closed Sundays and holidays"
+        "ko": "8:30~13:00 / 14:00~20:00 (화·토 14:00~18:00, 금 14:00~19:00) · 일·공휴일 휴진",
+        "en": "8:30–13:00 / 14:00–20:00 (Tue and Sat 14:00–18:00, Fri 14:00–19:00) · closed Sundays and holidays"
       },
       "phone": "—",
       "phoneNote": {
@@ -1047,7 +1047,7 @@
         "ko": "11:00~20:00 · 연중무휴(연말연시 휴진)",
         "en": "11:00–20:00 · open every day (closed over New Year)"
       },
-      "phone": "—",
+      "phone": "011-211-1244",
       "phoneNote": {
         "ko": "",
         "en": ""
