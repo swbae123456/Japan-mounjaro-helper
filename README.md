@@ -2,6 +2,8 @@
 
 일본에서 마운자로(マンジャロ)를 자가치료 목적으로 처방·수령해 자기 나라로 가져갈 때 필요한 **공개 정보 정리 + 방문 준비 도구**를 모은 모바일 우선 웹앱입니다. **한국어(KO)와 영어(EN)를 상단에서 1탭으로 전환**할 수 있고, 오른쪽 위 `한국어 | EN` 버튼으로 언제든 바꿀 수 있습니다. 빌드 도구·외부 CDN·서버가 필요 없는 정적 앱입니다.
 
+처음 여는 언어는 **① 주소의 `?lang=en`/`?lang=ko` → ② 이전에 고른 언어(브라우저 저장) → ③ 브라우저 언어** 순으로 정해집니다. 한국어 브라우저가 아니면(일본어·중국어·스페인어 등) 영어로 자동 표시되며, 공유용 영어 링크는 `https://swbae123456.github.io/Japan-mounjaro-helper/?lang=en` 입니다. `?lang=` 링크로 들어온 뒤 `한국어`를 누르면 주소의 값도 함께 바뀝니다.
+
 - 앱: [`index.html`](./index.html) (기관 데이터 폴백 내장)
 - 기관 데이터: [`clinics.json`](./clinics.json) — 11곳, 한국어·영어 필드. 앱은 실행 시 `fetch('./clinics.json')`을 시도하고, `file://`·오프라인·실패 시 `index.html` 내장 사본으로 자동 폴백합니다
 - PWA: [`manifest.json`](./manifest.json), [`sw.js`](./sw.js), [`icon-192.png`](./icon-192.png), [`icon-512.png`](./icon-512.png)
@@ -153,12 +155,12 @@ git push -u origin main
 ### 배포 후 체크
 
 - 모바일에서 실제 기기로 열어 폰트·줄바꿈·하단 탭 가림 확인
-- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v6` 생성 확인
+- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v7` 생성 확인
 - 홈 화면에 추가한 뒤 비행기 모드에서 재실행 → 화면이 뜨는지 확인(오프라인 캐시)
 - `index.html`을 수정해 다시 배포하면, 서비스 워커 캐시는 버전(`sw.js`의 `VERSION`)을 올려야 확실히 갱신됩니다
 - 도메인 연결 시 HTTPS 강제
 - 데이터 갱신: **`clinics.json`만 수정**하고 `python3 tools/embed_clinics.py`로 `index.html` 내장 폴백을 다시 생성한 뒤 `2026-11 확인` 표기를 갱신 (두 데이터가 같은지 `python3 tools/embed_clinics.py --check`, `test_app.py`가 검사)
-- 서비스 워커 캐시 이름은 `jmh-v6`(`clinics.json` 프리캐시 포함)
+- 서비스 워커 캐시 이름은 `jmh-v7`(`clinics.json` 프리캐시 포함)
 - 방문자 통계: `index.html` 끝에 GoatCounter 스크립트(`https://swbae12345.goatcounter.com/count`, `https://gc.zgo.at/count.js`)가 삽입되어 있고, 집계는 그 주소의 대시보드에서 확인합니다. 입력값은 전송되지 않으며 쿠키도 쓰지 않습니다.
 - 상단 헤더 방문자 수 배지: 페이지를 열면 헤더의 `가격·시간 2026-11 확인` 태그 옆에 표시됩니다. 로드 후 `https://swbae12345.goatcounter.com/counter/TOTAL.json`을 한 번 조회해 `총 방문자수 · N` / `Total visitors · N`을 보여줍니다. GoatCounter 사이트 설정에서 공개 카운터(Allow adding visitor counts on your website)를 켜지 않았거나 오프라인이면 403·실패로 끝나고 **배지는 그대로 숨겨집니다**(오류 표시 없음).
 

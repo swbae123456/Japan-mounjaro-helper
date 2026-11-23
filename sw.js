@@ -6,8 +6,9 @@
  * v4: 예약 탭 이름 입력 예시를 일반 이름으로 교체(개인정보 흔적 제거).
  * v5: GoatCounter 방문자 통계 스크립트 추가.
  * v6: 상단 헤더 방문자 수 배지(GoatCounter 공개 카운터) 추가.
+ * v7: ?lang=en·ko 공유 링크 + 비한국어 브라우저 자동 영어 전환, 클리닉 데이터 3건 정정.
  */
-const VERSION = 'v6';
+const VERSION = 'v7';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
