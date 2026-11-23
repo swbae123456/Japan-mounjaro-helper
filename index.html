@@ -392,6 +392,41 @@
   }
   .toast.show{opacity:1;transform:translateY(0)}
 
+  /* 쿠팡 파트너스 준비물 카드 (KO 전용) */
+  .coupang-card{border-color:#f0d4d4;background:linear-gradient(180deg,#fffafa,#fff)}
+  .coupang-card h3{display:flex;align-items:center;gap:6px}
+  .coupang-notice{
+    margin:9px 0 12px;padding:9px 11px;border-radius:10px;
+    background:#fff1f1;border:1px solid #f0c7c7;color:#a51c1c;
+    font-size:11.5px;font-weight:700;line-height:1.5;letter-spacing:-.01em;
+  }
+  .coupang-links{display:grid;gap:8px}
+  .coupang-link{
+    display:flex;align-items:center;gap:10px;text-decoration:none;
+    border:1px solid var(--line);border-radius:12px;background:#fff;
+    padding:11px 12px;color:var(--ink);transition:background .14s,transform .06s;
+  }
+  .coupang-link:active{background:#fbf7f7;transform:scale(.995)}
+  .coupang-link .cp-ico{
+    flex:0 0 auto;width:30px;height:30px;border-radius:9px;
+    background:#fff1f1;color:#c0272d;display:flex;align-items:center;justify-content:center;
+  }
+  .coupang-link .cp-body{flex:1 1 auto;min-width:0}
+  .coupang-link .cp-name{display:block;font-size:13.5px;font-weight:700;letter-spacing:-.01em}
+  .coupang-link .cp-sub{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .coupang-link .cp-arrow{flex:0 0 auto;color:#c0272d;font-size:15px;font-weight:700}
+  .coupang-foot{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.55}
+
+  /* 클리닉 첫 화면 → 반입 준비물 CTA (KO 전용) */
+  .import-cta{
+    display:block;width:100%;margin:2px 0 12px;padding:12px 13px;
+    border-radius:13px;border:1px solid #cfe6df;background:var(--brand-soft);color:var(--brand-2);
+    font-family:var(--font);font-size:12.5px;font-weight:700;line-height:1.45;letter-spacing:-.01em;
+    text-align:left;cursor:pointer;transition:transform .06s;
+  }
+  .import-cta:active{transform:scale(.995)}
+  .import-cta:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+
   footer.app-foot{padding:8px 16px 18px;color:var(--muted);font-size:10.5px;line-height:1.6;text-align:center}
   footer.app-foot a{color:var(--brand-2)}
   /* 방문자 수 배지 — hits.sh 실시간 이미지, 로드 전·실패 시 숨김 */
@@ -488,6 +523,8 @@
       </div>
 
       <div id="clinicList" class="clinic-list"></div>
+
+      <button type="button" class="import-cta" id="importSuppliesCta" data-lang-only="ko">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기 (보냉팩·아이스팩·보냉파우치) →</button>
 
       <p class="hint" id="clinicHint" style="padding:0 2px 6px" data-en="The language toggle above filters clinics where the official page confirms Korean support; in English mode it shows clinics whose official page confirms English (or Korean/Japanese/English) consultation. Language support differs by clinic — read the language line on each card first. Prices are self-pay (outside Japanese health insurance); whether a prescription is issued and at what dose is decided by the doctor who sees you.">‘한국어 안내 확인됨’은 해당 기관 공식 페이지에 한국어 안내(페이지·문진표·진료)가 표기된 경우만 포함합니다. 진료 언어는 기관마다 다르니 카드의 ‘한국어 안내’ 줄을 먼저 확인하세요. 가격은 자유진료(보험 적용 외) 기준이며, 처방 여부·용량은 진료한 의사가 판단합니다.</p>
     </section>
@@ -795,6 +832,38 @@
 
       <div class="card" id="checkList"></div>
 
+      <div class="card coupang-card" id="coupangPackingCard" data-lang-only="ko">
+        <h3>✈️ 출국 전 기내 반입 준비물 (쿠팡)</h3>
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        <div class="coupang-links">
+          <a class="coupang-link" href="https://link.coupang.com/a/iUFWlUrZF6" target="_blank" rel="noopener noreferrer sponsored">
+            <span class="cp-ico" aria-hidden="true">🧊</span>
+            <span class="cp-body">
+              <span class="cp-name">보냉팩</span>
+              <span class="cp-sub">기내 반입용 보냉팩 확인하기</span>
+            </span>
+            <span class="cp-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="coupang-link" href="https://link.coupang.com/a/iUGf88QEwe" target="_blank" rel="noopener noreferrer sponsored">
+            <span class="cp-ico" aria-hidden="true">❄️</span>
+            <span class="cp-body">
+              <span class="cp-name">아이스팩</span>
+              <span class="cp-sub">개당 100g 이하 규격 확인 후 선택</span>
+            </span>
+            <span class="cp-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="coupang-link" href="https://link.coupang.com/a/iUGi5q4pR6" target="_blank" rel="noopener noreferrer sponsored">
+            <span class="cp-ico" aria-hidden="true">🎒</span>
+            <span class="cp-body">
+              <span class="cp-name">보냉파우치</span>
+              <span class="cp-sub">냉장 펜 휴대용 파우치 확인하기</span>
+            </span>
+            <span class="cp-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="coupang-foot">구매 전에 항공사·공항의 액체·젤류 규정(개당 100g 이하, 1L 투명 지퍼백)을 먼저 확인하세요. 상품의 브랜드·용량·구성은 링크의 판매 페이지에서 직접 확인하세요.</p>
+      </div>
+
       <div class="card">
         <h3 data-en="Japanese phrase for airport security">보안검색대 제시용 일본어</h3>
         <p class="ja-name" style="margin-bottom:8px" data-en="Take the cold packs out of your bag and show this line together with your prescription and the receipt in your name.">보냉제를 꺼내며 이 문구와 처방 증빙을 함께 보여주세요.</p>
@@ -895,21 +964,23 @@
     <p id="complianceLead" data-en-html="&lt;strong&gt;This prototype is an informational directory and preparation tool built from what each clinic publishes. It is not medical brokerage, a booking agency or prescription drug advertising. Prescription eligibility and dosage are determined solely by a licensed physician in Japan during consultation.&lt;/strong&gt;"><strong>본 프로토타입은 의료기관 알선·예약 대행·의약품 광고 목적이 아니며, 각 기관이 공개한 일반 정보와 방문 준비 도구를 정리한 정보 도우미입니다. 처방 여부 및 용량은 반드시 현지 의사의 대면 진료 판단에 따릅니다.</strong></p>
     <ul id="complianceList" data-lang-only="ko">
       <li>가격·진료시간·주소는 각 기관 공식 페이지에서 <strong>2026-11 확인</strong>한 값이며, 이후 변경될 수 있습니다. 예약 전 공식 페이지에서 다시 확인하세요.</li>
-      <li>예약·결제·진료는 모두 해당 기관과 이용자 사이에서 이루어집니다. 이 앱은 대신 예약하거나 수수료를 받지 않습니다.</li>
+      <li>예약·결제·진료는 모두 해당 기관과 이용자 사이에서 이루어집니다. 이 앱은 대신 예약하지 않으며, <strong>클리닉 정보와 예약 링크로는 어떤 수수료·대가도 받지 않습니다(알선·광고 아님)</strong>.</li>
       <li>마운자로의 체중 관리 목적 사용은 일본에서 승인된 효능·효과 범위 밖(자유진료)이며, 일본 건강보험이 적용되지 않습니다.</li>
       <li>이름·금액 등 입력값은 서버로 전송되지 않습니다. 체크리스트 상태와 계산기 설정(환율·금액)만 이 기기 브라우저(localStorage)에 저장되고, 입력한 이름은 저장하지 않습니다.</li>
       <li>방문자 수를 세기 위해 페이지를 열 때 GoatCounter(gc.zgo.at)로 조회 기록이 익명으로 전송됩니다(쿠키 미사용, IP는 집계 후 저장하지 않음). 이 앱에 입력한 내용은 이 통계로 전송되지 않습니다.</li>
       <li>반입·세관 정보는 일반 참고이며 법률 자문이 아닙니다. 최종 판단은 세관·항공사 안내를 따릅니다.</li>
-      <li>공개 전·수익화 전에는 관련 법령(의료법·약사법·의료광고 가이드라인 등) 검토가 필요합니다.</li>
+      <li>선택 사항인 <strong>반입 준비물(보냉팩·아이스팩·보냉파우치) 링크만 쿠팡 파트너스 제휴 링크</strong>이며, 해당 카드 상단에 수수료 고지를 표시합니다. 의료기관 정보·예약 링크와는 무관하고, 구매하지 않아도 앱의 모든 정보를 그대로 볼 수 있습니다.</li>
+      <li>공개 전·수익화 전에는 관련 법령(의료법·약사법·의료광고 가이드라인·표시광고법 등) 검토가 필요합니다.</li>
     </ul>
     <ul id="complianceListEn" data-lang-only="en" hidden>
       <li>Prices, hours and addresses were checked on each clinic's official page in <strong>2026-11</strong> and can change. Confirm again on the official page before booking.</li>
-      <li>Booking, payment and consultation all happen between you and the clinic. This app does not book on your behalf and takes no commission.</li>
+      <li>Booking, payment and consultation all happen between you and the clinic. This app does not book on your behalf, and <strong>takes no commission or payment for clinic information or booking links (not a brokerage or advertisement)</strong>.</li>
       <li>Using Mounjaro for weight management is outside the approved indication in Japan (self-pay) and is not covered by Japanese health insurance.</li>
       <li>What you type (names, amounts) is never sent to a server. Only the checklist state and calculator settings (rates, amounts) are kept in this browser's localStorage; names are not stored.</li>
       <li>To count visits, opening the page sends an anonymous page-view hit to GoatCounter (gc.zgo.at); it uses no cookies and the IP is not stored after counting. Nothing you type in this app is included in that hit.</li>
       <li>Import and customs notes are general information, not legal advice. Your own country's customs and your airline have the final say.</li>
-      <li>Legal review (medical law, pharmaceutical law, advertising guidelines and so on) is needed before public release or monetisation.</li>
+      <li>Only the optional <strong>travel-supply links (cold bag, ice packs, insulated pouch)</strong> shown in the Korean interface are Coupang Partners affiliate links, with the commission notice displayed at the top of that card. They have nothing to do with clinic information or booking links, and every piece of information stays available without buying anything.</li>
+      <li>Legal review (medical law, pharmaceutical law, advertising guidelines, fair labelling and advertising law and so on) is needed before public release or monetisation.</li>
     </ul>
     <button class="btn primary" id="complianceClose" style="width:100%" data-en="Got it">확인</button>
   </div>
@@ -2213,6 +2284,17 @@
     var koBtn = $('langKo'), enBtn = $('langEn');
     if (koBtn) koBtn.addEventListener('click', function () { setLang('ko'); });
     if (enBtn) enBtn.addEventListener('click', function () { setLang('en'); });
+
+    // 클리닉 첫 화면 CTA → 반입 탭 전환 후 준비물 카드로 이동 (KO 전용 카드)
+    if ($('importSuppliesCta')) $('importSuppliesCta').addEventListener('click', function () {
+      switchTab('import');
+      var card = $('coupangPackingCard');
+      if (!card || !card.scrollIntoView) return;
+      var go = function () {
+        try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { card.scrollIntoView(); }
+      };
+      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(go); else setTimeout(go, 0);
+    });
 
     // compliance modal
     var modal = $('complianceModal');

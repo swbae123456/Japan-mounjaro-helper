@@ -9,8 +9,9 @@
  * v7: ?lang=en·ko 공유 링크 + 비한국어 브라우저 자동 영어 전환, 클리닉 데이터 3건 정정.
  * v8: 12.5mg 가격순 정렬 · 비교표·계산기 용량 추가, 클라라 3개월 공개가 보강.
  * v9: 상단 방문자 배지를 hits.sh 실시간(오늘·누적) 배지로 교체(GoatCounter 집계 스크립트는 유지).
+ * v10: 반입 탭에 쿠팡 파트너스 준비물 카드(보냉팩·아이스팩·보냉파우치, KO 전용 + 수수료 고지)와 클리닉 첫 화면 CTA 추가.
  */
-const VERSION = 'v9';
+const VERSION = 'v10';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
