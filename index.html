@@ -500,6 +500,8 @@
     font-family:var(--font);font-size:12.5px;font-weight:700;line-height:1.5;letter-spacing:-.02em;
     text-align:left;cursor:pointer;box-shadow:var(--shadow);transition:transform .06s;
   }
+  .import-cta-title{display:block;font-size:13px;font-weight:800;letter-spacing:-.025em}
+  .import-cta-sub{display:block;margin-top:3px;font-size:11.5px;font-weight:600;color:#0d6a63;letter-spacing:-.02em}
   .import-cta:active{transform:scale(.995)}
   .import-cta:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
 
@@ -554,7 +556,10 @@
   <main>
     <!-- ============ TAB 1: 클리닉 / Clinics ============ -->
     <section class="panel" id="panel-clinics" role="tabpanel" aria-labelledby="tab-clinics">
-      <button type="button" class="import-cta" id="importSuppliesCta" data-lang-only="ko">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기 (보냉팩·아이스팩·보냉파우치) →</button>
+      <button type="button" class="import-cta" id="importSuppliesCta" data-lang-only="ko">
+        <span class="import-cta-title">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기</span>
+        <span class="import-cta-sub">(보냉팩·아이스팩·보냉파우치) →</span>
+      </button>
 
       <div class="hero" id="heroSummary">
         <span class="hero-pill" data-en="Verified Nov 2026">2026-11 최신 확인</span>
