@@ -1,0 +1,14 @@
+# 일본 마운자로 방문 도우미 — robots.txt
+# 공개 정보 정리·방문 준비 도구입니다. 모든 검색 크롤러의 수집을 허용합니다.
+
+User-agent: *
+Allow: /
+
+# 네이버 검색수집기(Yeti) · 다음(카카오) 수집기
+User-agent: Yeti
+Allow: /
+
+User-agent: Daum
+Allow: /
+
+Sitemap: https://swbae123456.github.io/Japan-mounjaro-helper/sitemap.xml

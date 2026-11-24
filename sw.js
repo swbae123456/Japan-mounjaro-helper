@@ -17,8 +17,11 @@
  * v14: 그 배너 위치를 히어로 위 → 검색창 아래·기관 카드 위로 이동.
  * v15: 상단 방문자 배지를 hits.sh(새로고침마다 +1) → GoatCounter 순 방문자 수 JSON 알약으로 교체
  *      (중복 제거 · 새로고침으로 카운트가 늘지 않음). GoatCounter 집계 스크립트는 유지.
+ * v16: 기술 SEO — canonical·hreflang(KO/EN)·Open Graph·Twitter Card·JSON-LD(WebApplication/FAQPage)
+ *      헤드 메타 추가, robots.txt·sitemap.xml 생성. robots.txt·sitemap.xml은 서비스 워커가
+ *      가로채지 않고 네트워크로 그대로 보낸다(크롤러가 원본을 받도록).
  */
-const VERSION = 'v15';
+const VERSION = 'v16';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
@@ -54,6 +57,11 @@ self.addEventListener('fetch', (event) => {
   // 외부 요청(GoatCounter 카운터 JSON·count.js·쿠팡 링크 등)은 캐시하지 않고 네트워크로 그대로 보낸다
   // — 순 방문자 수가 캐시에 가려지지 않도록
   if (url.origin !== self.location.origin) return;
+
+  // 크롤러용 SEO 파일(robots.txt·sitemap.xml)은 가로채지 않는다
+  // — 앱 셸(index.html)로 대체 응답되거나 캐시에 남지 않도록 네트워크 결과를 그대로 돌려준다
+  const SEO_PATH = /\/(robots\.txt|sitemap\.xml)$/;
+  if (SEO_PATH.test(url.pathname)) return;
 
   // 페이지 이동 요청은 항상 index.html(또는 './')로 응답
   if (req.mode === 'navigate') {
