@@ -222,6 +222,7 @@ git push -u origin main
 | `sitemap.xml` | 한국어 루트·영어 `?lang=en` 2개 URL, 각각 `xhtml:link` hreflang 3종, `lastmod 2026-11-24` |
 
 - JSON-LD는 화면에 실제로 보이는 문구만 옮겼습니다(없는 가격·효능·후기 없음). 의료 조언·알선 문구는 넣지 않았습니다.
+- 언어 전환 JS(`applyStatic`)도 `<title>`과 **같은 문자열**로 문서 제목을 바꿉니다(KO→SEO 제목, EN→`Japan Mounjaro Clinics Compared — Import & Tsushima Pickup Guide`). 정적 `<title>`과 런타임 제목이 갈라지지 않도록 테스트로 고정했습니다.
 - 서비스 워커는 `/robots.txt`·`/sitemap.xml` 요청을 가로채지 않고 네트워크로 그대로 보냅니다(앱 셸로 대체 응답되거나 캐시에 남지 않도록 `SEO_PATH` 조기 반환).
 - 검색 등록 순서: ① [Google Search Console](https://search.google.com/search-console) → URL 접두어 `https://swbae123456.github.io/Japan-mounjaro-helper/` 추가 → `robots.txt`·`sitemap.xml` 확인 → **색인 생성 요청** ② [네이버 서치어드바이저](https://searchadvisor.naver.com) → 사이트 등록 → **소유확인 메타태그**를 `index.html` `<head>`에 붙이고 재배포 → **사이트맵 제출**·**수집 요청**. 검증용 메타태그는 받은 뒤 `index.html`에 넣어야 하므로, 값만 전달받아 붙이면 됩니다.
 - 리치 결과(FAQ)는 구글이 `FAQPage` 구조화 데이터를 2023-08부터 일반 사이트에는 더 이상 표시하지 않습니다(정부·의료기관 사이트 한정). 마크업은 유지하되 **리치 결과 노출을 기대하지 말고**, 색인·스니펫 정확도를 목적으로 둡니다.

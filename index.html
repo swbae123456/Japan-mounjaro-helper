@@ -1821,8 +1821,12 @@
     }
     // 문서 메타
     try {
-      document.documentElement.lang = lang;
-      document.title = L('일본 마운자로 방문 도우미 — 준비 도구', 'Japan Mounjaro Visit Helper — preparation tool');
+      if (document.documentElement) document.documentElement.lang = lang;
+    } catch (e) {}
+    // 제목은 <head>의 SEO <title>과 같은 문자열을 쓴다(검색 스니펫과 탭 제목이 갈라지지 않도록)
+    try {
+      document.title = L('일본 마운자로 클리닉 11곳 공개가 비교 · 반입·대마도 수령 가이드',
+                         'Japan Mounjaro Clinics Compared — Import & Tsushima Pickup Guide');
     } catch (e) {}
     // 언어 종속 라벨 (정적 속성으로 처리되지 않는 것)
     var nh = $('noteHint');
