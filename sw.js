@@ -20,8 +20,9 @@
  * v16: 기술 SEO — canonical·hreflang(KO/EN)·Open Graph·Twitter Card·JSON-LD(WebApplication/FAQPage)
  *      헤드 메타 추가, robots.txt·sitemap.xml 생성. robots.txt·sitemap.xml은 서비스 워커가
  *      가로채지 않고 네트워크로 그대로 보낸다(크롤러가 원본을 받도록).
+ * v17: 네이버 서치어드바이저 소유확인 메타태그(naver-site-verification)를 head에 추가.
  */
-const VERSION = 'v16';
+const VERSION = 'v17';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
