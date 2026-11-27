@@ -21,8 +21,9 @@
  *      헤드 메타 추가, robots.txt·sitemap.xml 생성. robots.txt·sitemap.xml은 서비스 워커가
  *      가로채지 않고 네트워크로 그대로 보낸다(크롤러가 원본을 받도록).
  * v17: 네이버 서치어드바이저 소유확인 메타태그(naver-site-verification)를 head에 추가.
+ * v18: 2026-11-27 가격 재점검 — 모데나 12.5mg·15mg, 재팬넷 15mg 공개가 반영.
  */
-const VERSION = 'v17';
+const VERSION = 'v18';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [

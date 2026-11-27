@@ -273,9 +273,10 @@
           "m3": 166540
         }
       },
+      "verifiedAt": "2026-11-27",
       "priceNote": {
-        "ko": "1펜 단위 가격(2.5mg 5,500엔·5mg 9,900엔·7.5mg 14,300엔 등)의 4펜 환산과 3개월 플랜 월액 기준. 3개월 플랜이 1펜 단위보다 저렴합니다.",
-        "en": "Based on per-pen prices (2.5 mg ¥5,500, 5 mg ¥9,900, 7.5 mg ¥14,300 and so on) converted to 4 pens, and on the monthly rate of the 3-month plan. The 3-month plan costs less than buying pen by pen."
+        "ko": "1펜 단위 가격(2.5mg 5,500엔·5mg 9,900엔·7.5mg 14,300엔 등)의 4펜 환산과 3개월 플랜 월액 기준. 3개월 플랜이 1펜 단위보다 저렴합니다. 15mg은 2026-11-27 확인 시 가격표·재고 안내에 추가되었습니다(3개월 12펜 200,673엔 = 3개월 플랜 월액 66,891엔, 1개월 단독 가격은 미표기). 한국어 본문에는 취급 5종으로 적혀 있어 예약 시 확인이 필요합니다.",
+        "en": "Based on per-pen prices (2.5 mg ¥5,500, 5 mg ¥9,900, 7.5 mg ¥14,300 and so on) converted to 4 pens, and on the monthly rate of the 3-month plan. The 3-month plan costs less than buying pen by pen. 15 mg was added to the price table and the stock note when checked on 27 Nov 2026 (¥200,673 for 12 pens = ¥66,891 a month on the 3-month plan; no standalone 1-month price is listed). The Korean body text still says five doses are handled, so confirm when booking."
       },
       "consultFee": 3630,
       "consultNote": {
@@ -370,11 +371,20 @@
         "10": {
           "m1": 40500,
           "m3": 121500
+        },
+        "12.5": {
+          "m1": 48000,
+          "m3": 144000
+        },
+        "15": {
+          "m1": 57500,
+          "m3": 172500
         }
       },
+      "verifiedAt": "2026-11-27",
       "priceNote": {
-        "ko": "1개월(4펜) 공개 가격 기준 · 세금 포함. 다개월 할인은 공식 페이지에 별도 표기 없어 월액 × 개월로 계산. 12.5mg은 공식 가격표에 없습니다(2026-11 확인).",
-        "en": "Based on the published 1-month (4-pen) price, tax included. No multi-month discount is stated, so longer courses are calculated as the monthly price × months. 12.5 mg is not listed in the official price table (checked 2026-11)."
+        "ko": "1개월(4펜) 공개 가격 기준 · 세금 포함. 다개월 할인은 공식 페이지에 별도 표기 없어 월액 × 개월로 계산. 12.5mg 48,000엔(1펜 14,850엔)·15mg 57,500엔(1펜 17,600엔)이 공식 가격표에 게시되어 있습니다(2026-11-27 확인, 이전 확인 시에는 10mg까지였음).",
+        "en": "Based on the published 1-month (4-pen) price, tax included. No multi-month discount is stated, so longer courses are calculated as the monthly price × months. 12.5 mg ¥48,000 (¥14,850 a pen) and 15 mg ¥57,500 (¥17,600 a pen) are listed in the official price table (checked 27 Nov 2026; the earlier check listed up to 10 mg only)."
       },
       "consultFee": 0,
       "consultNote": {
