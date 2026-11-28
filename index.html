@@ -118,6 +118,7 @@
     --muted:#64748b;
     --line:#dce5e2;
     --line-2:#edf2f0;
+    --qs-h:35px;
     --brand:#0f766e;
     --brand-2:#0b5d56;
     --brand-soft:#e6f4f1;
@@ -164,7 +165,7 @@
 
   /* ---------- header ---------- */
   .app-header{
-    position:sticky;top:0;z-index:30;
+    position:sticky;top:calc(var(--qs-h) + env(safe-area-inset-top));z-index:30;
     background:rgba(255,255,255,.97);
     backdrop-filter:saturate(160%) blur(12px);
     -webkit-backdrop-filter:saturate(160%) blur(12px);
@@ -209,16 +210,31 @@
   }
   .compliance-pill:active{transform:scale(.98)}
   .verified-tag{font-size:10px;color:var(--muted);font-weight:600;white-space:nowrap}
-  /* jpsave.com 홈 크로스링크 알약(상단 메타 줄) */
-  .home-pill{
-    display:inline-flex;align-items:center;gap:4px;
-    border:1px solid var(--line);background:#fff;color:var(--brand-2);
-    font-size:10.5px;font-weight:700;line-height:1;padding:6px 9px;border-radius:999px;
-    font-family:var(--font);text-decoration:none;white-space:nowrap;letter-spacing:-.015em;
+  /* ---------- 상단 고정 퀵 스위처 — jpsave.com 네 곳을 1탭으로 이동 ---------- */
+  .qs-bar{
+    position:sticky;top:0;z-index:34;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding:calc(5px + env(safe-area-inset-top)) 10px 5px;
   }
-  .home-pill svg{width:10px;height:10px;flex:0 0 auto;opacity:.7}
-  .home-pill:active{transform:scale(.98)}
-  .home-pill:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+  .qs-row{
+    display:flex;align-items:center;gap:5px;
+    overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;
+  }
+  .qs-row::-webkit-scrollbar{display:none;height:0}
+  .qs-pill{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:4px;
+    height:24px;padding:0 9px;border-radius:999px;
+    font-family:var(--font);font-size:12px;font-weight:800;line-height:1;
+    letter-spacing:-.02em;white-space:nowrap;text-decoration:none;
+    color:var(--ink-2);background:#fff;border:1px solid var(--line);
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .qs-ico{font-size:11px;line-height:1;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif}
+  .qs-pill:active{transform:scale(.97)}
+  .qs-pill:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+  .qs-pill.is-active{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(15,118,110,.22)}
 
   /* ---------- panels ---------- */
   main{padding:14px 14px 4px}
@@ -674,6 +690,22 @@
 </head>
 <body>
 <div class="shell">
+  <nav class="qs-bar" aria-label="jpsave.com 사이트 이동" data-en-aria="jpsave.com site switcher">
+    <div class="qs-row">
+      <a class="qs-pill" href="https://jpsave.com/" data-qs-href="https://jpsave.com/">
+        <span class="qs-ico" aria-hidden="true">🏠</span><span class="qs-lbl" data-en="Home">홈</span>
+      </a>
+      <span class="qs-pill is-active" aria-current="page">
+        <span class="qs-ico" aria-hidden="true">💉</span><span class="qs-lbl" data-en="Mounjaro">마운자로</span>
+      </span>
+      <a class="qs-pill" href="https://jpsave.com/pokemon-cards/" data-qs-href="https://jpsave.com/pokemon-cards/">
+        <span class="qs-ico" aria-hidden="true">🃏</span><span class="qs-lbl" data-en="Pokémon">포켓몬</span>
+      </a>
+      <a class="qs-pill" href="https://jpsave.com/whisky/" data-qs-href="https://jpsave.com/whisky/">
+        <span class="qs-ico" aria-hidden="true">🥃</span><span class="qs-lbl" data-en="Whisky">위스키</span>
+      </a>
+    </div>
+  </nav>
   <header class="app-header">
     <div class="brand">
       <div class="logo valid" aria-hidden="true">
@@ -699,10 +731,6 @@
         <span data-en="Information only · not a broker">정보 도우미 · 알선 아님</span>
       </button>
       <span class="top-meta">
-        <a class="home-pill" id="homePill" href="https://jpsave.com/" aria-label="jpsave.com 홈" data-en-aria="jpsave.com home">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20H4z"></path><path d="M9.5 20v-5h5v5"></path></svg>
-          <span data-en="jpsave.com">jpsave.com 홈</span>
-        </a>
         <span class="visit-badge" id="visitBadge" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="8" r="3.4"></circle><path d="M5.2 20c0-3.5 3-5.6 6.8-5.6s6.8 2.1 6.8 5.6"></path>
@@ -1913,6 +1941,13 @@
     for (i = 0; i < blocks.length; i++) {
       var want = blocks[i].getAttribute('data-lang-only');
       blocks[i].hidden = (want !== lang);
+    }
+    // 상단 퀵 스위처: 영어 화면에서 넘어갈 때도 ?lang=en 을 이어 간다
+    var qsLinks = document.querySelectorAll('[data-qs-href]');
+    for (i = 0; i < qsLinks.length; i++) {
+      var qsBase = qsLinks[i].getAttribute('data-qs-href');
+      if (!qsBase) continue;
+      qsLinks[i].setAttribute('href', lang === 'en' ? qsBase + (qsBase.indexOf('?') < 0 ? '?lang=en' : '&lang=en') : qsBase);
     }
     // 상단 언어 버튼
     var ko = $('langKo'), en = $('langEn');
