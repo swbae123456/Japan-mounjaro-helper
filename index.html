@@ -635,6 +635,16 @@
   .import-cta:active{transform:scale(.995)}
   .import-cta:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
 
+  /* 클리닉 첫 화면 → 반입 탭 제휴 카드 슬림 점프 배너 (KO/EN 공통, 한 줄) */
+  .aff-slim-cta{
+    display:block;width:100%;margin:0 0 12px;padding:9px 11px;
+    border-radius:11px;border:1px dashed #bfe0d7;background:#f8fdfb;color:#0d6a63;
+    font-family:var(--font);font-size:11.5px;font-weight:700;line-height:1.45;letter-spacing:-.03em;
+    text-align:left;cursor:pointer;transition:background .14s,transform .06s;
+  }
+  .aff-slim-cta:active{background:#eefaf6;transform:scale(.995)}
+  .aff-slim-cta:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+
   /* jpsave.com 다른 도우미 크로스링크 배너(본문 맨 아래·하단 탭바 위, 흐름 안에 놓임) */
   .cross-banner{
     display:block;margin:16px 0 6px;padding:13px 15px;
@@ -773,6 +783,8 @@
         <span class="import-cta-title">✈️ 출국 전 기내 반입 체크리스트 · 준비물 확인하기</span>
         <span class="import-cta-sub">(보냉팩·아이스팩·보냉파우치) →</span>
       </button>
+
+      <button type="button" class="aff-slim-cta" id="affPrepCta" data-en="🧳 Japan trip essentials (eSIM · Skyliner · Shinjuku stay) · affiliate →">🧳 일본 출발 전 필수 준비 (eSIM · 스카이라이너 · 신주쿠 숙소) · 제휴 →</button>
 
       <div id="clinicList" class="clinic-list"></div>
 
@@ -2723,6 +2735,17 @@
         try { card.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { card.scrollIntoView(); }
       };
       if (typeof requestAnimationFrame === 'function') requestAnimationFrame(go); else setTimeout(go, 0);
+    });
+
+    // 클리닉 첫 화면 제휴 슬림 배너 → 반입 탭 전환 후 제휴 카드로 이동 (KO/EN 공통)
+    if ($('affPrepCta')) $('affPrepCta').addEventListener('click', function () {
+      switchTab('import');
+      var affCard = $('affPrepCard');
+      if (!affCard || !affCard.scrollIntoView) return;
+      var goAff = function () {
+        try { affCard.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) { affCard.scrollIntoView(); }
+      };
+      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(goAff); else setTimeout(goAff, 0);
     });
 
     // compliance modal
