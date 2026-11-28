@@ -596,6 +596,32 @@
   .coupang-link .cp-arrow{flex:0 0 auto;color:#c0272d;font-size:15px;font-weight:700}
   .coupang-foot{margin:10px 0 0;font-size:11px;color:var(--muted);line-height:1.55}
 
+  /* 일본 방문 전 필수 준비 카드 (제휴: eSIM·공항열차·숙소 · KO/EN) */
+  .aff-card{border-color:#cfe6df;background:linear-gradient(180deg,#f8fdfb,#fff)}
+  .aff-card h3{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .aff-notice{
+    margin:9px 0 11px;padding:8px 11px;border-radius:10px;
+    background:var(--brand-soft);border:1px solid #cfe6df;color:var(--brand-2);
+    font-size:11.5px;font-weight:700;line-height:1.5;letter-spacing:-.01em;
+  }
+  .aff-links{display:grid;gap:8px}
+  .aff-link{
+    display:flex;align-items:center;gap:10px;text-decoration:none;
+    border:1px solid var(--line);border-radius:12px;background:#fff;
+    padding:11px 12px;color:var(--ink);transition:background .14s,transform .06s;
+  }
+  .aff-link:active{background:#f7fdfb;transform:scale(.995)}
+  .aff-link:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+  .aff-link .aff-ico{
+    flex:0 0 auto;width:30px;height:30px;border-radius:9px;
+    background:var(--brand-soft);display:flex;align-items:center;justify-content:center;font-size:15px;
+  }
+  .aff-link .aff-body{flex:1 1 auto;min-width:0}
+  .aff-link .aff-name{display:block;font-size:13.5px;font-weight:700;letter-spacing:-.01em}
+  .aff-link .aff-sub{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.45}
+  .aff-link .aff-arrow{flex:0 0 auto;color:var(--brand);font-size:15px;font-weight:700}
+  .aff-foot{margin:9px 0 0;font-size:11px;color:var(--muted);line-height:1.55}
+
   /* 클리닉 첫 화면 → 반입 준비물 CTA (KO 전용) */
   .import-cta{
     display:block;width:100%;margin:0 0 12px;padding:13px 14px;
@@ -1056,6 +1082,40 @@
 
       <div class="card" id="checkList"></div>
 
+      <div class="card aff-card" id="affPrepCard">
+        <h3><span aria-hidden="true">🧳</span> <span data-en="Before you fly — essentials (affiliate)">일본 방문 전 필수 준비 (제휴)</span></h3>
+        <p class="aff-notice" data-lang-only="ko">제휴 링크 포함 · 예약·구매 시 추가 비용 없이 사이트 운영에 도움이 됩니다</p>
+        <p class="aff-notice" data-lang-only="en" hidden>Affiliate links · supports this free guide at no extra cost</p>
+        <div class="aff-links">
+          <a class="aff-link" href="https://3ha.in/r/973283" target="_blank" rel="noopener noreferrer sponsored">
+            <span class="aff-ico" aria-hidden="true">📶</span>
+            <span class="aff-body">
+              <span class="aff-name" data-en="Japan eSIM (Usimsa)">유심사 일본 eSIM</span>
+              <span class="aff-sub" data-en="Data for maps and train directions on the go">현지 데이터·구글맵 길찾기용 eSIM</span>
+            </span>
+            <span class="aff-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="aff-link" href="https://3ha.in/r/973265" target="_blank" rel="noopener noreferrer sponsored">
+            <span class="aff-ico" aria-hidden="true">🚄</span>
+            <span class="aff-body">
+              <span class="aff-name" data-en="Keisei Skyliner">게이세이 스카이라이너</span>
+              <span class="aff-sub" data-en="Narita Airport ↔ Ueno · Akihabara airport express">나리타공항 ↔ 우에노·아키하바라 공항특급</span>
+            </span>
+            <span class="aff-arrow" aria-hidden="true">→</span>
+          </a>
+          <a class="aff-link" href="https://3ha.in/r/973276" target="_blank" rel="noopener noreferrer sponsored">
+            <span class="aff-ico" aria-hidden="true">🏨</span>
+            <span class="aff-body">
+              <span class="aff-name" data-en="APA Hotel Shinjuku Kabukicho Tower">APA 호텔 신주쿠 가부키초 타워</span>
+              <span class="aff-sub" data-en="Shinjuku base hotel (Agoda)">신주쿠 도심 거점 숙소 (아고다)</span>
+            </span>
+            <span class="aff-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="aff-foot" data-lang-only="ko">링크를 통해 예약·구매해도 결제 금액은 같고, 사이트 운영에 일부 수수료가 돌아옵니다. 필요하지 않으면 건너뛰셔도 됩니다.</p>
+        <p class="aff-foot" data-lang-only="en" hidden>Booking or buying through these links costs you the same and sends a small commission to this guide. Skip them if you don't need them.</p>
+      </div>
+
       <div class="card coupang-card" id="coupangPackingCard" data-lang-only="ko">
         <h3>✈️ 출국 전 기내 반입 준비물 (쿠팡)</h3>
         <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
@@ -1197,7 +1257,7 @@
       <li>이름·금액 등 입력값은 서버로 전송되지 않습니다. 체크리스트 상태와 계산기 설정(환율·금액)만 이 기기 브라우저(localStorage)에 저장되고, 입력한 이름은 저장하지 않습니다.</li>
       <li>방문자 수를 세기 위해 페이지를 열 때 GoatCounter(gc.zgo.at)로 조회 기록이 익명으로 전송됩니다(쿠키 미사용, IP는 집계 후 저장하지 않음). 이 앱에 입력한 내용은 이 통계로 전송되지 않습니다.</li>
       <li>반입·세관 정보는 일반 참고이며 법률 자문이 아닙니다. 최종 판단은 세관·항공사 안내를 따릅니다.</li>
-      <li>선택 사항인 <strong>반입 준비물(보냉팩·아이스팩·보냉파우치) 링크만 쿠팡 파트너스 제휴 링크</strong>이며, 해당 카드 상단에 수수료 고지를 표시합니다. 의료기관 정보·예약 링크와는 무관하고, 구매하지 않아도 앱의 모든 정보를 그대로 볼 수 있습니다.</li>
+      <li>선택 사항인 <strong>일본 방문 준비 링크(eSIM·스카이라이너·신주쿠 숙소, 3ha.in 경유)와 반입 준비물(보냉팩·아이스팩·보냉파우치, 쿠팡 파트너스)은 제휴 링크</strong>이며, 각 카드 상단에 수수료 고지를 표시합니다. 의료기관 정보·예약 링크와는 무관하고, 구매하지 않아도 앱의 모든 정보를 그대로 볼 수 있습니다.</li>
       <li>공개 전·수익화 전에는 관련 법령(의료법·약사법·의료광고 가이드라인·표시광고법 등) 검토가 필요합니다.</li>
     </ul>
     <ul id="complianceListEn" data-lang-only="en" hidden>
@@ -1207,7 +1267,7 @@
       <li>What you type (names, amounts) is never sent to a server. Only the checklist state and calculator settings (rates, amounts) are kept in this browser's localStorage; names are not stored.</li>
       <li>To count visits, opening the page sends an anonymous page-view hit to GoatCounter (gc.zgo.at); it uses no cookies and the IP is not stored after counting. Nothing you type in this app is included in that hit.</li>
       <li>Import and customs notes are general information, not legal advice. Your own country's customs and your airline have the final say.</li>
-      <li>Only the optional <strong>travel-supply links (cold bag, ice packs, insulated pouch)</strong> shown in the Korean interface are Coupang Partners affiliate links, with the commission notice displayed at the top of that card. They have nothing to do with clinic information or booking links, and every piece of information stays available without buying anything.</li>
+      <li>Only the optional <strong>Japan trip-prep links (eSIM, Skyliner, Shinjuku hotel, via 3ha.in) and the Coupang Partners affiliate links for travel supplies (cold bag, ice packs, insulated pouch)</strong> are affiliate links, with the commission notice displayed at the top of each card. They have nothing to do with clinic information or booking links, and every piece of information stays available without buying anything.</li>
       <li>Legal review (medical law, pharmaceutical law, advertising guidelines, fair labelling and advertising law and so on) is needed before public release or monetisation.</li>
     </ul>
     <button class="btn primary" id="complianceClose" style="width:100%" data-en="Got it">확인</button>
