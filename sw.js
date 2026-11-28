@@ -23,7 +23,7 @@
  * v17: 네이버 서치어드바이저 소유확인 메타태그(naver-site-verification)를 head에 추가.
  * v18: 2026-11-27 가격 재점검 — 모데나 12.5mg·15mg, 재팬넷 15mg 공개가 반영.
  */
-const VERSION = 'v18';
+const VERSION = 'v19';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [

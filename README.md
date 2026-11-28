@@ -2,9 +2,9 @@
 
 일본에서 마운자로(マンジャロ)를 자가치료 목적으로 처방·수령해 자기 나라로 가져갈 때 필요한 **공개 정보 정리 + 방문 준비 도구**를 모은 모바일 우선 웹앱입니다. **한국어(KO)와 영어(EN)를 상단에서 1탭으로 전환**할 수 있고, 오른쪽 위 `한국어 | EN` 버튼으로 언제든 바꿀 수 있습니다. 빌드 도구·외부 CDN·서버가 필요 없는 정적 앱입니다.
 
-화면은 **2026-11 리뉴얼 디자인(jmh-v18)** 기준입니다. 상단 고정 헤더(로고·제목·언어 전환·방문자 배지), **공개가 요약 히어로**(2.5mg·5mg 공개 최소가, 언어 안내 지원 기관 수를 데이터에서 실시간 계산), 클리닉 검색창 바로 아래·기관 카드 바로 위의 **반입 준비물·체크리스트 배너(KO 전용)**, 카드마다 **3칸 가격 타일 + 펼치기식 전체 가격표·주소·비용 규칙**, 화면 아래 **5탭 고정 내비게이션(클리닉·예약·계산기·반입·실전팁)** 으로 구성됩니다. 팔레트는 오프화이트(`#f4f7f6`)·흰 카드·테일(`#0f766e`), 글꼴은 설치된 경우 Pretendard를 먼저 쓰는 시스템 글꼴 스택입니다(외부 CDN 미사용·오프라인 유지).
+화면은 **2026-11 리뉴얼 디자인(jmh-v19)** 기준입니다. 상단 고정 헤더(로고·제목·언어 전환·방문자 배지), **공개가 요약 히어로**(2.5mg·5mg 공개 최소가, 언어 안내 지원 기관 수를 데이터에서 실시간 계산), 클리닉 검색창 바로 아래·기관 카드 바로 위의 **반입 준비물·체크리스트 배너(KO 전용)**, 카드마다 **3칸 가격 타일 + 펼치기식 전체 가격표·주소·비용 규칙**, 화면 아래 **5탭 고정 내비게이션(클리닉·예약·계산기·반입·실전팁)** 으로 구성됩니다. 팔레트는 오프화이트(`#f4f7f6`)·흰 카드·테일(`#0f766e`), 글꼴은 설치된 경우 Pretendard를 먼저 쓰는 시스템 글꼴 스택입니다(외부 CDN 미사용·오프라인 유지).
 
-처음 여는 언어는 **① 주소의 `?lang=en`/`?lang=ko` → ② 이전에 고른 언어(브라우저 저장) → ③ 브라우저 언어** 순으로 정해집니다. 한국어 브라우저가 아니면(일본어·중국어·스페인어 등) 영어로 자동 표시되며, 공유용 영어 링크는 `https://swbae123456.github.io/Japan-mounjaro-helper/?lang=en` 입니다. `?lang=` 링크로 들어온 뒤 `한국어`를 누르면 주소의 값도 함께 바뀝니다.
+처음 여는 언어는 **① 주소의 `?lang=en`/`?lang=ko` → ② 이전에 고른 언어(브라우저 저장) → ③ 브라우저 언어** 순으로 정해집니다. 한국어 브라우저가 아니면(일본어·중국어·스페인어 등) 영어로 자동 표시되며, 공유용 영어 링크는 `https://jpsave.com/Japan-mounjaro-helper/?lang=en` 입니다. `?lang=` 링크로 들어온 뒤 `한국어`를 누르면 주소의 값도 함께 바뀝니다.
 
 - 앱: [`index.html`](./index.html) (기관 데이터 폴백 내장)
 - 기관 데이터: [`clinics.json`](./clinics.json) — 11곳, 한국어·영어 필드. 앱은 실행 시 `fetch('./clinics.json')`을 시도하고, `file://`·오프라인·실패 시 `index.html` 내장 사본으로 자동 폴백합니다
@@ -161,12 +161,12 @@ git push -u origin main
 ### 배포 후 체크
 
 - 모바일에서 실제 기기로 열어 폰트·줄바꿈·하단 탭 가림 확인
-- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v18` 생성 확인
+- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v19` 생성 확인
 - 홈 화면에 추가한 뒤 비행기 모드에서 재실행 → 화면이 뜨는지 확인(오프라인 캐시)
 - `index.html`을 수정해 다시 배포하면, 서비스 워커 캐시는 버전(`sw.js`의 `VERSION`)을 올려야 확실히 갱신됩니다
 - 도메인 연결 시 HTTPS 강제
 - 데이터 갱신: **`clinics.json`만 수정**하고 `python3 tools/embed_clinics.py`로 `index.html` 내장 폴백을 다시 생성한 뒤 `2026-11 확인` 표기를 갱신 (두 데이터가 같은지 `python3 tools/embed_clinics.py --check`, `test_app.py`가 검사)
-- 서비스 워커 캐시 이름은 `jmh-v18`(`clinics.json` 프리캐시 포함). 외부 리소스(GoatCounter 카운터 JSON·`count.js` · 쿠팡 링크)는 서비스 워커가 가로채지 않아 캐시되지 않습니다. `robots.txt`·`sitemap.xml`도 서비스 워커가 가로채지 않고 네트워크 결과를 그대로 돌려줍니다(크롤러가 원본을 받도록).
+- 서비스 워커 캐시 이름은 `jmh-v19`(`clinics.json` 프리캐시 포함). 외부 리소스(GoatCounter 카운터 JSON·`count.js` · 쿠팡 링크)는 서비스 워커가 가로채지 않아 캐시되지 않습니다. `robots.txt`·`sitemap.xml`도 서비스 워커가 가로채지 않고 네트워크 결과를 그대로 돌려줍니다(크롤러가 원본을 받도록).
 - 방문자 통계: `index.html` 끝에 GoatCounter 스크립트(`https://swbae12345.goatcounter.com/count`, `https://gc.zgo.at/count.js`)가 삽입되어 있고, 집계는 그 주소의 대시보드에서 확인합니다. 입력값은 전송되지 않으며 쿠키도 쓰지 않습니다.
 - 상단 헤더 방문자 수 배지(순 방문자): 헤더의 `가격·시간 2026-11 확인` 태그 옆에 `방문자 N명`(KO) / `N visitors`(EN) 알약이 표시됩니다. 값은 GoatCounter 공개 카운터 JSON `https://swbae12345.goatcounter.com/counter/%2FJapan-mounjaro-helper%2F.json`의 `count_unique`(중복 제거 순 방문자 수)이며, `count_unique`가 없으면 `count`를 씁니다. 배지는 **표시만** 하므로 페이지를 새로고침해도 집계가 늘지 않고, 5분마다 다시 읽어 갱신합니다(CORS `access-control-allow-origin: *` 확인). 첫 조회 전이거나 네트워크 실패·오프라인이면 **배지는 조용히 숨겨집니다**(오류 표시 없음). 제목·`aria-label`에 '중복 제거 순 방문자 수 · 5분마다 갱신'을 안내합니다.
 
@@ -213,18 +213,18 @@ git push -u origin main
 |---|---|
 | `<title>` | `일본 마운자로 클리닉 11곳 공개가 비교 · 반입·대마도 수령 가이드` |
 | `meta description` | 클리닉 11곳 공개가·진찰료·예약 경로 + 보냉팩 100g·800달러 면세·대마도 수령·키레이패스, 알선·대행 아님 고지 |
-| canonical | `https://swbae123456.github.io/Japan-mounjaro-helper/` |
+| canonical | `https://jpsave.com/Japan-mounjaro-helper/` |
 | hreflang | `ko` = 루트, `en` = `?lang=en`, `x-default` = 루트 |
 | Open Graph | `og:type/site_name/title/description/url/locale(ko_KR)/locale:alternate(en_US)/image` — `og:image`는 실제 파일인 `icon-512.png`(512×512) |
 | Twitter Card | `twitter:card=summary`, `twitter:title/description/image` |
 | JSON-LD | `WebApplication`(무료 Offer price 0, `inLanguage [ko,en]`) + `FAQPage` 5문항 — 모두 화면의 **실전팁·FAQ 탭**에 있는 실제 문답(보냉제 100g·대마도 3일 보관·800달러 면세·키레이패스 예약·영문 증명서) |
 | `robots.txt` | 전체 허용(`User-agent: *`, `Yeti`, `Daum`) + `Sitemap:` 절대 URL |
-| `sitemap.xml` | 한국어 루트·영어 `?lang=en` 2개 URL, 각각 `xhtml:link` hreflang 3종, `lastmod 2026-11-24` |
+| `sitemap.xml` | 한국어 루트·영어 `?lang=en` 2개 URL, 각각 `xhtml:link` hreflang 3종, `lastmod 2026-11-28` |
 
 - JSON-LD는 화면에 실제로 보이는 문구만 옮겼습니다(없는 가격·효능·후기 없음). 의료 조언·알선 문구는 넣지 않았습니다.
 - 언어 전환 JS(`applyStatic`)도 `<title>`과 **같은 문자열**로 문서 제목을 바꿉니다(KO→SEO 제목, EN→`Japan Mounjaro Clinics Compared — Import & Tsushima Pickup Guide`). 정적 `<title>`과 런타임 제목이 갈라지지 않도록 테스트로 고정했습니다.
 - 서비스 워커는 `/robots.txt`·`/sitemap.xml` 요청을 가로채지 않고 네트워크로 그대로 보냅니다(앱 셸로 대체 응답되거나 캐시에 남지 않도록 `SEO_PATH` 조기 반환).
-- 검색 등록 순서: ① [Google Search Console](https://search.google.com/search-console) → URL 접두어 `https://swbae123456.github.io/Japan-mounjaro-helper/` 추가 → `robots.txt`·`sitemap.xml` 확인 → **색인 생성 요청** ② [네이버 서치어드바이저](https://searchadvisor.naver.com) → 사이트 등록 → **소유확인 메타태그**를 `index.html` `<head>`에 붙이고 재배포 → **사이트맵 제출**·**수집 요청**. 검증용 메타태그는 받은 뒤 `index.html`에 넣어야 하므로, 값만 전달받아 붙이면 됩니다.
+- 검색 등록 순서: ① [Google Search Console](https://search.google.com/search-console) → URL 접두어 `https://jpsave.com/Japan-mounjaro-helper/` 추가 → `robots.txt`·`sitemap.xml` 확인 → **색인 생성 요청** ② [네이버 서치어드바이저](https://searchadvisor.naver.com) → 사이트 등록 → **소유확인 메타태그**를 `index.html` `<head>`에 붙이고 재배포 → **사이트맵 제출**·**수집 요청**. 검증용 메타태그는 받은 뒤 `index.html`에 넣어야 하므로, 값만 전달받아 붙이면 됩니다.
 - 리치 결과(FAQ)는 구글이 `FAQPage` 구조화 데이터를 2023-08부터 일반 사이트에는 더 이상 표시하지 않습니다(정부·의료기관 사이트 한정). 마크업은 유지하되 **리치 결과 노출을 기대하지 말고**, 색인·스니펫 정확도를 목적으로 둡니다.
 
 ---

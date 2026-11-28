@@ -11,4 +11,4 @@ Allow: /
 User-agent: Daum
 Allow: /
 
-Sitemap: https://swbae123456.github.io/Japan-mounjaro-helper/sitemap.xml
+Sitemap: https://jpsave.com/Japan-mounjaro-helper/sitemap.xml
