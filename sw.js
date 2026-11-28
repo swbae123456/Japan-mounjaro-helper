@@ -25,8 +25,10 @@
  * v19: 커스텀 도메인 jpsave.com 전환(canonical·hreflang·sitemap).
  * v20: jpsave.com 사이트끼리 상호 연결 — 상단 메타 줄 'jpsave.com 홈' 알약과
  *      본문 맨 아래(탭바 위) '포켓몬 카드 시세 레이더' 크로스링크 배너를 추가.
+ * v21: 2호 사이트 이름 변경(포켓몬 카드 시세 레이더 → 포켓몬 카드샵 방문 도우미)에
+ *      맞춰 크로스링크 배너 문구를 '포켓몬 카드샵 방문 도우미 · 시세 보기 →' 로 교체.
  */
-const VERSION = 'v20';
+const VERSION = 'v21';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
