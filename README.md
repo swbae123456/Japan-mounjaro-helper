@@ -2,7 +2,7 @@
 
 일본에서 마운자로(マンジャロ)를 자가치료 목적으로 처방·수령해 자기 나라로 가져갈 때 필요한 **공개 정보 정리 + 방문 준비 도구**를 모은 모바일 우선 웹앱입니다. **한국어(KO)와 영어(EN)를 상단에서 1탭으로 전환**할 수 있고, 오른쪽 위 `한국어 | EN` 버튼으로 언제든 바꿀 수 있습니다. 빌드 도구·외부 CDN·서버가 필요 없는 정적 앱입니다.
 
-화면은 **2026-11 리뉴얼 디자인(jmh-v19)** 기준입니다. 상단 고정 헤더(로고·제목·언어 전환·방문자 배지), **공개가 요약 히어로**(2.5mg·5mg 공개 최소가, 언어 안내 지원 기관 수를 데이터에서 실시간 계산), 클리닉 검색창 바로 아래·기관 카드 바로 위의 **반입 준비물·체크리스트 배너(KO 전용)**, 카드마다 **3칸 가격 타일 + 펼치기식 전체 가격표·주소·비용 규칙**, 화면 아래 **5탭 고정 내비게이션(클리닉·예약·계산기·반입·실전팁)** 으로 구성됩니다. 팔레트는 오프화이트(`#f4f7f6`)·흰 카드·테일(`#0f766e`), 글꼴은 설치된 경우 Pretendard를 먼저 쓰는 시스템 글꼴 스택입니다(외부 CDN 미사용·오프라인 유지).
+화면은 **2026-11 리뉴얼 디자인(jmh-v20)** 기준입니다. 상단 고정 헤더(로고·제목·언어 전환·방문자 배지), **공개가 요약 히어로**(2.5mg·5mg 공개 최소가, 언어 안내 지원 기관 수를 데이터에서 실시간 계산), 클리닉 검색창 바로 아래·기관 카드 바로 위의 **반입 준비물·체크리스트 배너(KO 전용)**, 카드마다 **3칸 가격 타일 + 펼치기식 전체 가격표·주소·비용 규칙**, 화면 아래 **5탭 고정 내비게이션(클리닉·예약·계산기·반입·실전팁)** 으로 구성됩니다. 팔레트는 오프화이트(`#f4f7f6`)·흰 카드·테일(`#0f766e`), 글꼴은 설치된 경우 Pretendard를 먼저 쓰는 시스템 글꼴 스택입니다(외부 CDN 미사용·오프라인 유지).
 
 처음 여는 언어는 **① 주소의 `?lang=en`/`?lang=ko` → ② 이전에 고른 언어(브라우저 저장) → ③ 브라우저 언어** 순으로 정해집니다. 한국어 브라우저가 아니면(일본어·중국어·스페인어 등) 영어로 자동 표시되며, 공유용 영어 링크는 `https://jpsave.com/Japan-mounjaro-helper/?lang=en` 입니다. `?lang=` 링크로 들어온 뒤 `한국어`를 누르면 주소의 값도 함께 바뀝니다.
 
@@ -10,6 +10,7 @@
 - 기관 데이터: [`clinics.json`](./clinics.json) — 11곳, 한국어·영어 필드. 앱은 실행 시 `fetch('./clinics.json')`을 시도하고, `file://`·오프라인·실패 시 `index.html` 내장 사본으로 자동 폴백합니다
 - PWA: [`manifest.json`](./manifest.json), [`sw.js`](./sw.js), [`icon-192.png`](./icon-192.png), [`icon-512.png`](./icon-512.png)
 - 검색(SEO): [`robots.txt`](./robots.txt), [`sitemap.xml`](./sitemap.xml) — 아래 **「8. 검색 노출(기술 SEO)」** 참고
+- jpsave.com 사이트 연결(jmh-v20): 상단 메타 줄의 **`jpsave.com 홈`** 알약(→ `https://jpsave.com/`)과 본문 맨 아래 흐름 안(하단 탭바 바로 위)의 **`일본 여행 다른 도우미 · jpsave.com` → `포켓몬 카드숍 23곳 · 시세 레이더 보기`** 배너(→ `https://jpsave.com/pokemon-cards/`). 반대쪽 포켓몬 카드 레이더에서도 이 앱으로 오는 배너가 같은 모양으로 걸려 있습니다. 영어 화면에서는 각각 `jpsave.com` / `More on jpsave.com` · `Pokémon Card Radar · 23 Japan Shops →` 로 바뀝니다.
 - 테스트(개발용, 배포 대상 아님): [`test_app.py`](./test_app.py) (문법·로직), [`test_structure.py`](./test_structure.py) (DOM·문구 가드레일), [`test_smoke.py`](./test_smoke.py) (초기화·탭·필터·계산 경로 실행)
 
 > **이 앱이 하지 않는 일**: 의료기관 알선, 예약 대행, 의약품 광고·판매, 가격 순위 매기기.
@@ -161,12 +162,12 @@ git push -u origin main
 ### 배포 후 체크
 
 - 모바일에서 실제 기기로 열어 폰트·줄바꿈·하단 탭 가림 확인
-- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v19` 생성 확인
+- Chrome DevTools → **Application** 탭에서 Manifest 오류 없음 · Service Worker `activated` · 캐시 `jmh-v20` 생성 확인
 - 홈 화면에 추가한 뒤 비행기 모드에서 재실행 → 화면이 뜨는지 확인(오프라인 캐시)
 - `index.html`을 수정해 다시 배포하면, 서비스 워커 캐시는 버전(`sw.js`의 `VERSION`)을 올려야 확실히 갱신됩니다
 - 도메인 연결 시 HTTPS 강제
 - 데이터 갱신: **`clinics.json`만 수정**하고 `python3 tools/embed_clinics.py`로 `index.html` 내장 폴백을 다시 생성한 뒤 `2026-11 확인` 표기를 갱신 (두 데이터가 같은지 `python3 tools/embed_clinics.py --check`, `test_app.py`가 검사)
-- 서비스 워커 캐시 이름은 `jmh-v19`(`clinics.json` 프리캐시 포함). 외부 리소스(GoatCounter 카운터 JSON·`count.js` · 쿠팡 링크)는 서비스 워커가 가로채지 않아 캐시되지 않습니다. `robots.txt`·`sitemap.xml`도 서비스 워커가 가로채지 않고 네트워크 결과를 그대로 돌려줍니다(크롤러가 원본을 받도록).
+- 서비스 워커 캐시 이름은 `jmh-v20`(`clinics.json` 프리캐시 포함). 외부 리소스(GoatCounter 카운터 JSON·`count.js` · 쿠팡 링크)는 서비스 워커가 가로채지 않아 캐시되지 않습니다. `robots.txt`·`sitemap.xml`도 서비스 워커가 가로채지 않고 네트워크 결과를 그대로 돌려줍니다(크롤러가 원본을 받도록).
 - 방문자 통계: `index.html` 끝에 GoatCounter 스크립트(`https://swbae12345.goatcounter.com/count`, `https://gc.zgo.at/count.js`)가 삽입되어 있고, 집계는 그 주소의 대시보드에서 확인합니다. 입력값은 전송되지 않으며 쿠키도 쓰지 않습니다.
 - 상단 헤더 방문자 수 배지(순 방문자): 헤더의 `가격·시간 2026-11 확인` 태그 옆에 `방문자 N명`(KO) / `N visitors`(EN) 알약이 표시됩니다. 값은 GoatCounter 공개 카운터 JSON `https://swbae12345.goatcounter.com/counter/%2FJapan-mounjaro-helper%2F.json`의 `count_unique`(중복 제거 순 방문자 수)이며, `count_unique`가 없으면 `count`를 씁니다. 배지는 **표시만** 하므로 페이지를 새로고침해도 집계가 늘지 않고, 5분마다 다시 읽어 갱신합니다(CORS `access-control-allow-origin: *` 확인). 첫 조회 전이거나 네트워크 실패·오프라인이면 **배지는 조용히 숨겨집니다**(오류 표시 없음). 제목·`aria-label`에 '중복 제거 순 방문자 수 · 5분마다 갱신'을 안내합니다.
 

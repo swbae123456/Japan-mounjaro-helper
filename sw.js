@@ -22,8 +22,11 @@
  *      가로채지 않고 네트워크로 그대로 보낸다(크롤러가 원본을 받도록).
  * v17: 네이버 서치어드바이저 소유확인 메타태그(naver-site-verification)를 head에 추가.
  * v18: 2026-11-27 가격 재점검 — 모데나 12.5mg·15mg, 재팬넷 15mg 공개가 반영.
+ * v19: 커스텀 도메인 jpsave.com 전환(canonical·hreflang·sitemap).
+ * v20: jpsave.com 사이트끼리 상호 연결 — 상단 메타 줄 'jpsave.com 홈' 알약과
+ *      본문 맨 아래(탭바 위) '포켓몬 카드 시세 레이더' 크로스링크 배너를 추가.
  */
-const VERSION = 'v19';
+const VERSION = 'v20';
 const CACHE = 'jmh-' + VERSION;
 
 const PRECACHE = [
